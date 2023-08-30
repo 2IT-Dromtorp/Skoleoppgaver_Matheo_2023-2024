@@ -9,12 +9,12 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 2700s linear;
+    animation: App-logo-spin infinite 20s linear;
   }
 }
 
 .App-header {
-  background-color: #001339;
+  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -35,10 +35,4 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-.loginside{
-  background-color: red;
-  width: 500px;
-  height: 500px;
 }

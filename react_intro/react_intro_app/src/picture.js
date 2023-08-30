@@ -4,6 +4,7 @@ const people = [
     { name: 'Indine', imageUrl: "https://lh3.googleusercontent.com/pw/AIL4fc_agZtVXBTA3hdHHEYEb3jT_lCvfZP2Ceolx-iYU0n4YXAYhCQxPVA_Lpz3PLSW3w_UJCvOOG5FriHj3UbXoT0kMWxnVyyX9_VZAJBiAC2fDn6vGTC1qBui-BKwx74HcXhfG-l4OzaViy-WhOTuyhg1=w739-h924-s-no?authuser=0"},
 ];
 let logoSrc = people[0].imageUrl;
+let logoName = people[0].name;
 let countNumber = 0
 export default function LogoFunc({count}) {
     countNumber=count 
@@ -11,7 +12,13 @@ export default function LogoFunc({count}) {
         countNumber=count%people.length
     }
     logoSrc=people[countNumber].imageUrl;
+    logoName=people[countNumber].name;
     return (
+        <>
         <img src={logoSrc} className="App-logo" alt="{people[count].name}" />
+        <p>
+        {logoName} er {count} år gammel
+      </p>
+        </>
     );
-  }
+}; 
