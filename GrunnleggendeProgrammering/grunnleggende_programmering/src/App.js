@@ -9,11 +9,11 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Oppgave1/>
-        <Oppgave1/>
-        <Oppgave1/>
-        <Oppgave1/>
-        <Oppgave1/>
+        {/* <Oppgave1/>
+        <Oppgave2/> */}
+        {/* <Oppgave3/> */}
+        {/* <Oppgave4/> */}
+        <Oppgave5/>
       </header>
     </div>
   );
