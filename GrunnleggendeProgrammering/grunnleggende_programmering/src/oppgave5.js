@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 export default function Oppgave3() {
     let answer;
-    let n1 = 10000000
+    let n1 = 20000000
     let n2 = 0
 
     function nextQ(){

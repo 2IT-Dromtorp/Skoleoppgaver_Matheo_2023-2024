@@ -4,7 +4,6 @@ import MyButton from './myButton';
 import LogInButton from './loginButton';
 import LogOutButton from './logoutButton';
 import LogIn from './loginSite';
-import AlleOppgaver from './alleOppgaver';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -28,7 +27,6 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-      <AlleOppgaver/>
       <MyButton count={count} onClick={handleClick}/>
       {content}
       </header>

@@ -1,5 +1,19 @@
 import React, { useState } from 'react';
 
+function firkantAreal(firkantL1, firkantL2){
+  firkantL1 = parseFloat(firkantL1);
+  firkantL2 = parseFloat(firkantL2);
+  return (
+      firkantL1 * firkantL2
+  );
+};
+
+function trekantAreal(trekantLengde, trekantHoyde){
+  return (
+      (trekantLengde * trekantHoyde) / 2
+  );
+};
+
 export default function Oppgave2() {
     const [inputValue1, setInputValue1] = useState('1');
     const [inputValue2, setInputValue2] = useState('1');
@@ -26,19 +40,6 @@ export default function Oppgave2() {
           </div>
         );
       }
-    function firkantAreal(firkantL1, firkantL2){
-        firkantL1 = parseFloat(firkantL1);
-        firkantL2 = parseFloat(firkantL2);
-        return (
-            firkantL1 * firkantL2
-        );
-    }
-
-    function trekantAreal(trekantLengde, trekantHoyde){
-        return (
-            (trekantLengde * trekantHoyde) / 2
-        );
-    }
       return (
         <>
         <h1>
