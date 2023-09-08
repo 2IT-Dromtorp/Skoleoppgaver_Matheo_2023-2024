@@ -8,11 +8,11 @@ function App() {
   const [content, setContent] = useState(<MainSite oppdater={switchSite}/>);
 
   function switchSite(navn){
-    setContent(<Profil person={navn} oppdater={switchBack}/>)
+    setContent(<Profil person={navn} update={switchBack}/>)
   }
 
   function switchBack(){
-    setContent(<MainSite/>)
+    setContent(<MainSite oppdater={switchSite}/>)
   }
 
   return (

@@ -1,0 +1,16 @@
+export const Pupils = [
+    { firstname: 'Ahmad', lastname: "Murtaza Zahid", email: "ahmadza@viken.no", fellesfagng: "2IM1", klasse: "2ITB", fellesfags: "2IM1"},
+    { firstname: 'Elias', lastname: "Høgran Godager", email: "eliasgod@viken.no", fellesfagng: "2IM1", klasse: "2ITB", fellesfags: "2IM2"},
+    { firstname: 'Vetle', lastname: "Fongen", email: "vetlefon@viken.no", fellesfagng: "2IM1", klasse: "2ITB", fellesfags: "2IM2"},
+    { firstname: 'Kristoffer', lastname: "Bekkevold", email: "kristofbek@viken.no", fellesfagng: "2IM1", klasse: "2ITB", fellesfags: "2IM2"},
+    { firstname: 'Johannes', lastname: "Herman Rebård Evensen", email: "johanneeve@viken.no", fellesfagng: "2IM1", klasse: "2ITB", fellesfags: "2IM2"},
+    { firstname: 'Matheo', lastname: "Kant Pangopoulos", email: "matheop@viken.no", fellesfagng: "2IM2", klasse: "2ITB", fellesfags: "2IM2"},
+    { firstname: 'Axel', lastname: "Sequeida Sandbakken", email: "axelsan@viken.no", fellesfagng: "2IM2", klasse: "2ITB", fellesfags: "2IM2"},
+    { firstname: 'Gabriel', lastname: "Karisari Ueland", email: "gabrielu@viken.no", fellesfagng: "2IM2", klasse: "2ITB", fellesfags: "2IM1"},
+    { firstname: 'Philip', lastname: "Beyer", email: "philipbey@viken.no", fellesfagng: "2IM1", klasse: "2ITB", fellesfags: "2IM2"},
+    { firstname: 'Andreas', lastname: "Hurlen Kristiansen", email: "andreashkr@viken.no", fellesfagng: "2IM2", klasse: "2ITB", fellesfags: "2IM1"},
+    { firstname: 'Mattis', lastname: "Eintveit Møller", email: "mattismol@viken.no", fellesfagng: "2IM1", klasse: "2ITB", fellesfags: "2IM2"},
+    { firstname: 'Theodor', lastname: "Julien-Løvås", email: "theodorju@viken.no", fellesfagng: "2IM2", klasse: "2ITB", fellesfags: "2IM2"},
+    { firstname: 'Silas', lastname: "Surland-Fjær", email: "silass@viken.no", fellesfagng: "2IM1", klasse: "2ITB", fellesfags: "2IM1"},
+    { firstname: 'Alva', lastname: "Cecilia Øvrom", email: "alvaov@viken.no", fellesfagng: "2IM1", klasse: "2ITB", fellesfags: "2IM1"},
+];

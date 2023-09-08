@@ -1,0 +1,25 @@
+.all{
+    width: 100%;
+    height: 100vh;
+}
+    
+
+.top-bar{
+    background-color: red;
+    width: 100%;
+    height: 20%;
+}
+
+.top-bar button{
+    height: 100%;
+}
+
+.main-content{
+    background-color: green;
+    width: 100%;
+    height: 80%;
+}
+
+.nameButt{
+    height: 10%;
+}

@@ -1,78 +1,50 @@
-import Button from './button'
+import React, { useState } from 'react';
+import Button from './button';
+import { Pupils } from './pupilsJSON';
+import './mainSite.css'
 
-export default function MainSite({oppdater}){
-    return (
-      <div className='Container-Parent'>
-        <div className='Main-Divider'>
-          <div className='Line'>
-            <div className='Box'>
-              <Button oppdater={oppdater} person="Andreas"/>
-            </div>
-            <div className='Box'>
-            <Button oppdater={oppdater} person="Ahmad"/>
-            </div>
-            <div className='Box'>
-                
-              </div>
-            </div>
-            <div className='Line'>
-              <div className='Box'>
-              <Button oppdater={oppdater} person="Philip"/>
-              </div>
-              <div className='Box'>
-              <Button oppdater={oppdater} person="Mattis"/>
-              </div>
-              <div className='Box'>
-              
-              </div>
-            </div>
-            <div className='Line'>
-              <div className='Box'>
-              <Button oppdater={oppdater} person="Gabriel"/>
-              </div>
-              <div className='Box'>
-              
-              </div>
-              <div className='Box'>
-              
-              </div>
-            </div>
-          </div>
-        <div className='Main-Divider'>
-          <div className='Line'>
-            <div className='Box'>
-            <Button oppdater={oppdater} person="Theodor"/>
-              </div>
-              <div className='Box'>
-              <Button oppdater={oppdater} person="Silas"/>
-              </div>
-              <div className='Box'>
-              <Button oppdater={oppdater} person="Alva"/>
-              </div>
-            </div>
-            <div className='Line'>
-            <div className='Box'>
-            <Button oppdater={oppdater} person="Axel"/>
-              </div>
-              <div className='Box'>
-              <Button oppdater={oppdater} person="Vetle"/>
-              </div>
-              <div className='Box'>
-              <Button oppdater={oppdater} person="Kristoffer"/>
-              </div>
-            </div>
-            <div className='Line'>
-            <div className='Box'>
-            <Button oppdater={oppdater} person="Johannes"/>
-            </div>
-            <div className='Box'>
-            <Button oppdater={oppdater} person="Elias"/>
-            </div>
-            <div className='Box'>
-                <Button oppdater={oppdater} person="Matheo"/>
-            </div>
-          </div>
-        </div>
-      </div>  
-    );
-  };
+export default function MainSite({ oppdater }) {
+  const [content, setContent] = useState([]);
+  let buttonWidth;
+
+  function alleElever() {
+    const buttons = Pupils.map((pupil, index) => (
+      <Button key={index} oppdater={oppdater} person={pupil.firstname} />
+    ));
+    setContent(buttons);
+  }
+
+  function norskGymGruppeEn(fag, gruppe) {
+    const filteredPupils = Pupils.filter(pupil => pupil[fag] === gruppe);
+    const buttons = filteredPupils.map((pupil, index) => (
+      <Button key={index} oppdater={oppdater} person={pupil.firstname} />
+    ));
+    setContent(buttons);
+  }
+
+  function countButtons() {
+    const topBar = document.querySelector('.top-bar');
+    if (topBar) {
+      const buttonsInTopBar = topBar.querySelectorAll('button');
+      const numberOfButtons = buttonsInTopBar.length;
+      buttonWidth=100/numberOfButtons+"%"
+    } 
+  }
+
+  countButtons()
+
+  return (
+    <div className='all'>
+      <div className='top-bar'>
+        <button onClick={alleElever} style={{ width: buttonWidth }}>Alle elever</button>
+        <button onClick={() => norskGymGruppeEn("fellesfagng", "2IM1")} style={{ width: buttonWidth }}>Norsk/Gym gruppe 1</button>
+        <button onClick={() => norskGymGruppeEn("fellesfagng", "2IM2")} style={{ width: buttonWidth }}>Norsk/Gym gruppe 2</button>
+        <button onClick={() => norskGymGruppeEn("fellesfags", "2IM1")} style={{ width: buttonWidth }}>Samfunnsfag gruppe 1</button>
+        <button onClick={() => norskGymGruppeEn("fellesfags", "2IM2")} style={{ width: buttonWidth }}>Samfunnsfag gruppe 2</button>        
+      </div>
+      <div className='main-content'>
+        {content}    
+      </div>
+    </div>
+  );
+};

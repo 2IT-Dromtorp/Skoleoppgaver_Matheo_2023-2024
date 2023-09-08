@@ -1,41 +1,34 @@
 import React, { PureComponent, useState } from 'react';
-
-export default function Profil({person, oppdater}) {
-    const pupils = [
-        { firstname: 'Ahmad', lastname: "Murtaza Zahid", email: "ahmadza@viken.no"},
-        { firstname: 'Elias', lastname: "Høgran Godager", email: "eliasgod@viken.no"},
-        { firstname: 'Vetle', lastname: "Fongen", email: "vetlefon@viken.no"},
-        { firstname: 'Kristoffer', lastname: "Bekkevold", email: "kristofbek@viken.no"},
-        { firstname: 'Johannes', lastname: "Herman Rebård Evensen", email: "johanneeve@viken.no"},
-        { firstname: 'Matheo', lastname: "Kant Pangopoulos", email: "matheop@viken.no"},
-        { firstname: 'Axel', lastname: "Sequeida Sandbakken", email: "axelsan@viken.no"},
-        { firstname: 'Gabriel', lastname: "Karisari Ueland", email: "gabrielu@viken.no"},
-        { firstname: 'Philip', lastname: "Beyer", email: "philipbey@viken.no"},
-        { firstname: 'Andreas', lastname: "Murtaza Zahid", email: "ahmadza@viken.no"},
-        { firstname: 'Mattis', lastname: "Høgran Godager", email: "eliasgod@viken.no"},
-        { firstname: 'Theodor', lastname: "Fongen", email: "vetlefon@viken.no"},
-        { firstname: 'Silas', lastname: "Høgran Godager", email: "eliasgod@viken.no"},
-        { firstname: 'Alva', lastname: "Fongen", email: "vetlefon@viken.no"},
-    ];
+import {Pupils} from './pupilsJSON'
+export default function Profil({person, update}) {
+    let studentIndex;
 
     const handleClick = () => {
-        oppdater();
+        update();
     };
 
-    for (let index = 0; index < pupils.length; index++) {
-        console.log(index)
-        if (person===pupils[index].firstname) {
-            return(
-                <>
-                <button onClick={handleClick}>Gå Tilbake</button>
-                    <h1>
-                        {pupils[index].firstname + " " + pupils[index].lastname}
-                    </h1>
-                    <p>
-                        {pupils[index].email}
-                    </p>
-                </>
-            );
-        };
-    };
+
+
+    for (let index = 0; index < Pupils.length; index++) {
+        if(Pupils[index].firstname==person){
+            studentIndex = index
+        }
+        
+    }
+
+        return(
+            <>
+            <button onClick={handleClick}>Gå Tilbake</button>
+                <h1>
+                    {Pupils[studentIndex].firstname + " " + Pupils[studentIndex].lastname}
+                </h1>
+                <p>
+                    {Pupils[studentIndex].email}
+                </p>
+                <p>
+                    Klasse: {Pupils[studentIndex].klasse} <br></br> Fellesfag(Norsk og Gym): {Pupils[studentIndex].fellesfagng} <br></br> Fellesfag(Samfunnsfag): {Pupils[studentIndex].fellesfags}
+                </p>
+            </>
+        );
+        
     } 
