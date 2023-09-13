@@ -13,4 +13,10 @@ export const Pupils = [
     { firstname: 'Theodor', lastname: "Julien-Løvås", email: "theodorju@viken.no", fellesfagng: "2IM2", klasse: "2ITB", fellesfags: "2IM2"},
     { firstname: 'Silas', lastname: "Surland-Fjær", email: "silass@viken.no", fellesfagng: "2IM1", klasse: "2ITB", fellesfags: "2IM1"},
     { firstname: 'Alva', lastname: "Cecilia Øvrom", email: "alvaov@viken.no", fellesfagng: "2IM1", klasse: "2ITB", fellesfags: "2IM1"},
+
+    { firstname: 'Falk', lastname: "Von Krogh", email: "kroghv@viken.no", fellesfagng: "2IM1", klasse: "2ITA", fellesfags: "2IM1"},
+    { firstname: 'Vanessa Ida', lastname: "Pfeifer", email: "vanessapf@viken.no", fellesfagng: "2IM2", klasse: "2ITA", fellesfags: "2IM1"},
+    { firstname: 'Andreas', lastname: "Rovde", email: "andreasrov@viken.no", fellesfagng: "2IM1", klasse: "2ITA", fellesfags: "2IM2"},
+    { firstname: 'Martin Aleksander', lastname: "Andersen", email: "martiaan@viken.no", fellesfagng: "2IM2", klasse: "2ITA", fellesfags: "2IM2"},
+    { firstname: 'Chen Alexander', lastname: "Fuglesang", email: "chenf@viken.no", fellesfagng: "2IM2", klasse: "2ITA", fellesfags: "2IM2"},
 ];

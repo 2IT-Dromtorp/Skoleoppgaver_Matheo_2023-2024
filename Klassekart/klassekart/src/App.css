@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #e16aad;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -35,36 +35,4 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-.Container-Parent{
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: row;
-}
-
-.Main-Divider{
-  width: 50%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.Line{
-  width: 100%;
-  height: 33%;
-  display: flex;
-  flex-direction: row;
-}
-
-.Box{
-  width: 33%;
-  height: 100%;
-  border: solid black;
-}
-
-.nameButt{
-  width: 100%;
-  height: 100%;
 }
