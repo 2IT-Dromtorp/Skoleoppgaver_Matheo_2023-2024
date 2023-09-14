@@ -6,6 +6,6 @@ export default function Button({person}) {
   const navigate = useNavigate();
 
       return (
-        <button className='nameButt' button onClick={() => navigate(`./profile/${person}`)}>{person}</button>
+        <button className='nameButt' button onClick={() => navigate(`../profile/${person}`)}>{person}</button>
       );
     } 

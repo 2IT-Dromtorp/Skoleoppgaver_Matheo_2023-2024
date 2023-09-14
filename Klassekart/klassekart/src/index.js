@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import Profil from './profileSite';
 import reportWebVitals from './reportWebVitals';
+import MainSite from './mainSite'
+import ClassMap from './klassekart';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -12,6 +14,9 @@ root.render(
     <Routes>
       <Route path="/" element={<App />}/>
       <Route path="/profile/:elevNavn" element={<Profil />}/>
+      <Route path="/classList" element={<MainSite />}/>
+      <Route path="/classMap" element={<ClassMap />}/>
+
     </Routes>
   </BrowserRouter>
 );

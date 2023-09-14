@@ -10,7 +10,7 @@ export default function Profil() {
 
     let studentIndex;
 
-
+ 
     for (let index = 0; index < Pupils.length; index++) {
         if(Pupils[index].firstname==elevNavn){
             studentIndex = index
@@ -21,7 +21,7 @@ export default function Profil() {
         return(
             <div className="App">
                 <header className="App-header">
-                    <button button onClick={() => navigate(`..`)}>Gå Tilbake</button>
+                    <button button onClick={() => navigate(-1)}>Gå Tilbake</button>
 
                     <h1>
                         {Pupils[studentIndex].firstname + " " + Pupils[studentIndex].lastname}

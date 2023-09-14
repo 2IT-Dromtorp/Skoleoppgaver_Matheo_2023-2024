@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import Button from './button';
 import { Pupils } from './pupilsJSON';
 import './mainSite.css'
+import { useNavigate } from 'react-router-dom';
 
 export default function Checklist({ oppdater }) {
+  const navigate = useNavigate();
   const [inCheck, setIn] = useState("");
   const [find, setFind] = useState("");
   let filteredPupils = []
@@ -19,7 +21,8 @@ export default function Checklist({ oppdater }) {
   }
 
   return (
-    <>
+    <div className='a'>
+      <button className='menuButton' button onClick={() => navigate('/')}>Tilbake til menyen</button>
       <div className='top-bar'>
         <select onChange={e=> setIn(e.target.value)}>
             <option value={""}>Null filter</option>
@@ -34,7 +37,7 @@ export default function Checklist({ oppdater }) {
       <div className='main-content'>
       {filteredPupils}
       </div>
-    </>
+    </div>
         
         
     
