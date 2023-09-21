@@ -1,25 +1,50 @@
 import { useState, useEffect } from 'react';
+import Display from './display';
 
 
-export default function List({ array }) {
+export default function List({input}) {
+  const [filteredPupils, setF] = useState([]);
   const [objectList, setObjectList] = useState([]);
-  console.log(array)
+
+  function oppdater(id) {
+    setObjectList((prevObjectList) => {
+      if (id !== -1) {
+        const updatedObjectList = [...prevObjectList];
+        updatedObjectList[id] = {
+          ...updatedObjectList[id],
+          finished: true,
+        };
+
+        return updatedObjectList;
+      }
+
+      return prevObjectList;
+    });
+  }
+
   useEffect(() => {
+    setF('')
     const newPupil = {
-      firstname: array.value,
-      lastname: 'NewLastName',
-      email: 'newemail@viken.no',
-      fellesfagng: 'NewFellesfagng',
-      klasse: 'NewKlasse',
-      fellesfags: 'NewFellesfags',
+      name: input,
+      description: 'NewLastName',
+      finished: false,
     };
+    if (input!='') {
+      setObjectList((prevObjectList) => [...prevObjectList, newPupil]);
+    }
+  }, [input]);
 
-    setObjectList([...objectList, newPupil]);
-  }, []);
-
-  console.log(objectList)
+  useEffect(() => {
+    for (let i in objectList) {
+      if (objectList[i].finished===false) {
+        setF((filteredPupils) => [...filteredPupils, <Display oppdater={oppdater} key={i} name={objectList[i].name} />]);
+      }
+    }
+  }, [objectList]);
 
   return (
-    <p>i</p>
+    <>
+    {filteredPupils}
+    </>
   );
 }

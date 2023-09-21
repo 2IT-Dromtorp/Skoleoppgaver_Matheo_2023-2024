@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+.listBar{
+  width: 100vw;
+  height: 80vh;
+  overflow: auto;
+}
+
+.inputBar{
+  width: 100vw;
+  height: 20vh;
+}
+

@@ -2,23 +2,25 @@ import React, { useState } from 'react';
 import List from './list';
 
 export default function Input() {
-  const [array, setArray] = useState('');
+  const [arr, setArr] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const submittedValue = e.target.elements.inputField.value;
-    setArray(submittedValue);
+    setArr(submittedValue);
+    e.target.elements.inputField.value=''
   };
   return (
     <>
-    <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="inputField"
-          />
+    <div className='inputBar'>
+      <form onSubmit={handleSubmit}>
+          <input type="text" name="inputField"/>
           <button type="submit">Submit</button>
-        </form>
-        <List array={array} />
+      </form>
+    </div>
+    <div className='listBar'>
+      <List input={arr} />
+    </div>  
     </>
   );
 }
