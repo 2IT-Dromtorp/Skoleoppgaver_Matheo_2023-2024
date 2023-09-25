@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 
-export default function Display({name}) {
+export default function Display({name, oppdater, id}) {
  
 
   return (
@@ -9,7 +9,7 @@ export default function Display({name}) {
         <h1>
             {name}
         </h1>
-        <button>
+        <button onClick={() => oppdater(id)}>
             Delete
         </button>
     </div>

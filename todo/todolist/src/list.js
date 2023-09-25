@@ -8,17 +8,15 @@ export default function List({input}) {
 
   function oppdater(id) {
     setObjectList((prevObjectList) => {
-      if (id !== -1) {
-        const updatedObjectList = [...prevObjectList];
+      const updatedObjectList = [...prevObjectList];
+      if (id >= 0 && id < updatedObjectList.length) {
         updatedObjectList[id] = {
           ...updatedObjectList[id],
-          finished: true,
+          finished: !updatedObjectList[id].finished,
         };
-
-        return updatedObjectList;
       }
-
-      return prevObjectList;
+  
+      return updatedObjectList;
     });
   }
 
@@ -35,12 +33,19 @@ export default function List({input}) {
   }, [input]);
 
   useEffect(() => {
-    for (let i in objectList) {
-      if (objectList[i].finished===false) {
-        setF((filteredPupils) => [...filteredPupils, <Display oppdater={oppdater} key={i} name={objectList[i].name} />]);
+    const newFilteredPupils = [];
+    for (let i = 0; i < objectList.length; i++) {
+      if (objectList[i] && objectList[i].finished === false) {
+        newFilteredPupils.push(
+          <Display oppdater={oppdater} key={i} name={objectList[i].name} id={i}/>
+        );
       }
     }
+    setF(newFilteredPupils);
   }, [objectList]);
+  
+  
+  
 
   return (
     <>
