@@ -5,6 +5,8 @@ import Display from './display';
 export default function List({input}) {
   const [filteredPupils, setF] = useState([]);
   const [objectList, setObjectList] = useState([]);
+  const [deletedTasks, setDeletedTasks] = useState(false);
+
 
   function oppdater(id) {
     setObjectList((prevObjectList) => {
@@ -32,23 +34,43 @@ export default function List({input}) {
     }
   }, [input]);
 
-  useEffect(() => {
+  function makeList(){
     const newFilteredPupils = [];
+
     for (let i = 0; i < objectList.length; i++) {
-      if (objectList[i] && objectList[i].finished === false) {
-        newFilteredPupils.push(
-          <Display oppdater={oppdater} key={i} name={objectList[i].name} id={i}/>
-        );
+      if (deletedTasks===false){
+        if (objectList[i] && objectList[i].finished === false) {
+          newFilteredPupils.push(
+            <Display oppdater={oppdater} key={i} name={objectList[i].name} id={i} buttonState={deletedTasks} objectList={objectList} setObjectList={setObjectList}/>
+          );
+        }
+      }
+      else{
+        if (objectList[i] && objectList[i].finished === true) {
+          newFilteredPupils.push(
+            <Display oppdater={oppdater} key={i} name={objectList[i].name} id={i} buttonState={deletedTasks} objectList={objectList} setObjectList={setObjectList}/>
+          );
+        }
       }
     }
     setF(newFilteredPupils);
+  }
+
+  useEffect(() => {
+    makeList()
   }, [objectList]);
+
+  useEffect(() => {
+    makeList()
+  }, [deletedTasks]);
   
-  
-  
+  function changeList(){
+    setDeletedTasks(!deletedTasks)
+  }
 
   return (
     <>
+    <button onClick={() => changeList()}>Change</button>
     {filteredPupils}
     </>
   );
