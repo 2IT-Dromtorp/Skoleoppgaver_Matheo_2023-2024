@@ -34,6 +34,10 @@ export default function Display({name, oppdater, id, buttonState, objectList, se
     editValues()
   };
 
+  function deleteTask(){
+    setObjectList([...objectList].filter((_, index)=>index!=id))
+  }
+
   if(editing){
     return (
       <div className='display'>
@@ -59,6 +63,9 @@ export default function Display({name, oppdater, id, buttonState, objectList, se
           <button onClick={() => oppdater(id)}>
               {buttonText}
           </button>
+        <button onClick={() => deleteTask()}>
+          delete
+        </button>
       </div>
     );
   }
