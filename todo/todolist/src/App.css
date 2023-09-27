@@ -48,3 +48,17 @@
   height: 20vh;
 }
 
+.display{
+  width: 70vw;
+  height: 10vh;
+  background-color: red;
+  
+}
+
+.display button{
+  height: 20%;
+}
+
+.display img{
+  height: 20%;
+}

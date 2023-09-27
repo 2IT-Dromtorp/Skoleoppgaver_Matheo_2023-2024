@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import up from './up.png'
+import down from './down.png'
 
 
 export default function Display({name, oppdater, id, buttonState, objectList, setObjectList}) {
@@ -38,6 +40,30 @@ export default function Display({name, oppdater, id, buttonState, objectList, se
     setObjectList([...objectList].filter((_, index)=>index!=id))
   }
 
+  function takeUp(){
+    if(id!==0){
+      setObjectList((prevObjectList) => {
+        const updatedList = [...prevObjectList];
+        updatedList.splice(id-1, 0, updatedList[id]);
+        updatedList.splice(id+1, 1)
+    
+        return updatedList;
+        }
+      );
+    }
+  }
+  function takeDown(){
+    if(id!==objectList.lenght){
+      setObjectList((prevObjectList) => {
+        const updatedList = [...prevObjectList];
+        updatedList.splice(id+2, 0, updatedList[id]);
+        updatedList.splice(id, 1)
+        return updatedList;
+        }
+      );
+    }
+  }
+
   if(editing){
     return (
       <div className='display'>
@@ -65,6 +91,12 @@ export default function Display({name, oppdater, id, buttonState, objectList, se
           </button>
         <button onClick={() => deleteTask()}>
           delete
+        </button>
+        <button onClick={() => takeUp()}>
+          <img src={up}></img>
+        </button>
+        <button onClick={() => takeDown()}>
+          <img src={down}></img>
         </button>
       </div>
     );
