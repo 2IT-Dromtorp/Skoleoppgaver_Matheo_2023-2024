@@ -89,15 +89,15 @@ export default function Display({name, oppdater, id, buttonState, objectList, se
           <button onClick={() => oppdater(id)}>
               {buttonText}
           </button>
-        <button onClick={() => deleteTask()}>
-          delete
-        </button>
-        <button onClick={() => takeUp()}>
-          <img src={up}></img>
-        </button>
-        <button onClick={() => takeDown()}>
-          <img src={down}></img>
-        </button>
+          <button onClick={() => deleteTask()}>
+            delete
+          </button>
+          <button onClick={() => takeUp()}>
+            <img src={up}></img>
+          </button>
+          <button onClick={() => takeDown()}>
+            <img src={down}></img>
+          </button>
       </div>
     );
   }

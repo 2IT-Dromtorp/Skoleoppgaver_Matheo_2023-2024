@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Input from './input';
 
-function App() {
 
+function App() {
   return (
     <div className="App">
       <header className="App-header">

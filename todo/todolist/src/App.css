@@ -37,28 +37,32 @@
   }
 }
 
-.listBar{
-  width: 100vw;
-  height: 80vh;
-  overflow: auto;
-}
-
 .inputBar{
   width: 100vw;
   height: 20vh;
 }
 
+.listBar{
+  width: 100vw;
+  height: 80vh;
+  overflow-y: auto;
+}
+
+
+
 .display{
   width: 70vw;
   height: 10vh;
-  background-color: red;
-  
+  background-color: blue;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
 }
 
 .display button{
-  height: 20%;
+  height: 50%;
 }
 
 .display img{
-  height: 20%;
+  height: 100%;
 }
