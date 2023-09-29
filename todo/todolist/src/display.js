@@ -3,7 +3,7 @@ import up from './up.png'
 import down from './down.png'
 
 
-export default function Display({name, oppdater, id, buttonState, objectList, setObjectList}) {
+export default function Display({name, description, oppdater, id, buttonState, objectList, setObjectList}) {
   const [editing, setEditing] = useState(false);
   let buttonText;
   if (buttonState===true) {
@@ -71,8 +71,17 @@ export default function Display({name, oppdater, id, buttonState, objectList, se
             <input type="text" name="inputName" defaultValue={objectList[id].name}/>
             <button type="submit">Submit</button>
           </form>
-          <button onClick={() => oppdater()}>
+          <button onClick={() => oppdater(id)}>
               {buttonText}
+          </button>
+          <button onClick={() => deleteTask()}>
+            delete
+          </button>
+          <button onClick={() => takeUp()}>
+            <img src={up}></img>
+          </button>
+          <button onClick={() => takeDown()}>
+            <img src={down}></img>
           </button>
       </div>
     );
@@ -83,6 +92,9 @@ export default function Display({name, oppdater, id, buttonState, objectList, se
           <h1>
               {name}
           </h1>
+          <p>
+            {description}
+          </p>
           <button onClick={() => editValues()}>
              Edit
           </button>

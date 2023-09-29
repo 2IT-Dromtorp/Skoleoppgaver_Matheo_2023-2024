@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #141414;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -28,35 +28,65 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .inputBar{
   width: 100vw;
   height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+input{
+  background-color: #14213D;
+  border: solid #FCA311 0.3vh;
 }
 
 .listBar{
   width: 100vw;
   height: 80vh;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+.changeButton{
+  width: 20vw;
+  height: auto;
+  margin-bottom: 5vh;
+}
 
+.listPart{
+  width: 70vw;
+  flex-grow: 1;
+  overflow-y: auto;
+  background-color: #14213D;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: solid #FCA311 0.5vh;
+  padding: 5vh;
+  border-radius: 20px;
+}
 
 .display{
-  width: 70vw;
+  width: 90%;
   height: 10vh;
-  background-color: blue;
+  background-color: #141414;
+  border: solid #FCA311 0.5vh;
   display: flex;
   align-items: center;
-  padding: 0 10px;
+  margin-bottom: 2vh;
+  justify-content: space-between;
+  padding: 1vw;
+  text-align: left;
+  border-radius: 20px;
+}
+
+.display h1, .display p{
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden; 
+  text-overflow: ellipsis; 
 }
 
 .display button{
@@ -65,4 +95,8 @@
 
 .display img{
   height: 100%;
+}
+
+.display form{
+  flex-grow: 2;
 }

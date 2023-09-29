@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Display from './display';
 
 
-export default function List({input}) {
+export default function List({input, description}) {
   let x = false
   const [filteredPupils, setF] = useState([]);
   const [objectList, setObjectList] = useState([]);
@@ -65,10 +65,10 @@ export default function List({input}) {
     setF('')
     const newPupil = {
       name: input,
-      description: 'NewLastName',
+      description: description,
       finished: false,
     };
-    if (input!='') {
+    if (input!='' && description!='') {
       setObjectList((prevObjectList) => [...prevObjectList, newPupil]);
     }
   }, [input]);
@@ -80,14 +80,14 @@ export default function List({input}) {
       if (deletedTasks===false){
         if (objectList[i] && objectList[i].finished === false) {
           newFilteredPupils.push(
-            <Display oppdater={oppdater} key={i} name={objectList[i].name} id={i} buttonState={deletedTasks} objectList={objectList} setObjectList={setObjectList}/>
+            <Display oppdater={oppdater} key={i} name={objectList[i].name} description={objectList[i].description} id={i} buttonState={deletedTasks} objectList={objectList} setObjectList={setObjectList}/>
           );
         }
       }
       else{
         if (objectList[i] && objectList[i].finished === true) {
           newFilteredPupils.push(
-            <Display oppdater={oppdater} key={i} name={objectList[i].name} id={i} buttonState={deletedTasks} objectList={objectList} setObjectList={setObjectList}/>
+            <Display oppdater={oppdater} key={i} name={objectList[i].name} description={objectList[i].description} id={i} buttonState={deletedTasks} objectList={objectList} setObjectList={setObjectList}/>
           );
         }
       }
@@ -109,9 +109,12 @@ export default function List({input}) {
 
   return (
     <>
-      <button onClick={() => changeList()}>Change</button>
-    
+    <div className='changeButton'> 
+      <button onClick={() => changeList()}>Change View</button>
+    </div>
+    <div className='listPart'>
       {filteredPupils}
+    </div>
     </>
   );
 }
