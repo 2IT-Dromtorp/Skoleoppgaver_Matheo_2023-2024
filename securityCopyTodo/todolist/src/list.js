@@ -1,29 +1,27 @@
 import { useState, useEffect } from 'react';
 import Display from './display';
-let x = false
 
 
-export default function List({input, description, brukerNavn}) {
+export default function List({input, description}) {
+  let x = false
   const [filteredPupils, setF] = useState([]);
   const [objectList, setObjectList] = useState([]);
 
   useEffect(() => {
-    const userParam = brukerNavn;
-  
-    fetch(`/api/items?user=${userParam}`, { method: "GET" })
+    fetch("/api/items", {method:"GET"})
       .then((res) => res.json())
       .then((data) => setObjectList(data));
   }, []);
 
   useEffect(() => {
-    if(x==false){
+    if(x=false){
       x=true
     } 
     else{
       if (objectList.length > 0) {
         console.log("POST Request Called");
     
-        const newData = {"list":objectList, "user":brukerNavn};
+        const newData = objectList;
     
         fetch("/api/items", {
           method: "POST",
@@ -77,7 +75,6 @@ export default function List({input, description, brukerNavn}) {
 
   function makeList(){
     const newFilteredPupils = [];
-
 
     for (let i = 0; i < objectList.length; i++) {
       if (deletedTasks===false){
