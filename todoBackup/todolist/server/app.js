@@ -42,72 +42,24 @@ app.post("/api/items", function(req, res) {
 })
 
 app.post("/api/user", function(req, res) {
-  const a = req.body.person
-  const b = req.body.password
-  const inputUser = a.toLowerCase()
-  const inputPass = b.toLowerCase()
+  const raw = req.body.person
+  console.log(raw)
   const rawUsers = fs.readFileSync('./users.json');
   const users = JSON.parse(rawUsers);
   for (let i = 0; i < users.length; i++) {
-    if (users[i].name === inputUser && users[i].password === inputPass) {
-      const currentUser = users[i].name;
+    if (users[i].name === raw) {
+      const currentUser = users[i].name
+      console.log(currentUser)
       res.send({ "currentUser": currentUser });
       break; 
-    };
-  };
-});
+    }
+  }
+})
 
 app.get("/api/user", (req, res) => {
   try {
   } catch (error) {
     console.error("Error reading user.json:", error);
     res.status(500).send("Internal Server Error");
-  }
-});
-
-app.post("/api/create", function(req, res) {
-
-  const input = req.body;
-  const a = input.name
-  const inputUser=a.toLowerCase()
-  const rawUsers = fs.readFileSync('./users.json');
-  const users = JSON.parse(rawUsers);
-
-
-  let foundUser = null;
-
-  for (let i = 0; i < users.length; i++) {
-    if (users[i].name === inputUser) {
-      foundUser = users[i];
-      break;
-    }
-  }
-
-  if (foundUser) {
-    res.send({ "currentUser": `${foundUser.name} already exists` });
-
-  } else {
-    res.send({ "currentUser": inputUser });
-    const content = '[]';
-    const filePath = `${inputUser}.json`;
-
-    fs.writeFile(filePath, content, (err) => {
-      if (err) {
-        console.error('Error creating the file:', err);
-      } else {
-        console.log('File created successfully.');
-      }
-    });
-
-    users.push(input);
-    fs.writeFile(`./users.json`, JSON.stringify(users), function (err) {
-      if (err) {
-          console.error(err)
-          res.status(500).send("Internal Server Error")
-      } else {
-        console.log("Data saved")
-        res.status(200).json({ message: "Data saved successfully" });
-      }
-    });
   }
 });

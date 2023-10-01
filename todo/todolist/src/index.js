@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Input from './input';
+import CreateUser from './createUser';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -12,6 +13,7 @@ root.render(
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}/>
+      <Route path="/createUser" element={<CreateUser />}/>
       <Route path="/input/:brukerNavn" element={<Input />}/>
     </Routes>
   </BrowserRouter>

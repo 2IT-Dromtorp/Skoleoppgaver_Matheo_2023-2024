@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import List from './list';
+import { useNavigate } from 'react-router-dom';
+import './App.css';
 
-export default function Input() {
+
+export default function CreateUser() {
+  const navigate = useNavigate();
+
   const [arr, setArr] = useState('');
   const [description, setDesctiption] = useState('');
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,18 +18,16 @@ export default function Input() {
     e.target.elements.inputField.value=''
     e.target.elements.description.value=''
   };
+
   return (
-    <>
-    <div className='inputBar'>
-      <form onSubmit={handleSubmit}>
-          <input type="text" name="inputField"/>
-          <input type="text" name="description"/>
-          <button type="submit">Submit</button>
-      </form>
+    <div className="App">
+      <header className="App-header">
+        <form onSubmit={handleSubmit}>
+            <input type="text" name="inputField"/>
+            <input type="text" name="description"/>
+            <button type="submit">Submit</button>
+        </form> 
+      </header>
     </div>
-    <div className='listBar'>
-      <List input={arr} description={description} />
-    </div>  
-    </>
   );
 }

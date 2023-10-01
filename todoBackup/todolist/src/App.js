@@ -11,8 +11,6 @@ let y = false
 function App() {
   const navigate = useNavigate();
   const [person, setPerson] = useState('');
-  const [password, setPassword] = useState('');
-
   const [acceptetUser, setAcceptedUser] = useState('');
 
 
@@ -20,12 +18,8 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const submittedValue = e.target.elements.inputField.value;
-    const submittedPass = e.target.elements.inputPass.value;
-    setPassword(submittedPass)
     setPerson(submittedValue);
     e.target.elements.inputField.value=''
-    e.target.elements.inputPass.value=''
-
   };
 
   useEffect(() => {
@@ -35,12 +29,13 @@ function App() {
     else{
       if (1 > 0) {
         console.log("POST Request Called");
+        
         fetch("/api/user", {
           method: "POST",
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({person,password}),
+          body: JSON.stringify({person}),
         })
         .then((res) => res.json())
         .then((data) => setAcceptedUser(data.currentUser));
@@ -49,7 +44,10 @@ function App() {
   }, [person]);
 
   useEffect(() => {
-    if(acceptetUser!=''){
+    if(y==false){
+      y=true
+    } 
+    else{
       navigate(`./input/${acceptetUser}`)
     }
   }, [acceptetUser]);
@@ -59,7 +57,6 @@ function App() {
       <header className="App-header">
         <form onSubmit={handleSubmit}>
               <input type="text" name="inputField"/>
-              <input type="text" name="inputPass"/>
               <button type="submit">Submit</button>
           </form>
           <button onClick={()=>navigate(`./createUser`)}>Create new user</button>
