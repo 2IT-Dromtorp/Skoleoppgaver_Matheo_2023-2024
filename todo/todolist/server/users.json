@@ -1,1 +1,18 @@
-[{"name":"vetle","password":"rotte"},{"name":"matheo","password":"vugle"},{"name":"mamma","password":"erkul"}]
+[
+    {
+        "name": "vetle",
+        "password": "rotte"
+    },
+    {
+        "name": "matheo",
+        "password": "vugle"
+    },
+    {
+        "name": "mamma",
+        "password": "erkul"
+    },
+    {
+        "name": "andreas",
+        "password": "hore"
+    }
+]
