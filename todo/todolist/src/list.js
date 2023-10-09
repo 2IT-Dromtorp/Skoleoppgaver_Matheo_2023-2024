@@ -20,7 +20,7 @@ export default function List({input, description, brukerNavn}) {
       x=true
     } 
     else{
-      if (objectList.length > 0) {
+      if (objectList.length >=0) {
         console.log("POST Request Called");
     
         const newData = {"list":objectList, "user":brukerNavn};

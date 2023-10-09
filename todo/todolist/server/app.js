@@ -3,6 +3,9 @@ const fs = require("fs");
 const app = express();
 const PORT = 8080;
 
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 app.listen(PORT, () => console.log("Server started"));
 
 app.use(express.static("build"));
@@ -41,15 +44,16 @@ app.post("/api/items", function(req, res) {
 
 })
 
-app.post("/api/user", function(req, res) {
+app.post("/api/user", async function(req, res) {
   const a = req.body.person
   const b = req.body.password
   const inputUser = a.toLowerCase()
   const inputPass = b.toLowerCase()
   const rawUsers = fs.readFileSync('./users.json');
   const users = JSON.parse(rawUsers);
+
   for (let i = 0; i < users.length; i++) {
-    if (users[i].name === inputUser && users[i].password === inputPass) {
+    if (users[i].name === inputUser && await bcrypt.compare(inputPass, users[i].password)===true) {
       const currentUser = users[i].name;
       res.send({ "currentUser": currentUser });
       break; 
@@ -65,13 +69,17 @@ app.get("/api/user", (req, res) => {
   }
 });
 
-app.post("/api/create", function(req, res) {
+app.post("/api/create", async function(req, res) {
 
-  const input = req.body;
+  let input = req.body;
   const a = input.name
   const inputUser=a.toLowerCase()
   const rawUsers = fs.readFileSync('./users.json');
   const users = JSON.parse(rawUsers);
+  
+  const hashedPass = await bcrypt.hash(input.password, saltRounds)
+  console.log(hashedPass)
+  input.password=hashedPass
 
 
   let foundUser = null;
