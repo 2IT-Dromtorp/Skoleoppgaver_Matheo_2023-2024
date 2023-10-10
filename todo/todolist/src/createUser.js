@@ -29,7 +29,7 @@ export default function CreateUser() {
       if (user!=''&&pass!='') {
         console.log("POST Request Called");
     
-        const newData = {"name":user, "password":pass};
+        const newData = {"name":user, "password":pass, "isLoggedIn":false};
     
         fetch("/api/create", {
           method: "POST",

@@ -14,8 +14,6 @@ app.use(express.json());
 app.get("/api/items", (req, res) => {
   const desiredUser = req.query.user; 
   const fileName = `./${desiredUser}.json`;
-  console.log(fileName)
-  console.log("fileName")
 
 
 
@@ -30,19 +28,38 @@ app.get("/api/items", (req, res) => {
 });
 
 app.post("/api/items", function(req, res) {
-  console.log(req.body.user)
   fs.writeFile(`./${req.body.user}.json`, JSON.stringify(req.body.list), function (err) {
       if (err) {
           console.error(err)
           res.status(500).send("Internal Server Error")
       } else {
-        console.log("Data saved")
         res.status(200).json({ message: "Data saved successfully" });
       }
 
   })
 
 })
+
+app.get("/api/login", (req, res) => {
+  let index;
+  const desiredUser = req.query.user;
+  const inputUser = desiredUser.toLowerCase();
+  const rawUsers = fs.readFileSync('./users.json');
+  const users = JSON.parse(rawUsers);
+  for (let i = 0; i < users.length; i++) {
+    if (users[i].name === inputUser) {
+      index=i
+      break;
+    }
+  }
+
+  try {
+    res.send({"isLoggedIn":users[index].isLoggedIn});
+  } catch (error) {
+    console.error(`Error reading ${fileName}:`, error);
+    res.status(500).send(`Error reading ${fileName}: ${error.message}`);
+  }
+});
 
 app.post("/api/user", async function(req, res) {
   const a = req.body.person
@@ -55,6 +72,16 @@ app.post("/api/user", async function(req, res) {
   for (let i = 0; i < users.length; i++) {
     if (users[i].name === inputUser && await bcrypt.compare(inputPass, users[i].password)===true) {
       const currentUser = users[i].name;
+      users[i].isLoggedIn=true
+      fs.writeFile(`./users.json`, JSON.stringify(users), function (err) {
+        if (err) {
+            console.error(err+"deyyr")
+            res.status(500).send("Internal Server Error")
+        } else {
+          console.log("Data saved")
+          res.status(200).json({ message: "Data saved successfully" });
+        }
+      });
       res.send({ "currentUser": currentUser });
       break; 
     };
@@ -71,7 +98,7 @@ app.get("/api/user", (req, res) => {
 
 app.post("/api/create", async function(req, res) {
 
-  let input = req.body;
+  const input = req.body;
   const a = input.name
   const inputUser=a.toLowerCase()
   const rawUsers = fs.readFileSync('./users.json');
@@ -110,7 +137,7 @@ app.post("/api/create", async function(req, res) {
     users.push(input);
     fs.writeFile(`./users.json`, JSON.stringify(users), function (err) {
       if (err) {
-          console.error(err)
+          console.error(err+"deyyr")
           res.status(500).send("Internal Server Error")
       } else {
         console.log("Data saved")
