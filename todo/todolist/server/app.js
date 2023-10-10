@@ -12,7 +12,7 @@ app.use(express.static("build"));
 app.use(express.json());
 
 app.get("/api/items", (req, res) => {
-  const desiredUser = req.query.user; // Get the user from the query parameter
+  const desiredUser = req.query.user; 
   const fileName = `./${desiredUser}.json`;
   console.log(fileName)
   console.log("fileName")
