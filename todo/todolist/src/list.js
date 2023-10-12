@@ -10,7 +10,7 @@ export default function List({input, description, brukerNavn}) {
   useEffect(() => {
     const userParam = brukerNavn;
   
-    fetch(`/api/items?user=${userParam}`, { method: "GET" })
+    fetch(`http://localhost:8080/api/items?user=${userParam}`, { method: "GET" })
       .then((res) => res.json())
       .then((data) => setObjectList(data));
   }, []);

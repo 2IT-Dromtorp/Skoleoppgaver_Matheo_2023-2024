@@ -23,10 +23,11 @@ export default function Input() {
   };
 
   useEffect(() => {
-    fetch(`/api/login?user=${brukerNavn}`, { method: "GET" })
+    fetch(`http://localhost:8080/api/login?user=${brukerNavn}`, { method: "GET" })
       .then((res) => res.json())
       .then((data) => setLog(data.isLoggedIn));
   }, []);
+
   if (loggedIn) {
     return (
     
