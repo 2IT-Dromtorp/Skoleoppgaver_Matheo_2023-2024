@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEflct } from 'react';
 import up from './up.png'
 import down from './down.png'
 

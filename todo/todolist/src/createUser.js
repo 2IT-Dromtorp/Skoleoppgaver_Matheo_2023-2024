@@ -31,7 +31,7 @@ export default function CreateUser() {
     
         const newData = {"name":user, "password":pass, "isLoggedIn":false};
     
-        fetch("/api/create", {
+        fetch("http://localhost:8080/api/create", {
           method: "POST",
           headers: {
             'Content-Type': 'application/json'

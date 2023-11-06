@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import { useNavigate } from 'react-router-dom';
+import user from './icons/user.svg'
+
+
 let x = false
 let y = false
 
@@ -9,6 +12,8 @@ let y = false
 
 
 function App() {
+  const [showLogIn, setShowLogIn] = useState(false);
+
   const navigate = useNavigate();
   const [person, setPerson] = useState('');
   const [password, setPassword] = useState('');
@@ -45,7 +50,7 @@ function App() {
       //Jeg vet ikke hvorfor jeg sier at koden undeer skal skje hvis 1>0, for 1 er alltid større enn null. Men hvis jeg fjerner det fungerer ikke koden min
       if (1 > 0) {
         console.log("POST Request Called");
-        fetch("/api/user", {
+        fetch("http://localhost:8080/api/user", {
           method: "POST",
           headers: {
             'Content-Type': 'application/json'
@@ -65,14 +70,22 @@ function App() {
     }
   }, [acceptetUser]);
 
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <form onSubmit={handleSubmit}>
-              <input type="text" name="inputField"/>
-              <input type="text" name="inputPass"/>
-              <button type="submit">Submit</button>
-          </form>
+      <div className='loginbar'>
+        <button className="loginbutton" onClick={() => setShowLogIn(!showLogIn)}><img src={user}/></button>
+      </div>
+        {showLogIn && (<div className='dropdownLogin'>
+          <form onSubmit={handleSubmit}>
+                  <input type="text" name="inputField"/>
+                  <input type="text" name="inputPass"/>
+                  <button type="submit">Submit</button>
+            </form> 
+        </div>)}
+      
+      <header className="App-header">  
           <button onClick={()=>navigate(`./createUser`)}>Create new user</button>
       </header>
     </div>

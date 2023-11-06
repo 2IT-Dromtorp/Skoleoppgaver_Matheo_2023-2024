@@ -7,21 +7,57 @@
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
-  background-color: #141414;
-  min-height: 100vh;
+  background-color: #ededed;
+  min-height: 90vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  z-index: 1;
+}
+
+.loginbar{
+  background-color: rgb(28, 28, 28);
+  width: 100vw;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 10px 5px 5px black;
+  z-index: 200;
+}
+
+.loginbutton{
+  position: absolute;
+  right: 1vw;
+  height: 7vh;
+  width: 7vh;
+  border-radius: 10000vh;
+}
+
+.loginbutton img{
+  height: 80%;
+}
+
+.dropdownLogin{
+  width: 20vw;
+  height: 20vh;
+  margin-top: -10vh;
+  z-index: 33;
+  background-color: rgb(51, 51, 51);
+  position: absolute;
+  right: 0;
+  top: 20vh;
+}
+
+.dropdownLogin input{
+  width: 90%;
+  height: 5vh;
+  margin-top: 1vh;
 }
 
 .App-link {
