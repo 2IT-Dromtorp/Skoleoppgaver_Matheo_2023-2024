@@ -16,7 +16,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: black;
   z-index: 1;
 }
 
@@ -56,8 +56,35 @@
 
 .dropdownLogin input{
   width: 90%;
-  height: 5vh;
+  height: 8vh;
   margin-top: 1vh;
+}
+
+@media screen and (min-width: 2000px) {
+  .loginbar {
+    height: 5vh;
+  }
+  .loginbutton {
+    height: 3.5vh;
+    width: 3.5vh;
+    right: 25vh;
+  }
+  .dropdownLogin {
+    margin-top: -15vh;
+    width: 10vw;
+    right: 15vh;
+  }
+  .dropdownLogin input{
+    width: 90%;
+    height: 4vh;
+    margin-top: 1vh;
+  }
+  .App-header {
+    height: 95vh;
+  }
+  .listPart{
+    height: 70px;
+  }
 }
 
 .App-link {
@@ -66,7 +93,7 @@
 
 .inputBar{
   width: 100vw;
-  height: 20vh;
+  height: 10%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -88,7 +115,7 @@ input{
 
 .changeButton{
   width: 20vw;
-  height: auto;
+  height: 5vh;
   margin-bottom: 5vh;
 }
 
@@ -96,7 +123,7 @@ input{
   width: 70vw;
   flex-grow: 1;
   overflow-y: auto;
-  background-color: #14213D;
+  background-color: red;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -107,7 +134,7 @@ input{
 
 .display{
   width: 90%;
-  height: 10vh;
+  height: 3vh;
   background-color: #141414;
   border: solid #FCA311 0.5vh;
   display: flex;
@@ -124,10 +151,11 @@ input{
   white-space: nowrap;
   overflow: hidden; 
   text-overflow: ellipsis; 
+  font-size: 80%;
 }
 
 .display button{
-  height: 50%;
+  height: 3vh;
 }
 
 .display img{

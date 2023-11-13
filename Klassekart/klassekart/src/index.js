@@ -16,7 +16,6 @@ root.render(
       <Route path="/profile/:elevNavn" element={<Profil />}/>
       <Route path="/classList" element={<MainSite />}/>
       <Route path="/classMap" element={<ClassMap />}/>
-
     </Routes>
   </BrowserRouter>
 );

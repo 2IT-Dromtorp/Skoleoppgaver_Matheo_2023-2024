@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import List from './list';
 import { useParams } from 'react-router-dom';
 import './App.css';
-
+import NavBar from './navbar';
 
 export default function Input() {
   let { brukerNavn } = useParams()
@@ -22,16 +22,17 @@ export default function Input() {
     e.target.elements.description.value=''
   };
 
-  useEffect(() => {
-    fetch(`http://localhost:8080/api/login?user=${brukerNavn}`, { method: "GET" })
-      .then((res) => res.json())
-      .then((data) => setLog(data.isLoggedIn));
-  }, []);
+  // useEffect(() => {
+  //   fetch(`http://localhost:8080/api/login?user=${brukerNavn}`, { method: "GET" })
+  //     .then((res) => res.json())
+  //     .then((data) => setLog(data.isLoggedIn));
+  // }, []);
 
-  if (loggedIn) {
+  if (!loggedIn) {
     return (
     
       <div className="App">
+        <NavBar />
         <header className="App-header">
           <div className='inputBar'>
           <form onSubmit={handleSubmit}>
@@ -50,6 +51,7 @@ export default function Input() {
   else{
     return(
     <div className="App">
+        <NavBar />
         <header className="App-header">
           <h1>{`Du er ikke logget inn som ${brukerNavn}`}</h1>
         </header>
