@@ -1,0 +1,13 @@
+.contain-nav-bar-objects{
+    height: 90vh;
+    padding: 1vh;
+}
+
+.nav-bar-object{
+    margin-top: 2vh;
+    width: 100%;
+    height: 5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

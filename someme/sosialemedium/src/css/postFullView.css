@@ -1,0 +1,55 @@
+:root{
+    --post-height:80vh;
+    --top-user-height: calc(var(--post-height)/18);
+    --view-content-height: calc(var(--post-height) - var(--top-user-height) - var(--top-user-height) - 1vh);
+}
+
+.post-full-view{
+    margin-top: 10vh;
+    height: var(--post-height);
+    width: 50%;
+    border: solid black 1px;
+    border-radius: 10px;
+}
+
+.post-user-top{
+    height: var(--top-user-height);
+    display: flex;
+    align-items: center;
+    margin-top: 0.5vh;
+    margin-bottom: 0.5vh;
+}
+
+.post-user-top img{
+    height: var(--top-user-height);
+    width: var(--top-user-height);
+    border-radius: 50%;
+    margin-left: 0.5vh;
+}
+
+.post-user-name{
+    margin-left: 3%;
+}
+
+.post-view-content{
+    height: var(--view-content-height);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.post-view-content img{
+    width: 100%;
+    height: auto;
+}
+
+.post-interactive-content{
+    height: var(--top-user-height);
+    width: 100%;
+}
+
+.post-comment-symbol{
+    margin-left: 1vh;
+    height: 80%;
+}
