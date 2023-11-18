@@ -22,3 +22,16 @@ html, body, * {
     width: var(--navSideBarWidth);
     border-right: solid black 1px;
 }
+
+.own-profile-part-layout{
+    position: absolute;
+    top: 2vh;
+    right: 2vw;
+    display: flex;
+}
+
+.own-profile-picture-layout{
+    height: 5vh;
+    width: 5vh;
+    border-radius: 50%;
+}

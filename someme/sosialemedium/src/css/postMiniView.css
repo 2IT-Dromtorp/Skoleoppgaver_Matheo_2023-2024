@@ -1,0 +1,14 @@
+:root{
+    --post-height: 10vh;
+}
+
+.post-mini-view{
+    height: var(--post-height);
+    width: 10vh;
+    background-color: red;
+}
+
+.post-mini-view img{
+    height: var(--post-height);
+    width: auto;
+}

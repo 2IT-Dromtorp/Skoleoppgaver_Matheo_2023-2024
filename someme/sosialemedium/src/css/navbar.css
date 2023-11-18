@@ -1,13 +1,40 @@
+/* Du burde her sette høyden til bilde til til halvparten av diven sin, med hjkelp av variablert. og få bredden til å være høyde / 2,5 *  2,8*/
+
 .contain-nav-bar-objects{
     height: 90vh;
     padding: 1vh;
 }
 
+.contain-nav-bar-objects a h1{
+    font-size: 3em;
+    color: rgb(0, 0, 0);
+    text-decoration: none; 
+}
+
 .nav-bar-object{
     margin-top: 2vh;
     width: 100%;
-    height: 5vh;
+    height: 5;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.nav-bar-object img{
+    height: 2.5vh;
+    width: 2.8vh;
+    margin-right: 1vh;
+}
+
+.nav-bar-object a {
+    color: rgb(0, 0, 0);
+    text-decoration: none; 
+    font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+  
+.nav-bar-object:hover {
+    background-color: #aaaaaa;
 }
