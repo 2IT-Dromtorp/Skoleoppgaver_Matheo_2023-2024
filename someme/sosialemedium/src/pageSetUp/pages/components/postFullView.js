@@ -11,7 +11,7 @@ function PostFullView() {
                 <div className='post-user-top'>
                     <img src='https://www.wfla.com/wp-content/uploads/sites/71/2023/05/GettyImages-1389862392.jpg?w=2560&h=1440&crop=1'/>
                     <div className='post-user-name'>
-                        <Link to={`/user/${userTag}`}>Kattemann</Link>
+                        <Link to={`/${userTag}`}>Kattemann</Link>
                     </div>
                 </div>
                 <div className='post-view-content'>

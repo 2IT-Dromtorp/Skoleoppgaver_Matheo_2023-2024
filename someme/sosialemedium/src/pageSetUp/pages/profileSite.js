@@ -3,11 +3,18 @@ import { useParams } from 'react-router-dom';
 import '../../css/profileSite.css'
 import optionsSymbol from '../../icons/options.png'
 import PostMiniView from './components/postMiniView';
+import ProfileSiteViewPosts from './profileSiteViewPosts';
+import { useState, useEffect } from 'react';
 
 function ProfileSite(){
     const userTag = useParams();
+    const [showPosts, setShowPosts] = useState(false)
+    // useEffect(()=>{
+    //     console.log(showPosts)
+    // })
     return (
         <>
+            {showPosts?<ProfileSiteViewPosts/>:false}
            <div className='profile-container'>
                 <div className='profile-information'>
                     <div className='profile-picture'>
@@ -31,10 +38,11 @@ function ProfileSite(){
                 </div>
                 <div className='profile-mini-posts'>
                     <div className='profile-mini-posts-container'>
+                        <PostMiniView setShowPosts={setShowPosts}/>
                         <PostMiniView/>
                         <PostMiniView/>
                         <PostMiniView/>
-
+                        <PostMiniView/>
                     </div>
                 </div>
            </div>

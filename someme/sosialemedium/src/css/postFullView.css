@@ -9,6 +9,7 @@
     height: var(--post-height);
     width: 50%;
     border: solid black 1px;
+    background-color: #fffff7;
     border-radius: 10px;
 }
 

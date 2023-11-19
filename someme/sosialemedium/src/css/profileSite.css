@@ -86,6 +86,7 @@
     min-height: 80vh;
     width: var(--profile-mini-posts-container-width);
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-start;
     align-items: flex-start;
 }
