@@ -32,6 +32,17 @@
     margin-left: 3%;
 }
 
+.post-user-x-out{
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    padding: 1vh;
+}
+
+.post-user-x-out img{
+    height: 100%;
+}
+
 .post-view-content{
     height: var(--view-content-height);
     width: 100%;
