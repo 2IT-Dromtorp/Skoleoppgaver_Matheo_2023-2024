@@ -1,0 +1,9 @@
+.homesite-main{
+    height: fit-content;
+    min-height: var(--content-height);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}

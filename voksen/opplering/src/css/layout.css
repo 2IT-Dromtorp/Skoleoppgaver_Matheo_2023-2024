@@ -1,0 +1,20 @@
+body, html, *{
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.content_box{
+    height: var(--total-height);
+    width: 100vw;
+    background-color: red;
+    overflow-y: hidden;
+}
+
+.main_content{
+    height: var(--content-height);
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    overflow-y: scroll;
+
+}
+

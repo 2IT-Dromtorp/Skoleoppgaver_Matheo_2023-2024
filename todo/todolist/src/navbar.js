@@ -20,10 +20,7 @@ export default function NavBar() {
   //Grunnet parameteret i [] under calles denne useEffecten hver gang staten "person" oppdateres
   useEffect(() => {
     //for at koden ikke skal calles når du åpner opp førstegangen, for da sender den deg til en bruker selv før du logger inn bruker jeg "x-systemet"
-    if(x==false){
-      x=true
-    } 
-    else{
+    if(person!==''){
       //Jeg vet ikke hvorfor jeg sier at koden undeer skal skje hvis 1>0, for 1 er alltid større enn null. Men hvis jeg fjerner det fungerer ikke koden min
       if (1 > 0) {
         console.log("POST Request Called");
@@ -44,9 +41,11 @@ export default function NavBar() {
   //Hvis det som returneres, som helst er et navn, er noe, sendes man til input-siden, og får med parameteret, som er navnet på brukeren 
   useEffect(() => {
     if(acceptetUser!=''){
+      setPerson('')
       navigate(`./input/${acceptetUser}`)
     }
   }, [acceptetUser]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const submittedValue = e.target.elements.inputField.value;

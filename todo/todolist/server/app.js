@@ -17,7 +17,6 @@ const corsOptions = {
   credentials: true, 
 };
 
-// const token = req.cookies.auth
 
 //ALT UNDER SKAL KONVERTERES TIL SQL. OG DU SKAL I TILLEGG SETTE OPP EN DATABASE. JEG SKAL BRUKE TID NÅ, PÅ PRAKSIS, PÅ DESIGN, FORDI JEG HAR EN SERVER SOM KJØRER ALLEREDE, MEN NESTE GANG JEG JOBBER BLIR DET FOR DETTE.
 
@@ -26,6 +25,40 @@ app.use(cors(corsOptions));
 app.listen(PORT, () => console.log("Server started"))
 
 const experationTime = 1000*60*60*5
+
+const mysql = require("mysql2");
+
+const dbConfig = {
+  host: '10.168.120.202',
+  port: 3306,
+  user: 'hostpc',
+  password: 'hostpassord123',
+  database: 'todo',
+};
+const pool = mysql.createPool(dbConfig);
+
+
+
+app.get("/getlists", (req, res) => {
+  const token = req.cookies.auth
+  const q = req.query
+
+  const sessionQuery =  `SELECT name FROM users WHERE sessions = ?`;
+  const sessionValues = [token];
+
+  pool.query(sessionQuery, sessionValues, (err, safeResults) => {
+  if (err) {
+      console.error(err);
+      res.status(400).send(err);
+  } else {
+      const dataToSendOver = {data:safeResults, rightToAccess:true}
+      res.status(200).json(dataToSendOver);
+  }
+});
+
+// `SELECT DISTINCT listName FROM tasks where listName like ?`;
+})
+
  
 app.get("/api/items", (req, res) => {
   const desiredUser = req.query.user;
