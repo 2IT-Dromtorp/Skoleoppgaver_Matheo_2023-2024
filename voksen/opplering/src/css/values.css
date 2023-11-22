@@ -2,4 +2,5 @@
     --total-height: 100vh;
     --navbar-height: 10vh;
     --content-height: calc(var(--total-height) - var(--navbar-height));
+    --navbar-color: #006cad;
 }

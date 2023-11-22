@@ -1,0 +1,22 @@
+.popup-main{
+    z-index: 200000;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 0vw;
+    background-color: rgba(255, 255, 255, 0.226); /* Semi-transparent background */
+    backdrop-filter: blur(10px);
+}
+
+.popup-template{
+    width: 70vw;
+    height: fit-content;
+    max-height: 95vh;
+    min-height: 70vh;
+    background-color: white;
+    border: solid black 5px;
+    border-radius: 10px;
+}

@@ -4,9 +4,54 @@ import MiniDisplayCourse from '../components/miniDisplayCourse';
 function Homesite() {
     return (
         <div className='homesite-main'>
-            <MiniDisplayCourse/>
-            <MiniDisplayCourse/>
-            <MiniDisplayCourse/>
+            <div className='homesite-display-name'>
+                <h1>
+                    Kurs for godt voksne
+                </h1>
+            </div>
+            <div className='homesite-course-container'>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/> <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/> <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/> <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/> <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/> <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/> <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/> <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/> <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/> <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+                <MiniDisplayCourse/>
+            </div>
         </div>
     );
 }
