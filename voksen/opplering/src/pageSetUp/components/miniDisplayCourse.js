@@ -1,6 +1,10 @@
 import '../../css/miniDisplayCourse.css'
+import { useState, useContext } from 'react';
+import { ShowPopUpContext } from '../../context';
 
 function MiniDisplayCourse() {
+    const { showPopUp, setShowPopUp } = useContext(ShowPopUpContext);
+
     return (
         <button className="Mini-view-course-main">
             <div className='mini-view-course-picture'>
@@ -17,7 +21,7 @@ function MiniDisplayCourse() {
                 </h3>
             </div>
             <div className='mini-view-course-footer'>
-                <button>
+                <button onClick={()=>setShowPopUp(true)}>
                     Trykk her
                 </button>
             </div>

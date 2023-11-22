@@ -1,0 +1,88 @@
+:root{
+    --popUpPadding-total: 5vh;
+    --popup-widths: calc(70vw - var(--popUpPadding-total) - var(--popUpPadding-total));
+    --header-height: 10vh;
+    --description-height: 15vh;
+    --signup-height: 10vh;
+    --times-min-height: calc(var(--popup-min-height) - var(--header-height) - var(--description-height) - var(--signup-height) - var(--popUpPadding-total));
+}
+
+.course-popup-main{
+    height: fit-content;
+    width: var(--popup-widths);
+    max-height: var(--popup-max-height);
+    min-height: var(--popup-min-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: var(--popUpPadding-total) var(--popUpPadding-total) 0 var(--popUpPadding-total);
+}
+
+.course-popup-header{
+    width: var(--popup-widths);
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: larger;
+}
+
+
+.course-popup-times{
+    width: calc(var(--popup-widths)  - 10vw);
+    max-height: calc(var(--popup-max-height) - var(--header-height) - var(--description-height) - var(--signup-height) - var(--popUpPadding-total));
+    min-height: var(--times-min-height);
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.course-popup-times h2{
+    height: 5vh;
+}
+
+.course-popup-times-table{
+    height: fit-content;
+    overflow: hidden;
+}
+
+.course-popup-times-table table{
+    border-collapse: collapse;
+}
+
+.course-popup-times-table th, 
+.course-popup-times-table td, 
+.course-popup-times-table tr{
+    border: solid black 3px;
+}
+
+.course-popup-description{
+    width: calc(var(--popup-widths) - 10vw);
+    height: var(--description-height);
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow: hidden;
+    font-size: 1.3em;
+}
+
+.course-popup-signup{
+    width: var(--popup-widths);
+    height: var(--signup-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.course-popup-signup button{
+    background-color: var(--navbar-color);
+    color: white;
+    border-radius: 10px;
+    width: 13vw;
+    height: 5vh;
+    font-size: large;
+    border: solid 1px blue;
+}
