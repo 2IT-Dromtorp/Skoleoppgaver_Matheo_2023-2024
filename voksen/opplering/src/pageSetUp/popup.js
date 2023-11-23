@@ -17,7 +17,7 @@ function PopUp() {
                 <img src={xIcon}/>
             </button>
             <div className='popup-template'>
-                <RecievePopUp preferredPopUp={preferredPopUp}/>
+                <RecievePopUp/>
            </div>
         </div>
     );

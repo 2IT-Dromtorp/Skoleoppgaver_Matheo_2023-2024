@@ -1,31 +1,49 @@
 import '../../css/miniDisplayCourse.css'
 import { useState, useContext } from 'react';
-import { ShowPopUpContext } from '../../context';
+import { ShowPopUpContext, PopUpContentContext, PopUpCourseContext } from '../../context';
 
-function MiniDisplayCourse() {
+function MiniDisplayCourse({id, courseName, pictureAddress, timeStart, day, timeEnd}) {
     const { showPopUp, setShowPopUp } = useContext(ShowPopUpContext);
+    const { popUpContent, setPopUpContent } = useContext(PopUpContentContext);
+    const { popUpCourse, setPopUpCourse } = useContext(PopUpCourseContext);
+
+    const handleclick = ()=>{
+        setShowPopUp(true)
+        setPopUpContent('course')
+        setPopUpCourse(id)
+    }
+
+    const myStyle = {
+        fontSize: '1.4em',
+    };
+
+    const checkIfNameTooLong = courseName.length>15
 
     return (
-        <button className="Mini-view-course-main">
+        <div className="Mini-view-course-main" onClick={handleclick}>
             <div className='mini-view-course-picture'>
-                <img src='https://i.pinimg.com/564x/2d/49/d3/2d49d3c263707af48b6dd103da36484f.jpg'/>
+                <img src={pictureAddress}/>
             </div>
             <div className='mini-view-course-header'>
+                {checkIfNameTooLong?
+                <h1 style={myStyle}>
+                    {courseName}
+                </h1>:
                 <h1>
-                    Fremmedspråk
-                </h1>
+                    {courseName}
+                </h1>}
             </div>
             <div className='mini-view-course-description'>
                 <h3>
-                    23. Desember KL 20:00
+                    {day} Kl {timeStart} - {timeEnd}
                 </h3>
             </div>
             <div className='mini-view-course-footer'>
-                <button onClick={()=>setShowPopUp(true)}>
+                <button onClick={handleclick}>
                     Trykk her
                 </button>
             </div>
-        </button>
+        </div>
     );
 }
 

@@ -1,11 +1,19 @@
 import CoursePopUp from "./coursePopUp";
+import LogInPopUp from "./LogInPopUp";
+import { PopUpContentContext } from '../../context';
+import { useContext } from "react";
 
-function RecievePopUp({preferredPopUp}) {
-    if(preferredPopUp==='course'){
+function RecievePopUp() {
+    const { popUpContent, setPopUpContent } = useContext(PopUpContentContext);
+    if(popUpContent==='course'){
         return (        
             <CoursePopUp/>
         );
-    } else{
+    } if(popUpContent==='login'){
+        return (
+            <LogInPopUp/>
+        );
+    }else{
         return (
             <h1>404 not found</h1>
         );

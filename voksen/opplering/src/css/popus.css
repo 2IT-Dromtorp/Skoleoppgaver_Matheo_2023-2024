@@ -7,7 +7,7 @@
     justify-content: center;
     align-items: center;
     right: 0vw;
-    background-color: rgba(255, 255, 255, 0.226); /* Semi-transparent background */
+    background-color: rgba(255, 255, 255, 0.564); /* Semi-transparent background */
     backdrop-filter: blur(10px);
 }
 

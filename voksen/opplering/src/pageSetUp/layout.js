@@ -4,7 +4,7 @@ import PopUp from './popup.js';
 import '../css/layout.css';
 import '../css/values.css';
 import { ShowPopUpContext } from '../context.js';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 
 function Layout() {
     const { showPopUp, setShowPopUp } = useContext(ShowPopUpContext);

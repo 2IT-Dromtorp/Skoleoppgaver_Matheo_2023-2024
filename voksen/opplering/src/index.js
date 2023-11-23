@@ -3,15 +3,17 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ShowPopUpProvider } from './context';
+import { ShowPopUpProvider, PopUpContentProvider, PopUpCourseProvider } from './context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
     <ShowPopUpProvider>
-      <App />
+      <PopUpContentProvider>
+        <PopUpCourseProvider>
+          <App />
+        </PopUpCourseProvider>
+      </PopUpContentProvider>
     </ShowPopUpProvider>
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
