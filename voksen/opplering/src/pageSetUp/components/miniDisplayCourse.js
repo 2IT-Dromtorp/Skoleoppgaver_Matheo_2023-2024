@@ -14,7 +14,7 @@ function MiniDisplayCourse({id, courseName, pictureAddress, timeStart, day, time
     }
 
     const myStyle = {
-        fontSize: '1.4em',
+        fontSize: '1.2em',
     };
 
     const checkIfNameTooLong = courseName.length>15

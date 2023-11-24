@@ -1,0 +1,5 @@
+.login-main{
+    width: var(--popup-widths);
+    max-height: var(--popup-max-height);
+    min-height: var(--popup-min-height);
+}

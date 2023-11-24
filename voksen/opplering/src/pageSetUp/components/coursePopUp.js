@@ -12,6 +12,7 @@ function CoursePopUp() {
     const [listOfAllData, setListOfAllData] = useState('')
 
     useEffect(()=>{
+        console.log(popUpCourse)
         fetch(`/getcourseinfo?q=${popUpCourse}`, {
             method: 'GET',
             credentials: 'include',
