@@ -30,4 +30,15 @@ const PopUpCourseProvider = ({ children }) => {
     );
 };
 
-export { ShowPopUpProvider, ShowPopUpContext, PopUpContentProvider, PopUpContentContext, PopUpCourseContext, PopUpCourseProvider };
+
+const IsLoggedInContext = createContext({});
+const IsLoggedInProvider = ({ children }) => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    return (
+        <IsLoggedInContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+            {children}
+        </IsLoggedInContext.Provider>
+    );
+};
+
+export { ShowPopUpProvider, ShowPopUpContext, PopUpContentProvider, PopUpContentContext, PopUpCourseContext, PopUpCourseProvider, IsLoggedInContext, IsLoggedInProvider };

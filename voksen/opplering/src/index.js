@@ -3,14 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ShowPopUpProvider, PopUpContentProvider, PopUpCourseProvider } from './context';
+import { ShowPopUpProvider, PopUpContentProvider, PopUpCourseProvider, IsLoggedInProvider } from './context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <ShowPopUpProvider>
       <PopUpContentProvider>
         <PopUpCourseProvider>
-          <App />
+          <IsLoggedInProvider>
+            <App /> 
+          </IsLoggedInProvider>
         </PopUpCourseProvider>
       </PopUpContentProvider>
     </ShowPopUpProvider>

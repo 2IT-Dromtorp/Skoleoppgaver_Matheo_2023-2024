@@ -22,7 +22,8 @@ const experationTime = 1000*60*60*5
 
 
 const dbConfig = {
-  host: '10.20.64.137',
+  // host: '10.20.64.137', //Skolen
+  host: '192.168.0.118', //Hjemme
   port: 3306,
   user: 'hostpc',
   password: 'hostpassord123',
@@ -39,7 +40,34 @@ app.get('/getdata', (req, res) => {
         console.log(err)
         res.status(500).send(err)
       }else{
-        res.send(results)
+        const token = req.cookies.auth
+        if (token === undefined) {
+          res.status(202).send(results)
+        } else{
+          const checkRightQuery = 'SELECT session FROM users'
+          pool.query(checkRightQuery, (checkerr, checkresults)=>{
+            if(checkerr){
+              console.log(checkerr)
+              res.status(500).send(checkerr)
+            }else{
+              for(i in checkresults){
+                if(checkresults[i].session===token){
+                  const usersSession = checkresults[i].session
+                  const getCourseQuery = 'SELECT signedInto FROM users WHERE session = ?'
+                  const getCourseValue = [usersSession]
+                  pool.query(getCourseQuery, getCourseValue, (geterr, getresults)=>{
+                    if(geterr){
+                      console.log(geterr)
+                      res.status(500).send(geterr)
+                    }else{
+                      res.status(200).send({results:results, courses:getresults})
+                    }
+                  })
+                }
+              }
+            }
+          })
+        }
       }
     })
 });
@@ -92,7 +120,16 @@ app.post('/login', async(req, res) => {
             secure: true, 
             sameSite: "lax" || 'none',
           })
-          res.status(200).json("Yes work");
+          let updatequery = `UPDATE users SET session = ? WHERE email = ?;`
+          let updatevalues = [token, username]
+          pool.query(updatequery, updatevalues, (uperr, upresults)=>{
+            if(uperr){
+              console.log(uperr)
+              res.status(500).send(uperr)
+            }else{
+              res.status(200).send(upresults)
+            }
+          })
         } else{
           res.status(401).json("Incorrect password")
         }
