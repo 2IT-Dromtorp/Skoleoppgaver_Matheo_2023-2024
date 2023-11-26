@@ -23,7 +23,7 @@ const experationTime = 1000*60*60*5
 
 const dbConfig = {
   // host: '10.20.64.137', //Skolen
-  host: '192.168.0.118', //Hjemme
+  host: '192.168.0.125', //Hjemme
   port: 3306,
   user: 'hostpc',
   password: 'hostpassord123',
@@ -34,7 +34,7 @@ const pool = mysql.createPool(dbConfig);
 app.listen(PORT, () => console.log("Server started" + PORT))
 
 app.get('/getdata', (req, res) => {
-    const query = 'SELECT c.courseName, c.pictureAddress, c.id, t.timeStart, t.day, t.timeEnd FROM courses c INNER JOIN (SELECT timeStart, day, timeEnd, idOfCourse FROM (SELECT timeStart, day, timeEnd, idOfCourse, ROW_NUMBER() OVER (PARTITION BY idOfCourse ORDER BY day) AS RowNum FROM times) AS RankedTimes WHERE RowNum = 1) AS t ON c.id = t.idOfCourse;'
+    const query = 'SELECT c.courseName, c.pictureAddress, c.id, t.timeStart, t.day, t.timeEnd FROM courses c LEFT JOIN (SELECT timeStart, day, timeEnd, idOfCourse FROM (SELECT timeStart, day, timeEnd, idOfCourse, ROW_NUMBER() OVER (PARTITION BY idOfCourse ORDER BY day) AS RowNum FROM times) AS RankedTimes WHERE RowNum = 1) AS t ON c.id = t.idOfCourse;'
     pool.query(query, (err, results)=>{
       if(err){
         console.log(err)
@@ -78,24 +78,41 @@ app.get('/getcourseinfo', (req, res) => {
     res.status(422).send("Incorrect data type")
     return;
   }
-  const query = 'SELECT * FROM courses WHERE id=?'
+  const query = 'SELECT courses.*, times.day, times.location, times.timeStart, times.timeEnd FROM courses LEFT JOIN times ON times.idOfCourse = courses.id WHERE courses.id = ?'
   const values = [requestID]
   pool.query(query, values, (err, results)=>{
     if(err){
       console.log(err)
       res.status(500).send(err)
     }else{
-      res.send(results)
-    }
-  })
+        const token = req.cookies.auth
+        if (token===undefined) {
+          res.status(300).send(results)
+          
+        } else {
+          const getSessionQuery = 'SELECT signedInto FROM users WHERE session = ?'
+          const getSessionValue = [token]
+          pool.query(getSessionQuery, getSessionValue, (getSessionerr, getSessionresults)=>{
+            if(getSessionerr){
+              console.log(getSessionerr)
+              res.status(500).send(getSessionerr)
+            } else{
+              if (getSessionresults.length>0) {
+                res.status(200).send({signedInto:getSessionresults, data:results})
+              } else {
+                res.status(202).send(results)
+              }
+            }
+          })
+        }
+      }
+    })
 });
 
 app.post('/login', async(req, res) => {
   const b = req.body
   const username = b.username
   const unhashpass = b.password
-
-  console.log(await bcrypt.hash(unhashpass, 10))
 
   if(username===undefined||unhashpass===undefined){
     res.status(422).send("Incorrect data type")
@@ -111,29 +128,33 @@ app.post('/login', async(req, res) => {
       console.log(err)
       res.status(510).send(err)
     }else{
-      bcrypt.compare(unhashpass, results[0].password, (error, samePass) => {
-        if(samePass){
-          const token = crypto.randomBytes(256).toString('base64');
-          res.cookie('auth', token, {
-            maxAge: experationTime, 
-            httpOnly: true, 
-            secure: true, 
-            sameSite: "lax" || 'none',
-          })
-          let updatequery = `UPDATE users SET session = ? WHERE email = ?;`
-          let updatevalues = [token, username]
-          pool.query(updatequery, updatevalues, (uperr, upresults)=>{
-            if(uperr){
-              console.log(uperr)
-              res.status(500).send(uperr)
-            }else{
-              res.status(200).send(upresults)
-            }
-          })
-        } else{
-          res.status(401).json("Incorrect password")
-        }
-      })
+      if(results.length<=0){
+        res.status(401).json("User no exists")
+      } else {
+        bcrypt.compare(unhashpass, results[0].password, (error, samePass) => {
+          if(samePass){
+            const token = crypto.randomBytes(256).toString('base64');
+            res.cookie('auth', token, {
+              maxAge: experationTime, 
+              httpOnly: true, 
+              secure: true, 
+              sameSite: "lax" || 'none',
+            })
+            const updatequery = `UPDATE users SET session = ? WHERE email = ?;`
+            const updatevalues = [token, username]
+            pool.query(updatequery, updatevalues, (uperr, upresults)=>{
+              if(uperr){
+                console.log(uperr)
+                res.status(500).send(uperr)
+              }else{
+                res.status(200).send(upresults)
+              }
+            })
+          } else{
+            res.status(401).json("Incorrect password")
+          }
+        })
+      }
     }
   })
 })
@@ -151,8 +172,8 @@ app.post('/create-user', (req, res) => {
     }else{
       if(CheckResults.length===0){
         const hashedPass = await bcrypt.hash(b.password, 10)
-        const query = 'INSERT INTO users (email, password, userName, phoneNumber) VALUES (?, ?, ?, ?)'
-        const values = [b.email, hashedPass, b.username, b.number]
+        const query = 'INSERT INTO users (email, password, userName, phoneNumber, signedInto) VALUES (?, ?, ?, ?, ?)'
+        const values = [b.email, hashedPass, b.username, b.number, '[]']
         pool.query(query, values, (err, results)=>{
           if(err){
             console.log(err)
@@ -165,7 +186,104 @@ app.post('/create-user', (req, res) => {
         res.status(409).send(CheckResults)
       }
     }
-  })
+  }) 
+});
 
-  
+app.post('/signoff', (req, res) => {
+  const b = req.body.data
+  if(b===undefined || typeof(b)!=='number'){
+    res.status(422).send("Incorrect data type")
+    return;
+  }
+
+  const token = req.cookies.auth
+  if(token===undefined){
+    res.status(401).send("Not logged in")
+    return;
+  }
+
+  const getListOfSignedIntoQuery = 'SELECT signedInto FROM users WHERE session = ?'
+  const getListOfSignedIntoValue = [token]
+
+  pool.query(getListOfSignedIntoQuery, getListOfSignedIntoValue, (getErr, getResults)=>{
+    if(getErr){
+      console.log(getErr)
+      res.status(500).send(getErr)
+    }else{
+      if(getResults.length<1){
+        res.status(401).send("Not logged in")
+      } else {
+        let listOFSignedInto = getResults[0].signedInto
+        for(i in listOFSignedInto){
+          if(listOFSignedInto[i].course===b){
+            listOFSignedInto.splice(i, 1)
+          }
+        }
+        listOFSignedInto = JSON.stringify(listOFSignedInto)
+        const overRideQuery = 'UPDATE users SET signedInto = ? WHERE session = ?'
+        const overRideValues = [listOFSignedInto, token]
+        pool.query(overRideQuery, overRideValues, (err, results)=>{
+          if(err){
+            console.log(err)
+            res.status(500).send(err)
+          }else{
+            res.send(results)
+          }
+        })
+      }
+    }    
+  }) 
+});
+
+app.post('/signin', (req, res) => {
+  const b = req.body.data
+  if(b===undefined || typeof(b)!=='number'){
+    res.status(422).send("Incorrect data type")
+    return;
+  }
+
+  const token = req.cookies.auth
+  if(token===undefined){
+    res.status(401).send("Not logged in")
+    return;
+  }
+
+  const getListOfSignedIntoQuery = 'SELECT signedInto FROM users WHERE session = ?'
+  const getListOfSignedIntoValue = [token]
+
+  pool.query(getListOfSignedIntoQuery, getListOfSignedIntoValue, (getErr, getResults)=>{
+    if(getErr){
+      console.log(getErr)
+      res.status(500).send(getErr)
+    }else{
+      if(getResults.length<1){
+        res.status(401).send("Not logged in")
+      } else {
+        let listOFSignedInto = getResults[0].signedInto
+        for(i in listOFSignedInto){
+          if(listOFSignedInto[i].course===b){
+            res.status(409).send("Clashing data")
+            return;
+          }
+        }
+        listOFSignedInto.push({course: b})
+        listOFSignedInto = JSON.stringify(listOFSignedInto)
+        const overRideQuery = 'UPDATE users SET signedInto = ? WHERE session = ?'
+        const overRideValues = [listOFSignedInto, token]
+        pool.query(overRideQuery, overRideValues, (err, results)=>{
+          if(err){
+            console.log(err)
+            res.status(500).send(err)
+          }else{
+            res.send(results)
+          }
+        })
+      }
+    }
+  })    
+});
+
+app.get('/logout', (req, res) => {
+  res.clearCookie("auth");
+  res.json("Hæælæ snuppa");
 });

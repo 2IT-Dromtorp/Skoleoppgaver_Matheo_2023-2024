@@ -27,6 +27,16 @@
     align-items: center;
 }
 
+.navbar-left button{
+    height: 100%;
+    background-color: transparent;
+    border: none;
+}
+
+.navbar-left img{
+    height: 100%;
+}
+
 .navbar-right{
     display: flex;
     height: 100%;

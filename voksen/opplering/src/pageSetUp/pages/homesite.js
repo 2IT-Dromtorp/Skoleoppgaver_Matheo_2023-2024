@@ -50,6 +50,8 @@ function Homesite() {
                 addItemTolistOfComponentsNotIn(<MiniDisplayCourse key={i} id={listOfInfo[i].id} courseName={listOfInfo[i].courseName} pictureAddress={listOfInfo[i].pictureAddress} timeStart={listOfInfo[i].timeStart} day={listOfInfo[i].day} timeEnd={listOfInfo[i].timeEnd}/> );
             }
         } else if(listOfInfo!==false && isLoggedIn!==false){
+            setListOfComponentsNotIn([])
+            setListOfComponentsIn([])
             for (let i = 0; i < listOfInfo.length; i++) {
                 if (coursesSigned.some(item => item.course === listOfInfo[i].id)) {
                     addItemTolistOfComponentsIn(<MiniDisplayCourse key={i} id={listOfInfo[i].id} courseName={listOfInfo[i].courseName} pictureAddress={listOfInfo[i].pictureAddress} timeStart={listOfInfo[i].timeStart} day={listOfInfo[i].day} timeEnd={listOfInfo[i].timeEnd} />);
@@ -70,6 +72,7 @@ function Homesite() {
             </div>
             <div className='homesite-course-container'>
                 {listOfComponentsNotIn}
+                {listOfComponentsIn.length>0?<><p>Påmeldte</p> {listOfComponentsIn}</>:false}
             </div>
         </div>
     );

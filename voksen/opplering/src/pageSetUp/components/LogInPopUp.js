@@ -1,11 +1,19 @@
 import { useEffect, useContext, useState } from 'react'; 
 import '../../css/login.css'
 import { ShowPopUpContext } from '../../context.js';
+import { useNavigate } from 'react-router-dom';
 
 
 function LogInPopUp() {
+    const navigate = useNavigate()
+
     const handleClickedEntireDiv = (event) => {
         event.stopPropagation();
+    };
+
+    const handleClick = () => {
+        setShowPopUp(false)
+        navigate(`/sign-up`)
     };
 
     const { showPopUp, setShowPopUp } = useContext(ShowPopUpContext);
@@ -43,6 +51,7 @@ function LogInPopUp() {
             <input type='text' value={username} onInput={e => setUsername(e.target.value)}/>  
             <input type='password' value={password} onInput={e => setPassword(e.target.value)}/>  
             <button onClick={() => submitInfo()}>Trykk for submit</button>
+            <button onClick={handleClick}>Lag en ny bruker</button>
        </div>
     )
 }
