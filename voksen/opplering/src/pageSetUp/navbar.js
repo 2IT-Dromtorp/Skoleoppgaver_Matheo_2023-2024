@@ -12,7 +12,7 @@ function NavBar() {
     const {popUpContent, setPopUpContent} = useContext(PopUpContentContext);
     const {isLoggedIn, setIsLoggedIn} = useContext(IsLoggedInContext);
 
-    const handleclick = ()=>{
+    const handleclick = ()=>{ //Ble brukt for login-popup, brukes ikke per nå
         setShowPopUp(true)
         setPopUpContent('login')
     }
@@ -25,7 +25,7 @@ function NavBar() {
             .then(async (res) => {
                 const data = await res.json();
                 console.log(data)
-                setShowPopUp(true)
+                window.location.reload()
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -47,7 +47,7 @@ function NavBar() {
                         <img src={userIcon}/>
                     </button>
                     : 
-                    <button className='navbar-login-button' onClick={handleclick}>
+                    <button className='navbar-login-button' onClick={() => navigate("log-in")}>
                         Logg Inn
                     </button>
                     }

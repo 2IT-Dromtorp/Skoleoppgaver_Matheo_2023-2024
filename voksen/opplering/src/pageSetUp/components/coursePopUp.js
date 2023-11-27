@@ -1,16 +1,19 @@
 import '../../css/coursePopUp.css'
 import { PopUpCourseContext, ShowPopUpContext, IsLoggedInContext, PopUpContentContext } from '../../context';
 import { useEffect, useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 function CoursePopUp() {
+    const navigate = useNavigate()
+
     const handleClickedEntireDiv = (event) => {
         event.stopPropagation();
     };
 
     const handleclick = ()=>{
-        // setPopUpContent('login')
-        console.log("AA")
+        setShowPopUp(false)
+        navigate('log-in')
     }
 
     const {popUpContent, setPopUpContent} = useContext(PopUpContentContext);
@@ -23,18 +26,16 @@ function CoursePopUp() {
     const [registered, setRegistered] = useState(false)
 
     useEffect(()=>{
-        fetch(`/getcourseinfo?q=${popUpCourse}`, {
+        fetch(`/insidecourse?q=${popUpCourse}`, { 
             method: 'GET',
             credentials: 'include',
         })
             .then(async (res) => {
                 const data = await res.json();
                 if(res.status===300){
-                    console.log(data)
                     setListOfAllData(data);
-                } else if (res.status===200) {
-                    console.log(data)
 
+                } else if (res.status===200) {
                     setListOfAllData(data.data);
                     setUserSignedInto(data.signedInto[0].signedInto)
                 }
@@ -45,22 +46,25 @@ function CoursePopUp() {
     }, [popUpCourse])
 
     useEffect(()=>{
-        for(let i = 0; i<listOfAllData.length; i++){
-            addItemTodisplayTableTimes(
-                <tr key={i}>
-                    <td>{listOfAllData[i].day}</td>
-                    <td>{listOfAllData[i].timeStart}-{listOfAllData[i].timeEnd}</td>
-                    <td>{listOfAllData[i].location}</td>
-                </tr>
-            )
-        }
-    },[listOfAllData])
+        if(listOfAllData.length>0){
+            for(let i = 0; i<listOfAllData.length; i++){
+                addItemTodisplayTableTimes(
+                    <tr key={i}>
+                        <td>{listOfAllData[i].day}</td>
+                        <td>{listOfAllData[i].timeStart}-{listOfAllData[i].timeEnd}</td>
+                        <td>{listOfAllData[i].location}</td>
+                    </tr>
+                )
+            }
 
-    useEffect(()=>{
-        if(userSignedInto.some(item => item.course === listOfAllData[0].id)){
-            setRegistered(true)
+            // console.log(userSignedInto)
+            // console.log(listOfAllData[0].id)
+            if(userSignedInto.some(item => item.course === listOfAllData[0].id)){
+                setRegistered(true)
+            }
         }
-    },[userSignedInto])
+    },[listOfAllData, userSignedInto])
+
 
     const addItemTodisplayTableTimes = (newItem) => {
         setDisplayTableTimes((prevList) => [...prevList, newItem]);
@@ -86,7 +90,6 @@ function CoursePopUp() {
         })
         .then((data) => {
             if (data !== undefined){
-                console.log(data)
                 setShowPopUp(false)
             }
         })
@@ -113,12 +116,15 @@ function CoursePopUp() {
         })
         .then((data) => {
             if (data !== undefined){
-                console.log(data)
                 setShowPopUp(false)
             }
         })
         .catch((error) => console.error(error));
     }
+
+    const myStyle = {
+        fontSize: '0.8em',
+    };
 
     if(listOfAllData){
         return ( 
@@ -147,15 +153,15 @@ function CoursePopUp() {
                     {listOfAllData[0].description}
                     </p>
                 </div>
-                <div className='course-popup-signup'>
-                    {isLoggedIn ? (
+                <div className='course-popup-signup'> 
+                {isLoggedIn ? (
                         registered ? (
                             <button onClick={() => signoff()}>Meld deg av</button>
                         ) : (
                             <button onClick={() => signin()}>Meld deg på</button>
                         )
                     ) : (
-                        <button onClick={handleclick}>Logg inn for å melde deg på</button>
+                        <button onClick={handleclick} style={myStyle}>Logg inn for å melde deg på</button>
                     )}
                 </div>
             </div>

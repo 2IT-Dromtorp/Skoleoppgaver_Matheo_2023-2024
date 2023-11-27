@@ -1,6 +1,7 @@
 import Layout from "./pageSetUp/layout";
 import Homesite from "./pageSetUp/pages/homesite";
 import CreateUser from "./pageSetUp/pages/createUser";
+import LogInPopUp from "./pageSetUp/components/LogInPopUp";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
@@ -11,6 +12,7 @@ function App() {
               <Route path='/' element={<Layout />}>
                 <Route index element={<Homesite />} />
                 <Route path="sign-up" element={<CreateUser />} />
+                <Route path="log-in" element={<LogInPopUp/>} />
               </Route>
           </Routes>
       </BrowserRouter>

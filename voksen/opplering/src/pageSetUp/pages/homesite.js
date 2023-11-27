@@ -63,16 +63,36 @@ function Homesite() {
         } 
     }, [listOfInfo])
 
+    const myStyle = {
+        width: '66%',
+    };
+
     return (
         <div className='homesite-main'>
             <div className='homesite-display-name'>
                 <h1>
                     Kurs for godt voksne
                 </h1>
+                <p>Vi er stolte over å kunne tilby følgende kurs til dere i aldersgruppen 40-60 år</p>
             </div>
-            <div className='homesite-course-container'>
-                {listOfComponentsNotIn}
-                {listOfComponentsIn.length>0?<><p>Påmeldte</p> {listOfComponentsIn}</>:false}
+            <div className="homepage-container">
+                {listOfComponentsIn.length>0?
+                <>
+                    <div className='homesite-course-in'>
+                        <h3 className='homesite-course-info'>Påmeldte kurs</h3>
+                        {listOfComponentsIn}
+                    </div>
+                    <div className='homesite-course-container' style={myStyle}>
+                        <h3 className='homesite-course-info'>Tilgjengelige kurs</h3>
+                        {listOfComponentsNotIn}
+                    </div> 
+                </> 
+                :
+                <div className='homesite-course-container'>
+                    {listOfComponentsNotIn}
+                </div>
+                }
+                
             </div>
         </div>
     );
