@@ -7,7 +7,7 @@
     justify-content: center;
     align-items: center;
     right: 0vw;
-    background-color: rgba(255, 255, 255, 0.564); /* Semi-transparent background */
+    background-color: rgba(255, 255, 255, 0.564);
     backdrop-filter: blur(10px);
 }
 
@@ -17,7 +17,7 @@
     max-height: var(--popup-max-height);
     min-height: var(--popup-min-height);
     background-color: white;
-    border: solid black 5px;
+    border: solid black 2px;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -39,4 +39,5 @@
     height: 100%;
     width: 100%;
     object-fit: cover;
+    cursor: pointer;
 }

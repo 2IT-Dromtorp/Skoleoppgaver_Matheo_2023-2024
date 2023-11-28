@@ -12,7 +12,7 @@
     width: 35vw;
     height: calc(var(--content-height) - 30vh);
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     flex-direction: column;
 }
@@ -22,7 +22,7 @@
     width: 30vw;
     height: calc(var(--content-height) - 20vh);
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     flex-direction: column;
     padding: 3vh;
@@ -69,19 +69,25 @@
 
 .login-create-user{
     flex-grow: 1;
+    width: 100%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: flex-end;
     padding: 2vh;
 }
 
-.login-create-user button{
+.login-create-user-link{
     border: solid black 1px;
     padding: none;
     border-radius: 10px;
     background-color: var(--navbar-color);
-    height: 5vh;
+    height: 8vh;
     color: white;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
 }
 
 .login-smaller-box-content img{

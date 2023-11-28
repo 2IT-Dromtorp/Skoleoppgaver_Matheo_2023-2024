@@ -1,11 +1,11 @@
 import '../../css/miniDisplayCourse.css'
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import { ShowPopUpContext, PopUpContentContext, PopUpCourseContext } from '../../context';
 
 function MiniDisplayCourse({id, courseName, pictureAddress, timeStart, day, timeEnd}) {
-    const { showPopUp, setShowPopUp } = useContext(ShowPopUpContext);
-    const { popUpContent, setPopUpContent } = useContext(PopUpContentContext);
-    const { popUpCourse, setPopUpCourse } = useContext(PopUpCourseContext);
+    const { setShowPopUp } = useContext(ShowPopUpContext);
+    const { setPopUpContent } = useContext(PopUpContentContext);
+    const { setPopUpCourse } = useContext(PopUpCourseContext);
 
     const handleclick = ()=>{
         setShowPopUp(true)
@@ -22,7 +22,7 @@ function MiniDisplayCourse({id, courseName, pictureAddress, timeStart, day, time
     return (
         <div className="Mini-view-course-main" onClick={handleclick}>
             <div className='mini-view-course-picture'>
-                <img src={pictureAddress}/>
+                <img src={pictureAddress} alt=''/>
             </div>
             <div className='mini-view-course-header'>
                 {checkIfNameTooLong?

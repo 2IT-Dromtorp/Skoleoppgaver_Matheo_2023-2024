@@ -9,7 +9,7 @@
 }
 
 .homesite-display-name{
-    height: 30vh;
+    height: 45vh;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -20,7 +20,7 @@
 
 .homepage-container{
     height: fit-content;
-    min-height: calc(var(--content-height) - 30vh);
+    min-height: calc(var(--content-height) - 45vh);
     width: 90%;
     display: flex;
     justify-content: center;
@@ -30,7 +30,7 @@
 
 .homesite-course-container {
     height: fit-content;
-    min-height: calc(var(--content-height) - 30vh);
+    min-height: calc(var(--content-height) - 45vh);
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -41,7 +41,7 @@
 .homesite-course-in{
     width: 33%;
     height: fit-content;
-    min-height: calc(var(--content-height) - 30vh);
+    min-height: calc(var(--content-height) - 45vh);
     border-right: solid black 1px;
 }
 

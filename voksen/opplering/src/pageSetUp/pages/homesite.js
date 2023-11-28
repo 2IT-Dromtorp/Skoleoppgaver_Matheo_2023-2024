@@ -73,7 +73,7 @@ function Homesite() {
                 <h1>
                     Kurs for godt voksne
                 </h1>
-                <p>Vi er stolte over å kunne tilby følgende kurs til dere i aldersgruppen 40-60 år</p>
+                <p>Vi er stolte over å kunne tilby følgende kurs gratis til dere i aldersgruppen 40-60 år</p>
             </div>
             <div className="homepage-container">
                 {listOfComponentsIn.length>0?

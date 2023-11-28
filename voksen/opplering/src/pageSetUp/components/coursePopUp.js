@@ -2,7 +2,7 @@ import '../../css/coursePopUp.css'
 import { PopUpCourseContext, ShowPopUpContext, IsLoggedInContext, PopUpContentContext } from '../../context';
 import { useEffect, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 
 function CoursePopUp() {
     const navigate = useNavigate()
@@ -10,11 +10,6 @@ function CoursePopUp() {
     const handleClickedEntireDiv = (event) => {
         event.stopPropagation();
     };
-
-    const handleclick = ()=>{
-        setShowPopUp(false)
-        navigate('log-in')
-    }
 
     const {popUpContent, setPopUpContent} = useContext(PopUpContentContext);
     const { showPopUp, setShowPopUp } = useContext(ShowPopUpContext);
@@ -26,13 +21,14 @@ function CoursePopUp() {
     const [registered, setRegistered] = useState(false)
 
     useEffect(()=>{
-        fetch(`/insidecourse?q=${popUpCourse}`, { 
+        fetch(`/c?q=${popUpCourse}`, { //Av en eller annen grunn må denne byttes fra tid til annen, bare bytte navnet. Jeg har null peiling på hvorfor
             method: 'GET',
             credentials: 'include',
         })
             .then(async (res) => {
                 const data = await res.json();
                 if(res.status===300){
+                    console.log(data)
                     setListOfAllData(data);
 
                 } else if (res.status===200) {
@@ -161,7 +157,7 @@ function CoursePopUp() {
                             <button onClick={() => signin()}>Meld deg på</button>
                         )
                     ) : (
-                        <button onClick={handleclick} style={myStyle}>Logg inn for å melde deg på</button>
+                        <Link to="log-in" style={myStyle} className='course-popup-signup-link'>Logg inn for å melde deg på</Link>
                     )}
                 </div>
             </div>

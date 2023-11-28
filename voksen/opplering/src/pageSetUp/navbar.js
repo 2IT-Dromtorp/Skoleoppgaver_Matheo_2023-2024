@@ -4,6 +4,7 @@ import logo from '../icons/viken.png'
 import { ShowPopUpContext, PopUpContentContext, IsLoggedInContext } from '../context';
 import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function NavBar() {
     const navigate = useNavigate()
@@ -47,9 +48,9 @@ function NavBar() {
                         <img src={userIcon}/>
                     </button>
                     : 
-                    <button className='navbar-login-button' onClick={() => navigate("log-in")}>
+                    <Link to="log-in" className='navbar-login-button'>
                         Logg Inn
-                    </button>
+                    </Link>
                     }
                 </div>
             </div>

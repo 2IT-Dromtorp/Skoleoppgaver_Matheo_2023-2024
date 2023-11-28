@@ -1,6 +1,8 @@
 import '../../css/createuser.css'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Viken from '../../icons/viken.png'
+import { Link } from 'react-router-dom'
 
 function CreateUser() {
     const navigate = useNavigate();
@@ -35,16 +37,28 @@ function CreateUser() {
 
     return (
         <div className='create-user-main'>
-            <p>Brukernavn</p>
-            <input type='text' value={username} onInput={e => setUsername(e.target.value)}/>  
-            <p>Passord</p>
-            <input type='password' value={password} onInput={e => setPassword(e.target.value)}/>  
-            <p>Epost</p>
-            <input type='email' value={email} onInput={e => setEmail(e.target.value)}/>  
-            <p>Telefon-nummer</p>
-            <input type='number' value={number} onInput={e => setNumber(e.target.value)}/>  
-            <button onClick={() => submitInfo()}>Trykk for submit</button>
-        </div>
+            <div className='create-user-smaller-box-content'>
+                <img src={Viken}/>
+                <p>Lag en bruker slik at du kan melde deg på de mange lærerike kursene vi har å tilby</p>
+            </div>
+            <div className='create-user-smaller-box-with-login'>
+                <h1>Lag en ny bruker</h1>
+                <form name="create-userform" onSubmit={submitInfo}>
+                    <p>Epost</p>
+                    <input required={true} type='email' value={email} onInput={e => setEmail(e.target.value)} placeholder='Skriv inn epost-adresse'/>  
+                    <p>Brukernavn</p>
+                    <input required={true} type='text' value={username} onInput={e => setUsername(e.target.value)} placeholder='Skriv inn brukernavn'/>  
+                    <p>Passord</p>
+                    <input required={true} type='password' value={password} onInput={e => setPassword(e.target.value)} placeholder='Skriv inn passord'/>  
+                    <p>Telefon-nummer</p>
+                    <input required={true} type='tel'  pattern="[0-9]{8}" value={number} onInput={e => setNumber(e.target.value)} placeholder='Skriv inn telefon-nummer'/>  
+                    <button type='submit' >Lag en bruker</button>
+                </form>
+                <div className='create-user-create-user'>
+                    <Link to="/log-in" className='create-user-create-user-link'>Hvis du har en bruker, logg inn her</Link>
+                </div>
+            </div>
+       </div>
     );
 }
 

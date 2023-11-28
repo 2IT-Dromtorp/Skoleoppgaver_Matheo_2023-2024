@@ -3,17 +3,19 @@ import '../../css/login.css'
 import { ShowPopUpContext } from '../../context.js';
 import { useNavigate } from 'react-router-dom';
 import Viken from '../../icons/viken.png'
+import { Link } from 'react-router-dom';
 
 
 function LogInPopUp() {
     const navigate = useNavigate()
 
-    const handleClick = () => {
-        navigate(`/sign-up`)
-    };
-
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const {showPopUp, setShowPopUp} = useContext(ShowPopUpContext)
+
+    useEffect(()=>{
+        setShowPopUp(false)
+    }, [])
 
     const submitInfo = (e) => {
         e.preventDefault();
@@ -48,13 +50,13 @@ function LogInPopUp() {
         </div>
         <div className='login-smaller-box-with-login'>
             <h1>Logg inn</h1>
-            <form>
-                <input type='email' value={username} onInput={e => setUsername(e.target.value)} autoComplete='email' placeholder='Skriv inn epost-adresse'/>  
-                <input type='password' value={password} onInput={e => setPassword(e.target.value)} autoComplete='current-password' placeholder='Skriv inn passord'/>  
-                <button type='submit' onClick={submitInfo}>Fortsett</button>
+            <form name="Loginform" onSubmit={submitInfo}>
+                <input required={true} type='email' value={username} onInput={e => setUsername(e.target.value)} autoComplete='email' placeholder='Skriv inn epost-adresse'/>  
+                <input required={true} type='password' value={password} onInput={e => setPassword(e.target.value)} autoComplete='current-password' placeholder='Skriv inn passord'/>  
+                <button type='submit' >Fortsett</button>
             </form>
             <div className='login-create-user'>
-                <button onClick={handleClick}>Hvis du ikke har en bruker, lag en ny her</button>
+                <Link to="/sign-up" className='login-create-user-link'>Hvis du ikke har en bruker, lag en ny her</Link>
             </div>
         </div>
        </div>

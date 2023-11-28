@@ -58,9 +58,11 @@
 .course-popup-times-table th, 
 .course-popup-times-table td, 
 .course-popup-times-table tr{
-    border: solid black 3px;
-    height: 3vh;
+    background-color: var(--extra-color);
+    border: solid white 3px;
+    height: 6vh;
     text-align: center;
+    color: black;
 }
 
 .course-popup-description{
@@ -81,7 +83,7 @@
     justify-content: center;
 }
 
-.course-popup-signup button{
+.course-popup-signup button, .course-popup-signup-link{
     background-color: var(--navbar-color);
     color: white;
     border-radius: 10px;
@@ -90,4 +92,12 @@
     font-size: large;
     border: solid 1px blue;
     margin-top: 3vh;
+    cursor: pointer;
+}
+
+.course-popup-signup-link{
+    display: flex;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
 }

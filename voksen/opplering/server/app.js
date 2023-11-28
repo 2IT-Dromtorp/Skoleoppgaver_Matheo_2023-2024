@@ -22,8 +22,8 @@ const experationTime = 1000*60*60*5
 
 
 const dbConfig = {
-  // host: '10.20.64.137', //Skolen
-  host: '192.168.0.120', //Hjemme
+  host: '10.20.64.137', //Skolen
+  // host: '192.168.0.120', //Hjemme
   port: 3306,
   user: 'hostpc',
   password: 'hostpassord123',
@@ -72,7 +72,7 @@ app.get('/getdata', (req, res) => {
     })
 });
 
-app.get('/insidecourse', (req, res) => {
+app.get('/c', (req, res) => { //Av en eller annen grunn må denne byttes fra tid til annen, bare bytte navnet. Jeg har null peiling på hvorfor
   const requestID = req.query.q
   if(requestID===undefined){
     res.status(422).send("Incorrect data type")
@@ -190,7 +190,6 @@ app.post('/create-user', (req, res) => {
 });
 
 app.post('/signoff', (req, res) => {
-  console.log("YEs")
   const b = req.body.data
   if(b===undefined || typeof(b)!=='number'){
     res.status(422).send("Incorrect data type")
