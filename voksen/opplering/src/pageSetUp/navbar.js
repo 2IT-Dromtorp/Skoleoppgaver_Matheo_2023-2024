@@ -44,9 +44,12 @@ function NavBar() {
                 <div className='navbar-right'>
                     {/* <button>NORGE</button> */}
                     {isLoggedIn?
-                    <button className='navbar-user-icon' onClick={logoutclick}>
+                    // <button className='navbar-user-icon' onClick={logoutclick}>
+                    //     <img src={userIcon}/>
+                    // </button>
+                    <Link className='navbar-user-icon' to="user-site">
                         <img src={userIcon}/>
-                    </button>
+                    </Link>
                     : 
                     <Link to="log-in" className='navbar-login-button'>
                         Logg Inn

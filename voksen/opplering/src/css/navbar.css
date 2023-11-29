@@ -53,6 +53,11 @@
     border-radius: 50%;
     overflow: hidden;
     cursor: pointer;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
 }
 
 .navbar-user-icon img{

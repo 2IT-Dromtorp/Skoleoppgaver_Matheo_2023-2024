@@ -303,3 +303,54 @@ app.get('/logout', (req, res) => {
   res.clearCookie("auth");
   res.json("Logged out");
 });
+
+app.post('/edit-credentials', (req, res) => {
+  const b = req.body
+  if(b.password===undefined||typeof(b.password)!=='string'){
+    res.status(422).send('Invalid password format');
+    console.log('Invalid password format')
+  }
+  if(b.username===undefined||typeof(b.username)!=='string'){
+    res.status(422).send('Invalid username format');
+    console.log('Invalid username format')
+  }
+  if(b.email===undefined||typeof(b.email)!=='string'){
+    res.status(422).send('Invalid email format');
+    console.log('Invalid email format')
+  }
+  if(b.number===undefined){
+    res.status(422).send('Invalid number format');
+    console.log('Invalid number format')
+  }
+  const token = req.cookies.auth
+  if(token===undefined){
+    res.status(403).send("Unauthorized access")
+  }
+  const query = "UPDATE users SET email = ?, password = ?, userName = ?, phoneNumber = ? WHERE session = ?"
+  const values = [b.email, b.password, b.username, b.number, token]
+  pool.query(query,values,(err, result)=>{
+    if(err){
+      console.log(err);
+      res.status(500).send(err);
+    } else{
+      res.send(result)
+    }
+  })
+});
+
+app.get('/get-credentials', (req, res) => {
+  const token = req.cookies.auth
+  if(token===undefined){
+    res.status(403).send("Unauthorized access")
+  }
+  const query = 'SELECT email, password, userName, phoneNumber FROM users WHERE session=?'
+  const values = [token]
+  pool.query(query,values,(err, result)=>{
+    if(err){
+      console.log(err);
+      res.status(500).send(err);
+    } else{
+      res.send(result)
+    }
+  })
+});

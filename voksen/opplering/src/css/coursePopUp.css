@@ -7,6 +7,19 @@
     --times-min-height: calc(var(--popup-min-height) - var(--header-height) - var(--description-height) - var(--signup-height) - var(--popUpPadding-total));
 }
 
+@keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+}
+
+.course-popup-loading{
+    animation: rotate 4s linear infinite;
+}
+
 .course-popup-main{
     height: fit-content;
     width: var(--popup-widths);

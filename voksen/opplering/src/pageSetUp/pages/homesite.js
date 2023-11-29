@@ -86,7 +86,7 @@ function Homesite() {
                 <p>Vi er stolte over å kunne tilby følgende kurs gratis til dere i aldersgruppen 40-60 år</p>
             </div>
             <div className="homepage-container">
-                {listOfComponentsIn.length>0?
+                {isLoggedIn?
                 <>
                     <div className='homesite-course-in'>
                         <h3 className='homesite-course-info'>Påmeldte kurs</h3>

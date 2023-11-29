@@ -39,7 +39,7 @@
 }
 
 .homesite-course-in{
-    width: 33%;
+    width: 51%;
     height: fit-content;
     min-height: calc(var(--content-height) - 45vh);
     border-right: solid black 1px;

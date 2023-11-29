@@ -3,6 +3,7 @@ import { PopUpCourseContext, ShowPopUpContext, IsLoggedInContext, PopUpContentCo
 import { useEffect, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import LoadingIcon from '../../icons/loading.webp'
 
 function CoursePopUp() {
     const navigate = useNavigate()
@@ -164,7 +165,11 @@ function CoursePopUp() {
             </div>
         )
     } else{
-        return <h1>Loading...</h1>;
+        return (
+            <div className="course-popup-main" onClick={handleClickedEntireDiv}>
+                 <img className='course-popup-loading' src={LoadingIcon}/>
+            </div>
+        );
     }  
     
 }

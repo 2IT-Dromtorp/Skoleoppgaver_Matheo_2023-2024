@@ -40,18 +40,18 @@ function CreateUser() {
     return (
         <div className='create-user-main'>
             <div className='create-user-smaller-box-content'>
-                <img src={Viken}/>
+                <img src={Viken} alt=''/>
                 <p>Lag en bruker slik at du kan melde deg på de mange lærerike kursene vi har å tilby</p>
             </div>
             <div className='create-user-smaller-box-with-login'>
                 <h1>Lag en ny bruker</h1>
                 <form name="create-userform" onSubmit={submitInfo}>
                     <p>Epost</p>
-                    <input required={true} type='email' value={email} onInput={e => setEmail(e.target.value)} placeholder='Skriv inn epost-adresse'/>  
+                    <input autoComplete='email' required={true} type='email' value={email} onInput={e => setEmail(e.target.value)} placeholder='Skriv inn epost-adresse'/>  
                     <p>Brukernavn</p>
-                    <input required={true} type='text' value={username} onInput={e => setUsername(e.target.value)} placeholder='Skriv inn brukernavn'/>  
+                    <input autoComplete="username" required={true} type='text' value={username} onInput={e => setUsername(e.target.value)} placeholder='Skriv inn brukernavn'/>  
                     <p>Passord</p>
-                    <input required={true} type='password' value={password} onInput={e => setPassword(e.target.value)} placeholder='Skriv inn passord'/>  
+                    <input autoComplete="current-password" required={true} type='password' value={password} onInput={e => setPassword(e.target.value)} placeholder='Skriv inn passord'/>  
                     <p>Telefon-nummer</p>
                     <input required={true} type='tel'  pattern="[0-9]{8}" value={number} onInput={e => setNumber(e.target.value)} placeholder='Skriv inn telefon-nummer'/>  
                     <button type='submit' >Lag en bruker</button>

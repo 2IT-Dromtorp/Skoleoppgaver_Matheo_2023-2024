@@ -44,7 +44,7 @@ function LogInPopUp() {
     return ( 
        <div className="login-main">
         <div className='login-smaller-box-content'>
-            <img src={Viken}/>
+            <img src={Viken} alt=''/>
             <p>Logg inn for å kunne melde deg på de mange lærerike kursene vi har å tilby</p>
         </div>
         <div className='login-smaller-box-with-login'>
