@@ -11,7 +11,8 @@ function CreateUser() {
     const [email, setEmail] = useState('')
     const [number, setNumber] = useState('')
 
-    function submitInfo(){
+    const submitInfo = (e) => {
+        e.preventDefault();
         const dataToSendIn = { username: username, password: password, email: email, number: number}
         fetch(`/create-user`, {
             method: 'POST',
@@ -27,9 +28,10 @@ function CreateUser() {
             }
         })
         .then((data) => {
+            console.log(data)
             if (data !== undefined){
                 console.log(data)
-                navigate(-1)
+                navigate('/')
             }
         })
         .catch((error) => console.error(error));

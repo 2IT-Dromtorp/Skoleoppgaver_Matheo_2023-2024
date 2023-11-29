@@ -54,3 +54,20 @@
     height: 7vh;
     font-size: 1.5em;
 }
+
+@media screen and (max-width: 600px) {
+    .homepage-container{
+        flex-direction: column;
+    }
+    .homesite-course-in{
+        width: 100%;
+        border: none;
+    }
+    .homesite-course-container{
+        width: 100%;
+    }
+    .homesite-display-name{
+        font-size: 1.5em;
+        padding-left: 24vw
+    }
+}

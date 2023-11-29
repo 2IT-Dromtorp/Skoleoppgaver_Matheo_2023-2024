@@ -72,7 +72,7 @@ app.get('/getdata', (req, res) => {
     })
 });
 
-app.get('/c', (req, res) => { //Av en eller annen grunn må denne byttes fra tid til annen, bare bytte navnet. Jeg har null peiling på hvorfor
+app.get('/d', (req, res) => { //Av en eller annen grunn må denne byttes fra tid til annen, bare bytte navnet. Jeg har null peiling på hvorfor
   const requestID = req.query.q
   if(requestID===undefined){
     res.status(422).send("Incorrect data type")
@@ -179,7 +179,23 @@ app.post('/create-user', (req, res) => {
             console.log(err)
             res.status(500).send(err)
           }else{
-            res.send(results)
+            const token = crypto.randomBytes(256).toString('base64');
+            const updatequery = `UPDATE users SET session = ? WHERE email = ?;`
+            const updatevalues = [token, b.email]
+            pool.query(updatequery, updatevalues, (uperr, upresults)=>{
+              if(uperr){
+                console.log(uperr)
+                res.status(500).send(uperr)
+              }else{
+                res.cookie('auth', token, {
+                  maxAge: experationTime, 
+                  httpOnly: true, 
+                  secure: true, 
+                  sameSite: "lax" || 'none',
+                })
+                res.status(200).send(upresults)
+              }
+            })
           }
         })
       } else{

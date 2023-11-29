@@ -21,14 +21,13 @@ function CoursePopUp() {
     const [registered, setRegistered] = useState(false)
 
     useEffect(()=>{
-        fetch(`/c?q=${popUpCourse}`, { //Av en eller annen grunn må denne byttes fra tid til annen, bare bytte navnet. Jeg har null peiling på hvorfor
+        fetch(`/d?q=${popUpCourse}`, { //Av en eller annen grunn må denne byttes fra tid til annen, bare bytte navnet. Jeg har null peiling på hvorfor
             method: 'GET',
             credentials: 'include',
         })
             .then(async (res) => {
                 const data = await res.json();
                 if(res.status===300){
-                    console.log(data)
                     setListOfAllData(data);
 
                 } else if (res.status===200) {
@@ -52,9 +51,6 @@ function CoursePopUp() {
                     </tr>
                 )
             }
-
-            // console.log(userSignedInto)
-            // console.log(listOfAllData[0].id)
             if(userSignedInto.some(item => item.course === listOfAllData[0].id)){
                 setRegistered(true)
             }
@@ -122,6 +118,11 @@ function CoursePopUp() {
         fontSize: '0.8em',
     };
 
+    const red = {
+        backgroundColor: '#8b0000',
+        border: 'solid 1px red',
+    };
+
     if(listOfAllData){
         return ( 
             <div className="course-popup-main" onClick={handleClickedEntireDiv}>
@@ -152,7 +153,7 @@ function CoursePopUp() {
                 <div className='course-popup-signup'> 
                 {isLoggedIn ? (
                         registered ? (
-                            <button onClick={() => signoff()}>Meld deg av</button>
+                            <button style={red} onClick={() => signoff()}>Meld deg av</button>
                         ) : (
                             <button onClick={() => signin()}>Meld deg på</button>
                         )

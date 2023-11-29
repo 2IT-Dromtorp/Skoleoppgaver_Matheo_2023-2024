@@ -35,7 +35,6 @@ function LogInPopUp() {
         })
         .then((data) => {
             if (data !== undefined){
-                console.log(data)
                 navigate('/')
             }
         })

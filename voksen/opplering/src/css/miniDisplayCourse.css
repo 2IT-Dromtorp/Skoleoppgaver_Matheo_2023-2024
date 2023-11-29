@@ -63,3 +63,11 @@
     cursor: pointer;
 }
 
+@media screen and (max-width: 600px) {
+    .Mini-view-course-main {
+      width: 90vw;
+    }
+    .mini-view-course-footer button{
+        width: 70vw;
+    }
+}

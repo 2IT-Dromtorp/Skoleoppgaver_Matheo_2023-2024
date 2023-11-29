@@ -63,9 +63,19 @@ function Homesite() {
         } 
     }, [listOfInfo])
 
-    const myStyle = {
-        width: '66%',
-    };
+    const [myStyle, setMyStyle] = useState({
+        width: '100%',
+    })
+
+    useEffect(()=>{
+        if (window.innerWidth < 601 && myStyle==="{width: '100%'}"){
+            setMyStyle({
+                width: '66%',
+            })
+        }
+    }, [myStyle])
+
+    
 
     return (
         <div className='homesite-main'>
