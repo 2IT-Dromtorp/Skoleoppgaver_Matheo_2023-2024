@@ -38,7 +38,9 @@
 .homesite-display-ticket-settings{
     height: var(--display-setting-height);
     width: 100%;
-    background-color: green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .homesite-create-ticket-container{
@@ -47,5 +49,10 @@
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    
+}
+
+.homesite-column{
+    background-color: blue;
+    height: 100%;
+    width: var(--display-row-width);
 }
