@@ -5,9 +5,10 @@ html, body, *{
 .content_box{
     height: 100vh;
     width: 100vw;
+    overflow: hidden;
 }
 
 .main_content{
-    height: 100%;
+    height: calc(100% - var(--navbar-height));
     width: 100%;
 }
