@@ -22,7 +22,7 @@ function CoursePopUp() {
     const [registered, setRegistered] = useState(false)
 
     useEffect(()=>{
-        fetch(`/d?q=${popUpCourse}`, { //Av en eller annen grunn må denne byttes fra tid til annen, bare bytte navnet. Jeg har null peiling på hvorfor
+        fetch(`/e?q=${popUpCourse}`, { //Av en eller annen grunn må denne byttes fra tid til annen, bare bytte navnet. Jeg har null peiling på hvorfor
             method: 'GET',
             credentials: 'include',
         })

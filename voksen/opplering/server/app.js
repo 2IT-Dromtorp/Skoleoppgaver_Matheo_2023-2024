@@ -72,7 +72,7 @@ app.get('/getdata', (req, res) => {
     })
 });
 
-app.get('/d', (req, res) => { //Av en eller annen grunn må denne byttes fra tid til annen, bare bytte navnet. Jeg har null peiling på hvorfor
+app.get('/e', (req, res) => { //Av en eller annen grunn må denne byttes fra tid til annen, bare bytte navnet. Jeg har null peiling på hvorfor
   const requestID = req.query.q
   if(requestID===undefined){
     res.status(422).send("Incorrect data type")
