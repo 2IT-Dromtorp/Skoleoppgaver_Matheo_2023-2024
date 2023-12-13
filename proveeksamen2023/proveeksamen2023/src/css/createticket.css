@@ -11,6 +11,13 @@
     width: 49vw;
     height: 66%;
     background-color: var(--main-color);
+    font-size: 2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    font-family: Garamond, serif;
 }
 
 .createticket-create-container{

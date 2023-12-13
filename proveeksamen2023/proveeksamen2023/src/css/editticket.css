@@ -13,6 +13,7 @@
     /* background-color: var(--main-color); */
     border: solid black 2px;
     border-radius: 10px;
+    overflow: hidden;
 }
 
 .editticket-create-container{
@@ -66,3 +67,27 @@
 /* .editticket-labels option{
    background-color: red;
 } */
+
+.editticket-more-form{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.editticket-labels-check input[type=checkbox]{
+    width: 2vw;
+    height: 2vw;
+    margin-left: 1vw;
+}
+
+.editticket-labels-check{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-size: 1.5em;
+    margin-bottom: 3vh;
+}

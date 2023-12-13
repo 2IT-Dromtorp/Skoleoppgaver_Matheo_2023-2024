@@ -1,7 +1,6 @@
 import '../../css/editticket.css'
 
 import { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { JsonListContext } from '../../context';
 import { useParams } from 'react-router-dom';
@@ -34,7 +33,7 @@ function EditTicket() {
 
         const newValues = [...jsonList];
         const nowNote = newValues[id].note
-        const sendNote = nowNote+note
+        const sendNote = nowNote+"/n"+note
         const newItem = {casenum:1, date:todaysDate, subject: subject, username:username, isFixed:isFixed, priority:priority, detailedSubject:detailedSubject, note:sendNote}
         newValues[id] = newItem;
         setJsonList(newValues);
@@ -47,8 +46,11 @@ function EditTicket() {
         <div className='editticket-main'>
             <div className='editticket-ad-container'>
                 <form className='editticket-more-form' onSubmit={handleSubmit1}>
-                    <input type='checkbox' required={false} checked={isFixed} onChange={()=>setIsFixed(!isFixed)}/>
-                    <label>
+                    <label className='editticket-labels-check'>
+                        Er ticketen fullført?
+                        <input type='checkbox' required={false} checked={isFixed} onChange={()=>setIsFixed(!isFixed)}/>
+                    </label>
+                    <label className='editticket-labels'>
                         Notat fra brukerstøtte
                         <input type="text" required={true} autoComplete='off' value={note} onChange={(e)=>{setNote(e.target.value)}}/>
                     </label>

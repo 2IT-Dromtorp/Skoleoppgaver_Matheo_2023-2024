@@ -1,0 +1,37 @@
+.aboutus-main{
+    height: 100%;
+    width: 100%;
+}
+
+.aboutus-header{
+    height: 25%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-bottom: solid black 3px;
+}
+
+.aboutus-header h1{
+    font-size: 3em;
+}
+
+.aboutus-header h2{
+    font-size: 1.3em;
+}
+
+.aboutus-contact-container{
+    height: 75%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.aboutus-inner-contact{
+    height: 100%;
+    width: 74%;
+    overflow-y: auto;
+}

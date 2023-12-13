@@ -24,7 +24,7 @@ function Homesite() {
         <div className='homesite-main'>
             <div className='homesite-create-ticket-main'>
                 <div className='homesite-display-ticket-settings'>
-                    <p className='homesite-column'>Sak Nr</p>
+                    <p className='homesite-column'>Sak nr.</p>
                     <p className='homesite-column'>Dato</p>
                     <p className='homesite-column'>Beskrivelse</p>
                     <p className='homesite-column'>Bruker</p>                    

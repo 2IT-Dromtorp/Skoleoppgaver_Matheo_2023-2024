@@ -22,9 +22,9 @@ function CreateTicket() {
         const month = today.getMonth() + 1;
         const year = today.getFullYear();
         const date = today.getDate();
-        const todaysDate = date+"."+month+"."+year+"."
+        const todaysDate = date+"."+month+"."+year
 
-        const newItem = {casenum:1, date:todaysDate, subject: subject, username:username, isFixed:false, priority:priority, detailedSubject:detailedSubject}
+        const newItem = {casenum:jsonList.length+1, date:todaysDate, subject: subject, username:username, isFixed:false, priority:priority, detailedSubject:detailedSubject}
         setJsonList((prevList) => [...prevList, newItem]);
         navigate("/")
 
@@ -33,6 +33,12 @@ function CreateTicket() {
     return (
         <div className='createticket-main'>
             <div className='createticket-ad-container'>
+                <h1>
+                    VTH BRUKERSTØTTE
+                </h1>
+                <h2>
+                    For deg som bruker våre tjenester
+                </h2>
             </div>
             <div className='createticket-create-container'>
                 <form className='ticker-creator' onSubmit={handleSubmit}>

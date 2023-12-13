@@ -9,6 +9,7 @@ function Navbar() {
         <div className='navbar-main'>
             <Link className='navbar-new-ticket' to={'/'}><p>Se dine tickets</p></Link>
             <Link className='navbar-new-ticket' to={'/create-ticket'}><p>Lag en ny ticket <i>+</i></p></Link>
+            <Link className='navbar-new-ticket' to={'/about-us'}><p>Kontakt oss</p></Link>
         </div>
     );
 }
