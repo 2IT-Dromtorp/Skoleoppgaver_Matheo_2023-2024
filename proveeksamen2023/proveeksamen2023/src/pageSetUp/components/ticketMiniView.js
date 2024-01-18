@@ -27,7 +27,7 @@ function TicketMiniView({id}) {
             <p className='ticketminiview-column'>{jsonList[id].date}</p>
             <p className='ticketminiview-column'>{jsonList[id].subject}</p>
             <p className='ticketminiview-column'>{jsonList[id].username}</p>                    
-             {jsonList[id].isFixed?<p className='ticketminiview-column'>Fullført</p>:<p className='ticketminiview-column'>I prosess</p>}
+             {jsonList[id].isFixed?<p className='ticketminiview-column'>Fullført</p>:<p className='ticketminiview-column'>Under arbeid</p>}
             {jsonList[id].priority==="h"?
                 <p className='ticketminiview-column ticketminiview-high'>Høyst kritisk</p>
                 :

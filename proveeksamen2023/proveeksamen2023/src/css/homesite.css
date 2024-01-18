@@ -15,14 +15,14 @@
 
 .homesite-display-ticket-settings{
     height: var(--display-setting-height);
-    width: calc(var(--display-row-width)*6 + 0.5vw);
+    width: calc((var(--display-row-width)*6 + 0.5vw));
     display: flex;
     justify-content: flex-start;
     align-items: center;
     overflow: hidden;
     border: solid black 1px;
     border-radius: 10px;
-    background-color: rgb(199, 199, 199);
+    background-color: rgb(224, 224, 224);
 }
 
 .homesite-column{

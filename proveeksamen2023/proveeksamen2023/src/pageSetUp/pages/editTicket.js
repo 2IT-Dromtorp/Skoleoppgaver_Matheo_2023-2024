@@ -20,6 +20,8 @@ function EditTicket() {
     const [priority, setPriority] = useState(jsonList[id].priority);
     const [note, setNote] = useState('');
     const [isFixed, setIsFixed] = useState(jsonList[id].isFixed);
+    const [num, setNum] = useState(jsonList[id].casenum);
+
 
 
     const handleSubmit1 = (e) => {
@@ -29,12 +31,12 @@ function EditTicket() {
         const month = today.getMonth() + 1;
         const year = today.getFullYear();
         const date = today.getDate();
-        const todaysDate = date+"."+month+"."+year+"."
+        const todaysDate = date+"."+month+"."+year
 
         const newValues = [...jsonList];
         const nowNote = newValues[id].note
         const sendNote = nowNote+"/n"+note
-        const newItem = {casenum:1, date:todaysDate, subject: subject, username:username, isFixed:isFixed, priority:priority, detailedSubject:detailedSubject, note:sendNote}
+        const newItem = {casenum:num, date:todaysDate, subject: subject, username:username, isFixed:isFixed, priority:priority, detailedSubject:detailedSubject, note:sendNote}
         newValues[id] = newItem;
         setJsonList(newValues);
         

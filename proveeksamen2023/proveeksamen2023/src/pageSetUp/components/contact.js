@@ -8,11 +8,11 @@ function Contact({name, text, number, mail, image}) {
                 <div className="contact-picture-upper">
                     <img src={image} alt=""/>
                 </div>
+            </div>
+            <div className="contact-info">
                 <div className="contact-picture-lower">
                     <p>{name}</p>
                 </div>
-            </div>
-            <div className="contact-info">
                 <div className="contact-info-text">
                     <p>{text}</p>
                 </div>

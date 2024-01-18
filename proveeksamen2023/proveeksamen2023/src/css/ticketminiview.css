@@ -1,6 +1,6 @@
 .ticketminiview-main{
     background-color: rgb(224, 224, 224);
-    margin-top: 2vh;
+    /* margin-top: 2vh; */
     width: calc(100%);
     height: var(--display-setting-height);
     display: flex;
@@ -28,6 +28,7 @@
     background-color: transparent;
     border: none;
     background-color: white;
+    cursor: pointer;
 }
 
 .ticketminiview-check-button img{
@@ -38,7 +39,7 @@
     background-color: rgb(224, 224, 224);
     border: solid black 1px;
     height: 40vh;
-    width: calc(var(--display-row-width)*6 + 0.5vh);
+    width: calc(var(--display-row-width)*6 + 0.5vw);
     display: flex;
     align-items: center;
     justify-content: center;
