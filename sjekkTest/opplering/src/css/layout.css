@@ -1,0 +1,16 @@
+body, html, *{
+    margin: 0;
+}
+
+.content_box{
+    height: var(--total-height);
+    width: 100vw;
+}
+
+.main_content{
+    height: var(--content-height);
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    overflow-y: scroll;
+}
+

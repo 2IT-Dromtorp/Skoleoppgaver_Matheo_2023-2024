@@ -1,0 +1,101 @@
+.create-user-main{
+    height: var(--content-height);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.create-user-smaller-box-content{
+    background-color: var(--navbar-color);
+    width: 35vw;
+    height: calc(var(--content-height) - 30vh);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+
+.create-user-smaller-box-with-login{
+    background-color: rgb(219, 219, 219);
+    width: 30vw;
+    height: calc(var(--content-height) - 20vh);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    padding: 3vh;
+}
+
+.create-user-smaller-box-with-login h1{
+    font-size: 3em;
+}
+
+.create-user-smaller-box-with-login form{
+    margin-top: 2vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.create-user-smaller-box-with-login input{
+    width: 60%;
+    height: 6vh;
+    font-size: 2.5vh;
+    margin-bottom: 1vh;
+    border: solid black 1px;
+    border-radius: 10px;
+}
+
+.create-user-smaller-box-with-login input::placeholder{
+    font-size: 2vh;
+}
+
+.create-user-smaller-box-with-login form button{
+    margin-top: 3vh;
+    width: 10vw;
+    height: 6vh;
+    font-size: 2.5vh;
+    border: solid black 1px;
+    padding: none;
+    border-radius: 10px;
+    background-color: var(--navbar-color);
+    color: white;
+}
+
+.create-user-create-user{
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 2vh;
+}
+
+.create-user-create-user-link{
+    border: solid black 1px;
+    padding: none;
+    border-radius: 10px;
+    background-color: var(--navbar-color);
+    height: 6vh;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+}
+
+.create-user-smaller-box-content img{
+    width: 100%;
+}
+
+.create-user-smaller-box-content p{
+    color: white;
+    width: 80%;
+    font-weight: 700;
+    font-size: 1.2em;
+}
