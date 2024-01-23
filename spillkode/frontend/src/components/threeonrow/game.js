@@ -2,52 +2,102 @@ import { socket } from '../../App';
 import '../../css/game.css'
 import { useContext, useEffect, useState } from "react";
 
-import { SocketIdContext } from '../../context';
+import { SocketIdContext, UsernameContext } from '../../context';
 import GameButton from './gameButton';
 
 export default function Game() {  
     const [fullGameInfo, setFullGameInfo] = useState({})
-    const [socketIdsFromBackend, setSocketIdsFromBackend] = useState([])
+    const [gameState, setGameState] = useState(true);
+    const [winner, setWinner] = useState(true);
+    const [arrayOfNames, setArrayOfNames] = useState([])
+    const [oppositeName, setOppositeName] = useState("")
+
 
     const {socketId} = useContext(SocketIdContext);
-    //hver gang noe sendes inn kalles gi info, som gir begge klientene informasjon
-    //denne kalles av en funksjon som kalles når noe sendes inn
-
-    //informasjonens struktur er en array, 0-8
-    //Man går igjennom arrayen, og map-er informasjonen over på i "knapper" som enten er ingenting, checked, eller 
+    const {username} = useContext(UsernameContext);
 
     useEffect(()=>{
         socket.emit("joinedGameRequest")
 
+        function giveInformation() {
+            socket.emit("sendInformation", username)
+            setArrayOfNames([])
+        }
+
+        function informationGained(info) {
+            setArrayOfNames(prev => [...prev, info]);
+        }
+
         socket.on('firstTurnIsReady', (firstTurnIsReady) => setFullGameInfo(firstTurnIsReady));
-        socket.on('giveGameInformation', (b) => setSocketIdsFromBackend(b));
         socket.on('gameUpdated', (newInfo) => setFullGameInfo(newInfo));
+        socket.on('weHaveWinner', (weHaveWinner) => winOrDraw(weHaveWinner));
+        socket.on('giveInformation', giveInformation);
+        socket.on('informationSentToClients', (info) => informationGained(info));
 
         return () => {
             socket.off("firstTurnIsReady", setFullGameInfo);
-            socket.off("giveGameInformation", setSocketIdsFromBackend);
             socket.off("gameUpdated", setFullGameInfo);
+            socket.off("weHaveWinner", winOrDraw);
+            socket.off("giveInformation", giveInformation)
+            socket.off("informationSentToClients", informationGained)
         };
     },[])
 
+    function winOrDraw(info){
+        setGameState(false)
+        setWinner(info)
+    }
+
     useEffect(()=>{
-        if(socketIdsFromBackend.length===2){
-            setFullGameInfo(prev => ({ ...prev, players: [...prev.players, ...socketIdsFromBackend] }));
-            setFullGameInfo(prev => ({ ...prev, playersTurn: socketIdsFromBackend[0] }));
+        console.log(fullGameInfo)
+    },[fullGameInfo])
+
+    useEffect(()=>{
+        for(let i = 0; i<arrayOfNames.length;i++){
+            if (arrayOfNames[i]!==username&&!oppositeName) {
+                setOppositeName(arrayOfNames[i]);
+                break;
+            }
         }
-    }, [socketIdsFromBackend])
+    },[arrayOfNames])
+
+    function findNameOfWinner(vinnern){
+        if (vinnern === socketId) {
+            return username;
+        } else{
+            return oppositeName;
+        }
+    }
 
     return (
         <div className='game-full-screen'>
             <div className='game-top-bar'>
-                {fullGameInfo.playersTurn?<p>{fullGameInfo.playersTurn}</p>:<p>hvaz</p>}
+                {gameState ? (
+                        oppositeName&&fullGameInfo.playersTurn&&fullGameInfo.playersTurn===socketId ?
+                            <h1>It's {username}'s turn</h1>
+                        :
+                            <h1>It's {oppositeName}'s turn</h1>
+                    )
+                 : 
+                    (
+                        typeof(winner) === "string" ? (
+                                <h1>{findNameOfWinner(winner)} won</h1>
+                            ) 
+                        :
+                            (
+                                <h1>It was a draw</h1>
+                            )
+                    )
+                }
             </div>
             <div className='game-game-bar'>
+                {username&&<h2>{username}</h2>}
                 <div className='game-board'>
                     {fullGameInfo.board && fullGameInfo.board.map((name, index) => (
-                        <GameButton key={index} id={index} name={name} fullGameInfo={fullGameInfo} setFullGameInfo={setFullGameInfo}/>
+                        <GameButton key={index} id={index} name={name} fullGameInfo={fullGameInfo} />
                     ))}
                 </div>
+                {oppositeName&&<h2>{oppositeName}</h2>}
             </div>
         </div>
     );

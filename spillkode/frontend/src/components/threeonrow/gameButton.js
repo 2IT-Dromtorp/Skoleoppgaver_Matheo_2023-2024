@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 
 import { SocketIdContext } from '../../context';
 
-export default function GameButton({ id, name, fullGameInfo, setFullGameInfo }) {
+export default function GameButton({ id, name, fullGameInfo }) {
     const { socketId } = useContext(SocketIdContext);
 
     const [gameState, setGameState] = useState(true)
@@ -24,18 +24,20 @@ export default function GameButton({ id, name, fullGameInfo, setFullGameInfo }) 
         socket.emit("gameBoxClicked", a)    
     }
 
-    function whatToDisplay(name){
-        if (name===socketId) {
-            return "x";
-        }
-        else{
-            return "o";
-        }
+    function whatToDisplay(){
+        for(let i = 0; i<fullGameInfo.players.length; i++){
+            if (fullGameInfo.players[i]===name && i === 0) {
+                return "x";
+            }
+            else{
+                return "o";
+            }
+        }  
     }
   
     return (
       <button className="game-board-box" onClick={() => buttonClicked()}>
-        {name !== null ? <h1>{whatToDisplay(name)}</h1> : false}
+        {name !== null ? <h1>{whatToDisplay()}</h1> : false}
       </button>
     );
   }

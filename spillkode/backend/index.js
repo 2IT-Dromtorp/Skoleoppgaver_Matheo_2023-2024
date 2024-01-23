@@ -53,12 +53,12 @@ server.on("connection", (client)=> {
 
       const roomClients = Array.from(roomClientsInSet)
 
-      let gameObject = {players:[], playersTurn: "", board: []};
+      let gameObject = {players:[roomClients[0], roomClients[1]], playersTurn: roomClients[Math.round(Math.random())], board: []};
       for(let i = 0; i<9; i++){
         gameObject.board.push(undefined)
       }
       server.to(currentRoom).emit("firstTurnIsReady", gameObject)
-      server.to(currentRoom).emit("giveGameInformation", roomClients)
+      server.to(currentRoom).emit("giveInformation")
     })
 
     client.on("gameBoxClicked", (newData)=>{
