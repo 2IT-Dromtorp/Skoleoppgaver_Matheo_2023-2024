@@ -8,3 +8,4 @@ bbom
 bbmc
 
 gi meg data bro AXAAAAAAAAAAAAA
+mhm
