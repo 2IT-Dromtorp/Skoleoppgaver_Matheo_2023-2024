@@ -6,3 +6,5 @@ bbopb
 bbom
 
 bbmc
+
+gi meg data bro
