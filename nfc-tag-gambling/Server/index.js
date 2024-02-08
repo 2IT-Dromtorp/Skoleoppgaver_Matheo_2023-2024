@@ -9,7 +9,6 @@ app.use(express.json());
 const url = "mongodb+srv://mathoepan:Skole123@matheodb.kuczdkk.mongodb.net/"
 
 const http = require("http");
-const { Console } = require("console");
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
@@ -17,10 +16,9 @@ const io = new Server(server, {
     }
 });
 
-const port = process.env.PORT || 8080;
+//Husikm å endre spånn at dewn henter ut riktig fra database og, for per nå henter du alltid fra den samme. alt er lagt opp, m,en du m å tenke litt for å få det på rett spor
 
-//Planen min er å prøve å gjøre slik at man kan koble seg opp mot forskjellige games
-//Bytte ut der jeg skriver "server" med en "room" greie, sende inn det i requesten
+const port = process.env.PORT || 8080;
 
 server.listen(port, () => {
     console.log("Running on port " + port)
@@ -40,6 +38,15 @@ server.listen(port, () => {
         const data = await blackjack.findOne({});
 
         client.emit("hei", data); 
+
+        client.on("createRoom", (roomName)=>{
+            if(!roomName) return;
+            for(let i = 1; i<Array.from(io.sockets.adapter.rooms).length;i++){
+                if(roomName===Array.from(io.sockets.adapter.rooms)[i][0]) return;
+            }
+            client.join(roomName);
+            io.to(roomName).emit("joinedRoom", roomName);
+        })
         
         app.get("/joinGame", async(req,res)=>{
             const name = req.query.username;

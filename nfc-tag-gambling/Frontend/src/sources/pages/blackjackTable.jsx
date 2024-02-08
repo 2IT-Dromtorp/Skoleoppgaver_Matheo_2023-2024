@@ -1,17 +1,20 @@
+import '../../css/blackJackTable.css'
+
 import { socket } from "../../App";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+
+import { RoomIdContext } from "../../context";
 
 export default function BlackjackTable() {
   const [players, setPlayers] = useState([]);
 
-  useEffect(() => {
-    socket.emit("connection")
+  const { roomId} = useContext(RoomIdContext)
 
-    socket.on('hei', (hei) => console.log(hei));
+
+  useEffect(() => {
     socket.on("sendInPlayerThatJoinedGame", (name) => setPlayers(prevPlayers => [...prevPlayers, name]))
 
     return () => {
-      socket.off('hei', console.log);
       socket.off("sendInPlayerThatJoinedGame", setPlayers)
     };
   }, []);
@@ -19,10 +22,10 @@ export default function BlackjackTable() {
   function startGame(){}
 
   return (
-    <>
-        <p>Main Board</p>
+    <div className='blackjackTable'>
+        <h1>{roomId}</h1>
         {players.map((player, index) => <p key={index}>{player}</p>)}
         <button onClick={()=>startGame()}>Start the game</button>
-    </>
+    </div>
   );
 };

@@ -4,9 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { RoomIdProvider } from './context';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <App />
+  <RoomIdProvider>
+    <App />
+  </RoomIdProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
