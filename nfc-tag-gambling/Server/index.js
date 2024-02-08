@@ -19,12 +19,22 @@ const io = new Server(server, {
 
 const port = process.env.PORT || 8080;
 
+//Planen min er å prøve å gjøre slik at man kan koble seg opp mot forskjellige games
+//Bytte ut der jeg skriver "server" med en "room" greie, sende inn det i requesten
+
 server.listen(port, () => {
     console.log("Running on port " + port)
 
     const mongodb = new MongoClient(url);
     const database = mongodb.db("Gambling")
     const blackjack = database.collection("Blackjack")
+
+    app.get("/reset", async(req,res)=>{
+        await blackjack.updateMany({}, {$set: {
+            players: []
+        }})
+        res.status(200).send("Reset");
+    })
 
     io.on("connection", async (client)=>{
         const data = await blackjack.findOne({});
@@ -39,6 +49,10 @@ server.listen(port, () => {
                 money:1500,
                 cards:[]
             };
+            const everything = await blackjack.findOne({"boardName":"MainBoard"});
+            if(!everything.players) return res.status(500).send("Game does not exist");
+            const allPlayers = everything.players
+            if(!allPlayers||allPlayers.length>=5) return res.status(412).send("Game is full");
             const findOtherUserOfSameName = await blackjack.findOne({"players.name":name});
             if(findOtherUserOfSameName) return res.status(409).send("En bruker finnes allerede med dette navnet");
 
@@ -48,7 +62,7 @@ server.listen(port, () => {
             );
             res.status(200).send("You're now in the queue");
 
-            client.emit("sendInOldPlayers")
+            io.emit("sendInPlayerThatJoinedGame", name);
         })
     })
 })

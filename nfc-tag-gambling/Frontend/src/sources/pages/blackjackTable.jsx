@@ -8,17 +8,21 @@ export default function BlackjackTable() {
     socket.emit("connection")
 
     socket.on('hei', (hei) => console.log(hei));
-    socket.on("sendInOldPlayers", socket.emit(players))
+    socket.on("sendInPlayerThatJoinedGame", (name) => setPlayers(prevPlayers => [...prevPlayers, name]))
 
     return () => {
       socket.off('hei', console.log);
-      socket.off("sendInOldPlayers", socket.emit)
+      socket.off("sendInPlayerThatJoinedGame", setPlayers)
     };
   }, []);
 
+  function startGame(){}
+
   return (
     <>
-        <p>knrke</p>
+        <p>Main Board</p>
+        {players.map((player, index) => <p key={index}>{player}</p>)}
+        <button onClick={()=>startGame()}>Start the game</button>
     </>
   );
 };
