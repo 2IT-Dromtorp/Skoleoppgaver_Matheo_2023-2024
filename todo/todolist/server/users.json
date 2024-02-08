@@ -1,7 +1,1 @@
-[
-    {
-        "name": "vetle",
-        "password": "$2b$10$LsasqGYWaoR5m.j0dYADf.KQtsJGbuU7ZvcEl8DidmIoD.ATkPQ86",
-        "isLoggedIn": "dwadwd"
-    }
-]
+[{"name":"vetle","password":"$2b$10$LsasqGYWaoR5m.j0dYADf.KQtsJGbuU7ZvcEl8DidmIoD.ATkPQ86","isLoggedIn":"dwadwd"},{"name":"aa","password":"$2b$10$hPySLZI82QUPSdgXbpzkGucysgM33ws86bicN4M9gyd/xTNe9cG.m","isLoggedIn":false}]
