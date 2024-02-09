@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./sources/layout"
 import BlackjackTable from './sources/pages/blackjackTable';
 import MainSite from './sources/pages/mainSite';
+import BlackjackGame from './sources/pages/blackjackGame';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path='/' element={<Layout />}>
             <Route index element={<MainSite/>}/>
             <Route path='/lobby' element={<BlackjackTable />} />
+            <Route path='/insideGame' element={<BlackjackGame />} />
           </Route>
       </Routes>
     </BrowserRouter>

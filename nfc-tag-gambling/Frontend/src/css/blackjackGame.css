@@ -1,0 +1,38 @@
+:root{
+    --game-board-width: 85vw;
+}
+
+.blackjackgame-main{
+    height: 100%;
+    width: 100%;
+    background-color: #fffdd0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.blackjackgame-table{
+    height: 85vh;
+    width: var(--game-board-width);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: green;
+    border: solid #892201 5vh;
+    border-radius: 20px;
+    box-shadow: black 0px 0px 20px 4px, inset black -1px 0px 13px 4px;
+}
+
+.blackjackgame-table-top{
+    height: 50%;
+    width: 100%;
+}
+
+.blackjackgame-table-player-section{
+    height: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}

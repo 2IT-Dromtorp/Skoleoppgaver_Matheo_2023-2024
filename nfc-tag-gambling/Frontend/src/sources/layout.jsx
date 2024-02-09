@@ -1,7 +1,10 @@
+import '../css/layout.css'
 import { Outlet } from "react-router-dom";
 
 export default function Layout() {
   return (
-    <Outlet/>
+    <div className='layout-main'>
+      <Outlet/>
+    </div>
   );
 }

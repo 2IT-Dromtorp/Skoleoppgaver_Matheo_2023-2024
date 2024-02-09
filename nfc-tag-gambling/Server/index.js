@@ -35,41 +35,55 @@ server.listen(port, () => {
     })
 
     io.on("connection", async (client)=>{
-        const data = await blackjack.findOne({});
+        function getRoom(){
+            if(Array.from(client.rooms).length<=1) return;
+            return Array.from(client.rooms)[Array.from(client.rooms).length-1];
+        }
 
-        client.emit("hei", data); 
-
-        client.on("createRoom", (roomName)=>{
+        client.on("createRoom", async (roomName)=>{
             if(!roomName) return;
-            for(let i = 1; i<Array.from(io.sockets.adapter.rooms).length;i++){
-                if(roomName===Array.from(io.sockets.adapter.rooms)[i][0]) return;
-            }
+            const findDocumentOfSameName = await blackjack.findOne({"boardName":roomName});
+            if(findDocumentOfSameName) return;
             client.join(roomName);
+            blackjack.insertOne({
+                boardName:roomName,
+                players:[]
+            })
             io.to(roomName).emit("joinedRoom", roomName);
         })
         
         app.get("/joinGame", async(req,res)=>{
             const name = req.query.username;
-            if(!name) return;
+            const roomName = req.query.room
+            if(!name||!roomName) return;
             const newPlayerObject = {
                 name:name,
                 money:1500,
-                cards:[]
+                cards:[], moneyBet:null
             };
-            const everything = await blackjack.findOne({"boardName":"MainBoard"});
-            if(!everything.players) return res.status(500).send("Game does not exist");
+            const everything = await blackjack.findOne({"boardName":roomName});
+            if(!everything) return res.status(500).send("Game does not exist");
             const allPlayers = everything.players
-            if(!allPlayers||allPlayers.length>=5) return res.status(412).send("Game is full");
-            const findOtherUserOfSameName = await blackjack.findOne({"players.name":name});
+            if(!allPlayers||allPlayers.length>=4) return res.status(412).send("Game is full");
+            const findOtherUserOfSameName = await blackjack.findOne({boardName:roomName,"players.name":name});
             if(findOtherUserOfSameName) return res.status(409).send("En bruker finnes allerede med dette navnet");
 
             await blackjack.updateOne(
-                {boardName:"MainBoard"},
+                {boardName:roomName},
                 {$push: {players:newPlayerObject}}
             );
             res.status(200).send("You're now in the queue");
 
-            io.emit("sendInPlayerThatJoinedGame", name);
+            io.to(roomName).emit("sendInPlayerThatJoinedGame", name);
+        })
+
+        client.on("gameStarted",async ()=>{
+            const curRoom = getRoom();
+            const findDocumentOfSameName = await blackjack.findOne({"boardName":curRoom});
+            if(!findDocumentOfSameName) return;
+            io.to(curRoom).emit("gameStartedGivePlayerInfo", findDocumentOfSameName.players)
         })
     })
 })
+
+
