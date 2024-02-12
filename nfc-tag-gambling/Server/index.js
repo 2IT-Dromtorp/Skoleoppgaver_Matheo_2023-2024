@@ -9,14 +9,13 @@ app.use(express.json());
 const url = "mongodb+srv://mathoepan:Skole123@matheodb.kuczdkk.mongodb.net/"
 
 const http = require("http");
+const { constrainedMemory } = require("process");
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
       origin: "http://localhost:3000"
     }
 });
-
-//Husikm å endre spånn at dewn henter ut riktig fra database og, for per nå henter du alltid fra den samme. alt er lagt opp, m,en du m å tenke litt for å få det på rett spor
 
 const port = process.env.PORT || 8080;
 
@@ -47,7 +46,8 @@ server.listen(port, () => {
             client.join(roomName);
             blackjack.insertOne({
                 boardName:roomName,
-                players:[]
+                players:[],
+                playersTurn:null
             })
             io.to(roomName).emit("joinedRoom", roomName);
         })
@@ -59,7 +59,8 @@ server.listen(port, () => {
             const newPlayerObject = {
                 name:name,
                 money:1500,
-                cards:[], moneyBet:null
+                cards:[], 
+                moneyBet:0
             };
             const everything = await blackjack.findOne({"boardName":roomName});
             if(!everything) return res.status(500).send("Game does not exist");
@@ -79,11 +80,53 @@ server.listen(port, () => {
 
         client.on("gameStarted",async ()=>{
             const curRoom = getRoom();
+            const forGettingPlayers = await blackjack.findOne({"boardName":curRoom});
+            if(!forGettingPlayers) return;
+            await blackjack.updateOne(
+                {"boardName":curRoom},
+                {$set:{playersTurn:forGettingPlayers.players[0].name}}
+            );
             const findDocumentOfSameName = await blackjack.findOne({"boardName":curRoom});
             if(!findDocumentOfSameName) return;
-            io.to(curRoom).emit("gameStartedGivePlayerInfo", findDocumentOfSameName.players)
+            io.to(curRoom).emit("gameStartedGivePlayerInfo", findDocumentOfSameName)
+        })
+
+        app.get("/betMoney", async(req, res)=>{
+            const q = req.query;
+            if(!q) return res.status(440).send("Nuhuh");
+            const action = req.query.action;
+            const name = req.query.username;
+            const roomName = req.query.room;
+            if(!name||!roomName||!action) return;
+
+            const whatPlayersTurn = await blackjack.findOne({"boardName":roomName});
+            if(name!==whatPlayersTurn.playersTurn) return res.status(403).send("Not your turn");
+
+            if(action==="submit"){
+
+            } else{
+                const moneyParsed = parseInt(action)
+                if(!moneyParsed) return res.status(440).send("You cant bet a string");
+
+                for(let i = 0; i<whatPlayersTurn.players.length; i++){
+                    if(name===whatPlayersTurn.players[i].name){
+                        const totalBet = whatPlayersTurn.players[i].moneyBet + moneyParsed
+                        if(totalBet>whatPlayersTurn.players[i].money) return res.status(403).send("You dont have enough money to bet that");
+                        break;
+                    }
+                }
+
+                await blackjack.updateOne(
+                    {boardName:roomName, "players.name":name},
+                    {$inc:{"players.$.moneyBet":moneyParsed}}
+                );
+
+                const findDocumentOfSameName = await blackjack.findOne({"boardName":roomName});
+                if(!findDocumentOfSameName) return res.status(440).send("Game doesnt exist");
+
+                io.to(roomName).emit("gameStartedGivePlayerInfo", findDocumentOfSameName)
+                return res.status(200).send("Added");
+            }
         })
     })
 })
-
-
