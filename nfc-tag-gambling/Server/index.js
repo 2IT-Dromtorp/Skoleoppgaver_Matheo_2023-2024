@@ -26,13 +26,6 @@ server.listen(port, () => {
     const database = mongodb.db("Gambling")
     const blackjack = database.collection("Blackjack")
 
-    app.get("/reset", async(req,res)=>{
-        await blackjack.updateMany({}, {$set: {
-            players: []
-        }})
-        res.status(200).send("Reset");
-    })
-
     io.on("connection", async (client)=>{
         function getRoom(){
             if(Array.from(client.rooms).length<=1) return;
@@ -47,7 +40,9 @@ server.listen(port, () => {
             blackjack.insertOne({
                 boardName:roomName,
                 players:[],
-                playersTurn:null
+                playersTurn:null,
+                whatTurn:null,
+                dealersHand:[]
             })
             io.to(roomName).emit("joinedRoom", roomName);
         })
@@ -84,7 +79,7 @@ server.listen(port, () => {
             if(!forGettingPlayers) return;
             await blackjack.updateOne(
                 {"boardName":curRoom},
-                {$set:{playersTurn:forGettingPlayers.players[0].name}}
+                {$set:{playersTurn:forGettingPlayers.players[0].name, whatTurn:"bet"}}
             );
             const findDocumentOfSameName = await blackjack.findOne({"boardName":curRoom});
             if(!findDocumentOfSameName) return;
@@ -101,10 +96,29 @@ server.listen(port, () => {
 
             const whatPlayersTurn = await blackjack.findOne({"boardName":roomName});
             if(name!==whatPlayersTurn.playersTurn) return res.status(403).send("Not your turn");
+            if(whatPlayersTurn.whatTurn!=="bet") return res.status(403).send("It's not betting time");
 
-            if(action==="submit"){
+            const checkIfLastPlayerTurn = (element) => element.name === name;
 
-            } else{
+            const indexOfName = whatPlayersTurn.players.findIndex(checkIfLastPlayerTurn);
+
+            if(action==="submit"&&indexOfName!==whatPlayersTurn.players.length-1){
+                await blackjack.updateOne(
+                    {boardName:roomName},
+                    {$set:{playersTurn:whatPlayersTurn.players[indexOfName+1].name}}
+                );
+            } else if(action==="submit"&&indexOfName===whatPlayersTurn.players.length-1){
+                await blackjack.updateOne(
+                    {boardName:roomName},
+                    {$set:{playersTurn:whatPlayersTurn.players[0].name,whatTurn:"play"}}
+                );
+                const findDocumentOfSameName = await blackjack.findOne({"boardName":roomName});
+                if(!findDocumentOfSameName) return res.status(440).send("Game doesnt exist");
+
+                io.to(roomName).emit("gameStartedGivePlayerInfo", findDocumentOfSameName)
+                io.to(roomName).emit("startGivingCards")
+                return res.status(200).send("Submitted");
+            }else{
                 const moneyParsed = parseInt(action)
                 if(!moneyParsed) return res.status(440).send("You cant bet a string");
 
@@ -120,13 +134,12 @@ server.listen(port, () => {
                     {boardName:roomName, "players.name":name},
                     {$inc:{"players.$.moneyBet":moneyParsed}}
                 );
-
-                const findDocumentOfSameName = await blackjack.findOne({"boardName":roomName});
-                if(!findDocumentOfSameName) return res.status(440).send("Game doesnt exist");
-
-                io.to(roomName).emit("gameStartedGivePlayerInfo", findDocumentOfSameName)
-                return res.status(200).send("Added");
             }
+            const findDocumentOfSameName = await blackjack.findOne({"boardName":roomName});
+            if(!findDocumentOfSameName) return res.status(440).send("Game doesnt exist");
+
+            io.to(roomName).emit("gameStartedGivePlayerInfo", findDocumentOfSameName)
+            return res.status(200).send("Added");
         })
     })
 })
