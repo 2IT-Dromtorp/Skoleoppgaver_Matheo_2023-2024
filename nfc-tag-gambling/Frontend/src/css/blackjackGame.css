@@ -25,12 +25,40 @@
 }
 
 .blackjackgame-table-top{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
     height: 50%;
     width: 100%;
 }
 
+.blackjackgame-table-dealer-hand{
+    height: 100%;
+    width: 70%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.blackjackgame-table-whose-turn{
+    height: 100%;
+    width: 15%;
+    margin-top: 10vh;
+}
+
+.blackjackgame-table-whose-turn h2{
+    font-size: 120%;
+}
+
+.blackjackgame-table-whose-turn p{
+    font-size: 250%;
+    font-weight: 600;
+}
+
 .blackjackgame-table-player-section{
-    height: 50%;
+    height: 70%;
     width: 100%;
     display: flex;
     justify-content: space-around;

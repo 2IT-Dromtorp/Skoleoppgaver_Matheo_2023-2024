@@ -14,7 +14,7 @@ export default function BlackjackPlayerProfile({ name, cards, money, index, mone
             </div>
             <div className='blackjackplayerprofile-information'>
                 <div className='blackjackplayerprofile-cards'>
-                    {cards&&cards.map((card, index) => <p>{card}</p>)}
+                    {cards&&cards.map((card, index) => <p>{card.value}</p>)}
                 </div>
                 <div className='blackjackplayerprofile-money'>
                     {moneyBet&&<p>Money bet: {moneyBet}</p>}

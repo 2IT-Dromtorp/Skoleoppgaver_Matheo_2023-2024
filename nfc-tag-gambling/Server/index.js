@@ -37,14 +37,19 @@ server.listen(port, () => {
             const findDocumentOfSameName = await blackjack.findOne({"boardName":roomName});
             if(findDocumentOfSameName) return;
             client.join(roomName);
-            blackjack.insertOne({
-                boardName:roomName,
-                players:[],
-                playersTurn:null,
-                whatTurn:null,
-                dealersHand:[]
-            })
-            io.to(roomName).emit("joinedRoom", roomName);
+            fetch("https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6")
+                .then(response=>response.json())
+                .then(data=>{
+                    blackjack.insertOne({
+                        boardName:roomName,
+                        players:[],
+                        playersTurn:null,
+                        whatTurn:null,
+                        dealersHand:[],
+                        deckId:data.deck_id
+                    })
+                    io.to(roomName).emit("joinedRoom", roomName);
+                })
         })
         
         app.get("/joinGame", async(req,res)=>{
@@ -115,8 +120,8 @@ server.listen(port, () => {
                 const findDocumentOfSameName = await blackjack.findOne({"boardName":roomName});
                 if(!findDocumentOfSameName) return res.status(440).send("Game doesnt exist");
 
-                io.to(roomName).emit("gameStartedGivePlayerInfo", findDocumentOfSameName)
-                io.to(roomName).emit("startGivingCards")
+                io.to(roomName).emit("gameStartedGivePlayerInfo", findDocumentOfSameName);
+                io.to(roomName).emit("startGivingCards");
                 return res.status(200).send("Submitted");
             }else{
                 const moneyParsed = parseInt(action)
@@ -140,6 +145,40 @@ server.listen(port, () => {
 
             io.to(roomName).emit("gameStartedGivePlayerInfo", findDocumentOfSameName)
             return res.status(200).send("Added");
+        })
+
+        client.on("giveCardsToPlayers",async()=>{
+            console.log("it was coolalffew")
+            const curRoom = getRoom();
+            const allPlayerData = await blackjack.findOne({"boardName":curRoom});
+            if(!allPlayerData) return;
+            const deckId = allPlayerData.deckId;
+            if(!deckId) return;
+
+            for(let i = 0; i<allPlayerData.players.length;i++){
+                await fetch(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=${2}`)
+                    .then(response=>response.json())
+                    .then(data=>{
+                        if(!data)return;
+                        blackjack.updateOne(
+                            {boardName:curRoom, "players.name":allPlayerData.players[i].name},
+                            {$set: {"players.$.cards": data.cards}}
+                        );
+                    })
+            }   
+            await fetch(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=${2}`)
+                    .then(response=>response.json())
+                    .then(data=>{
+                        if(!data)return;
+                        blackjack.updateOne(
+                            {boardName:curRoom},
+                            {$set: {dealersHand: data.cards}}
+                        );
+                    })
+
+            const findDocumentOfSameName = await blackjack.findOne({"boardName":curRoom});
+            if(!findDocumentOfSameName) return;
+            io.to(curRoom).emit("gameStartedGivePlayerInfo", findDocumentOfSameName)
         })
     })
 })
