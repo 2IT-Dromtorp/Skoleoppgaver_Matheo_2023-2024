@@ -9,7 +9,6 @@ app.use(express.json());
 const url = "mongodb+srv://mathoepan:Skole123@matheodb.kuczdkk.mongodb.net/"
 
 const http = require("http");
-const { constrainedMemory } = require("process");
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
@@ -39,8 +38,8 @@ server.listen(port, () => {
             client.join(roomName);
             fetch("https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6")
                 .then(response=>response.json())
-                .then(data=>{
-                    blackjack.insertOne({
+                .then(async data=>{
+                    await blackjack.insertOne({
                         boardName:roomName,
                         players:[],
                         playersTurn:null,
@@ -60,7 +59,8 @@ server.listen(port, () => {
                 name:name,
                 money:1500,
                 cards:[], 
-                moneyBet:0
+                moneyBet:0,
+                roundResult:""
             };
             const everything = await blackjack.findOne({"boardName":roomName});
             if(!everything) return res.status(500).send("Game does not exist");
@@ -84,7 +84,7 @@ server.listen(port, () => {
             if(!forGettingPlayers) return;
             await blackjack.updateOne(
                 {"boardName":curRoom},
-                {$set:{playersTurn:forGettingPlayers.players[0].name, whatTurn:"bet"}}
+                {$set:{playersTurn:forGettingPlayers.players[0].name, whatTurn:"bet", "players.$[].cards":[], dealersHand:[], "players.$[].roundResult":""}}
             );
             const findDocumentOfSameName = await blackjack.findOne({"boardName":curRoom});
             if(!findDocumentOfSameName) return;
@@ -148,19 +148,19 @@ server.listen(port, () => {
         })
 
         client.on("giveCardsToPlayers",async()=>{
-            console.log("it was coolalffew")
             const curRoom = getRoom();
             const allPlayerData = await blackjack.findOne({"boardName":curRoom});
             if(!allPlayerData) return;
+            
             const deckId = allPlayerData.deckId;
             if(!deckId) return;
 
             for(let i = 0; i<allPlayerData.players.length;i++){
                 await fetch(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=${2}`)
                     .then(response=>response.json())
-                    .then(data=>{
+                    .then(async data=>{
                         if(!data)return;
-                        blackjack.updateOne(
+                        await blackjack.updateOne(
                             {boardName:curRoom, "players.name":allPlayerData.players[i].name},
                             {$set: {"players.$.cards": data.cards}}
                         );
@@ -168,9 +168,9 @@ server.listen(port, () => {
             }   
             await fetch(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=${2}`)
                     .then(response=>response.json())
-                    .then(data=>{
+                    .then(async data=>{
                         if(!data)return;
-                        blackjack.updateOne(
+                        await blackjack.updateOne(
                             {boardName:curRoom},
                             {$set: {dealersHand: data.cards}}
                         );
@@ -180,5 +180,180 @@ server.listen(port, () => {
             if(!findDocumentOfSameName) return;
             io.to(curRoom).emit("gameStartedGivePlayerInfo", findDocumentOfSameName)
         })
+
+        app.get("/cardTurn", async(req, res)=>{
+            const q = req.query;
+            if(!q) return res.status(440).send("Nuhuh");
+            const action = req.query.action;
+            const name = req.query.username;
+            const roomName = req.query.room;
+            if(!name||!roomName||!action) return;
+
+            const whatPlayersTurn = await blackjack.findOne({"boardName":roomName});
+            const deckId = whatPlayersTurn.deckId
+            if(whatPlayersTurn.whatTurn!=="play") return res.status(403).send("It's not playing time");
+            if(name!==whatPlayersTurn.playersTurn||!deckId) return res.status(403).send("Not your turn");
+
+            const indexOfName = whatPlayersTurn.players.findIndex((element) => element.name === name);
+
+            if(action==="hit"){
+                await fetch(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`)
+                    .then(res=>res.json())
+                    .then(async data=>{
+                        if(!data.success)return;
+                        await blackjack.updateOne(
+                            {boardName:roomName, "players.name":name},
+                            {$push:{"players.$.cards":data.cards[0]}}
+                        )
+                    })
+            }
+                
+            if(indexOfName===whatPlayersTurn.players.length-1 && action==="stand"){
+                await blackjack.updateOne(
+                    {boardName:roomName},
+                    {$set:{playersTurn:"", whatTurn:""}}
+                )
+            } else if(action==="stand"){
+                await blackjack.updateOne(
+                    {boardName:roomName},
+                    {$set:{playersTurn:whatPlayersTurn.players[indexOfName+1].name}}
+                )
+            }
+
+            const document = await blackjack.findOne({"boardName":roomName});
+            if(!document) return res.status(440).send("Game doesnt exist");
+
+
+            if(addCardsTogether(document.players[indexOfName]) > 21 && indexOfName===document.players.length-1){
+                await blackjack.updateOne(
+                    {boardName:roomName},
+                    {$set:{playersTurn:"", whatTurn:""}}
+                )
+                const checkUp = await blackjack.findOne({"boardName":roomName});
+                if(!checkUp) return res.status(440).send("Game doesnt exist");
+                io.to(roomName).emit("gameStartedGivePlayerInfo", checkUp);
+            } else if(document.players[indexOfName] > 21){
+                await blackjack.updateOne(
+                    {boardName:roomName},
+                    {$set:{playersTurn:whatPlayersTurn.players[indexOfName+1].name}}
+                )
+                const checkUp = await blackjack.findOne({"boardName":roomName});
+                if(!checkUp) return res.status(440).send("Game doesnt exist");
+                io.to(roomName).emit("gameStartedGivePlayerInfo", checkUp);
+            } 
+            else{
+                io.to(roomName).emit("gameStartedGivePlayerInfo", document);
+            }
+
+            if(document.whatTurn==="") dealersTurn(roomName, document.dealersHand, deckId);
+            return res.status(200).send("Added");
+        })
+
+        function addCardsTogether(player){
+            let playersHandarray = []
+            let playersHandAddedTogether = 0
+            for(let j = 0; j<player.cards.length; j++){
+                playersHandarray.push(findValueOfCard(player.cards[j]));
+                playersHandAddedTogether += findValueOfCard(player.cards[j])
+            }
+
+            while(true){
+                if(playersHandAddedTogether>21&&playersHandarray.includes(11)){
+                    playersHandarray[playersHandarray.findIndex(x => x === 11)] = 1
+                    playersHandAddedTogether -= 10
+                } else {
+                    break; 
+                }
+            }
+            return playersHandAddedTogether;
+        }
+        
+        async function dealersTurn(roomName, dealersHandBeforeInsert, deckId){
+            let dealerHandArray = [];
+            for(let i = 0; i<dealersHandBeforeInsert.length; i++){
+                dealerHandArray.push(findValueOfCard(dealersHandBeforeInsert[i]));
+            }
+            let handValueAddedTogether = 0;
+            for(let i=0; i<dealerHandArray.length; i++){
+                handValueAddedTogether+=dealerHandArray[i];
+            }
+            while(handValueAddedTogether<17){
+                await fetch(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`)
+                .then(res=>res.json())
+                .then(async data=>{
+                    if(!data.success)return;
+                    await blackjack.updateOne(
+                        {boardName:roomName},
+                        {$push:{dealersHand:data.cards[0]}}
+                    )
+                    dealerHandArray.push(findValueOfCard(data.cards[0]));
+
+                    handValueAddedTogether = 0;
+                    for(let i=0; i<dealerHandArray.length; i++){
+                        handValueAddedTogether+=dealerHandArray[i];
+                    }
+                    if(handValueAddedTogether>21&&dealerHandArray.includes(11)){
+                        dealerHandArray[dealerHandArray.findIndex(x => x === 11)] = 1
+                        handValueAddedTogether -= 10
+                    }
+                })
+            }
+            
+            const dealerHandAfterInsert = await blackjack.findOne({"boardName":roomName});
+            if(!dealerHandAfterInsert) return;
+
+            for(let i = 0; i<dealerHandAfterInsert.players.length; i++){
+                const player = dealerHandAfterInsert.players[i]
+                const playersName = player.name
+
+                let playersHandarray = []
+                let playersHandAddedTogether = 0
+                for(let j = 0; j<player.cards.length; j++){
+                    playersHandarray.push(findValueOfCard(player.cards[j]));
+                    playersHandAddedTogether += findValueOfCard(player.cards[j])
+                }
+
+                while(true){
+                    if(playersHandAddedTogether>21&&playersHandarray.includes(11)){
+                        playersHandarray[playersHandarray.findIndex(x => x === 11)] = 1
+                        playersHandAddedTogether -= 10
+                    } else {
+                        break; 
+                    }
+                }
+
+                if(playersHandAddedTogether>handValueAddedTogether&&playersHandAddedTogether<22||playersHandAddedTogether<22&&handValueAddedTogether>21){
+                    await blackjack.updateOne(
+                        {boardName:roomName, "players.name":playersName},
+                        {$inc:{"players.$.money":player.moneyBet}, $set:{"players.$.roundResult":"won", "players.$.moneyBet":0}}
+                    )
+                } else if(playersHandAddedTogether<handValueAddedTogether&&handValueAddedTogether<22||handValueAddedTogether<22&&playersHandAddedTogether>21){
+                    await blackjack.updateOne(
+                        {boardName:roomName, "players.name":playersName},
+                        {$inc:{"players.$.money":~player.moneyBet+1}, $set:{"players.$.roundResult":"loss", "players.$.moneyBet":0}}
+                    )
+                } else{
+                    await blackjack.updateOne(
+                        {boardName:roomName, "players.name":playersName},
+                        {$set:{"players.$.roundResult":"draw", "players.$.moneyBet":0}}
+                    )
+                }
+            }
+
+            const finishedCardsToSendIn = await blackjack.findOne({"boardName":roomName});
+            if(!finishedCardsToSendIn) return;
+
+            io.to(roomName).emit("gameStartedGivePlayerInfo", finishedCardsToSendIn);
+            return;
+        }
+
+        function findValueOfCard(cardInHand){
+            const arrayOfTypesNotNumbers = ["QUEEN", "KING", "JACK"]
+            if(arrayOfTypesNotNumbers.includes(cardInHand.value)) return 10;
+            else if(cardInHand.value === "ACE") return 11;
+            const valueIntParsed = parseInt(cardInHand.value);
+            if (!valueIntParsed) return;
+            return valueIntParsed;
+        }
     })
 })

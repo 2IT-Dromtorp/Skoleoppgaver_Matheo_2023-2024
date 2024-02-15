@@ -26,8 +26,7 @@ export default function BlackjackGame() {
     function setPlayerValues(playerArray){
         setGame(playerArray.playersTurn);
         setPlayers(playerArray.players);
-        console.log(playerArray.dealersHand)
-        setDealerHand(playerArray.dealersHand)
+        setDealerHand(playerArray.dealersHand);
     }
     
     return (
@@ -41,8 +40,16 @@ export default function BlackjackGame() {
                         ))}
                     </div>
                     <div className='blackjackgame-table-whose-turn'>
-                        <h2>The next turn is:</h2>
-                        {game && <p>{game}</p>}
+                        {players[0]&&players[0].roundResult===""?(
+                            <>
+                                <h2>The next turn is:</h2>
+                                <p>{game}</p>
+                            </>
+                        ):(
+                            <button onClick={()=>socket.emit("gameStarted")}>Start the next round</button>
+                        )
+                        }
+                        
                     </div>
                 </div>
                 <div className='blackjackgame-table-player-section'>
