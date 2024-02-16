@@ -100,8 +100,9 @@ server.listen(port, () => {
             if(!name||!roomName||!action) return;
 
             const whatPlayersTurn = await blackjack.findOne({"boardName":roomName});
-            if(name!==whatPlayersTurn.playersTurn) return res.status(403).send("Not your turn");
             if(whatPlayersTurn.whatTurn!=="bet") return res.status(403).send("It's not betting time");
+            if(name!==whatPlayersTurn.playersTurn) return res.status(403).send("Not your turn");
+            if(action==="0") return res.status(403).send("You cant bet 0")
 
             const checkIfLastPlayerTurn = (element) => element.name === name;
 
@@ -181,6 +182,15 @@ server.listen(port, () => {
             io.to(curRoom).emit("gameStartedGivePlayerInfo", findDocumentOfSameName)
         })
 
+        function findNextPlayerThatIsYetToLose(players, thisPlayersIndex){
+            for(let i = thisPlayersIndex+1; i<players.length; i++){
+                if(players[i].money>0) return {nextLevel:false, name:players[i].name}
+            }
+            for(let i = 0; i<players.length; i++){
+                if(players[i].money>0) return {nextLevel:true, name:players[i].name}
+            }
+        }
+
         app.get("/cardTurn", async(req, res)=>{
             const q = req.query;
             if(!q) return res.status(440).send("Nuhuh");
@@ -208,35 +218,41 @@ server.listen(port, () => {
                     })
             }
                 
-            if(indexOfName===whatPlayersTurn.players.length-1 && action==="stand"){
-                await blackjack.updateOne(
-                    {boardName:roomName},
-                    {$set:{playersTurn:"", whatTurn:""}}
-                )
-            } else if(action==="stand"){
-                await blackjack.updateOne(
-                    {boardName:roomName},
-                    {$set:{playersTurn:whatPlayersTurn.players[indexOfName+1].name}}
-                )
+            if(action==="stand"){
+                const nextPlayerObject = findNextPlayerThatIsYetToLose(whatPlayersTurn.players, indexOfName)
+                const name = nextPlayerObject.name
+                const shouldRestart = nextPlayerObject.nextLevel
+                if(shouldRestart){
+                    await blackjack.updateOne(
+                        {boardName:roomName},
+                        {$set:{playersTurn:"", whatTurn:""}}
+                    )
+                } else{
+                    await blackjack.updateOne(
+                        {boardName:roomName},
+                        {$set:{playersTurn:name}}
+                    )
+                }
             }
 
             const document = await blackjack.findOne({"boardName":roomName});
             if(!document) return res.status(440).send("Game doesnt exist");
 
-
-            if(addCardsTogether(document.players[indexOfName]) > 21 && indexOfName===document.players.length-1){
-                await blackjack.updateOne(
-                    {boardName:roomName},
-                    {$set:{playersTurn:"", whatTurn:""}}
-                )
-                const checkUp = await blackjack.findOne({"boardName":roomName});
-                if(!checkUp) return res.status(440).send("Game doesnt exist");
-                io.to(roomName).emit("gameStartedGivePlayerInfo", checkUp);
-            } else if(document.players[indexOfName] > 21){
-                await blackjack.updateOne(
-                    {boardName:roomName},
-                    {$set:{playersTurn:whatPlayersTurn.players[indexOfName+1].name}}
-                )
+            if(addCardsTogether(document.players[indexOfName]) > 21){
+                const nextPlayerObject = findNextPlayerThatIsYetToLose(document.players, indexOfName)
+                const name = nextPlayerObject.name
+                const shouldRestart = nextPlayerObject.nextLevel
+                if(shouldRestart){
+                    await blackjack.updateOne(
+                        {boardName:roomName},
+                        {$set:{playersTurn:"", whatTurn:""}}
+                    )
+                } else{
+                    await blackjack.updateOne(
+                        {boardName:roomName},
+                        {$set:{playersTurn:name}}
+                    )
+                }
                 const checkUp = await blackjack.findOne({"boardName":roomName});
                 if(!checkUp) return res.status(440).send("Game doesnt exist");
                 io.to(roomName).emit("gameStartedGivePlayerInfo", checkUp);
@@ -245,7 +261,10 @@ server.listen(port, () => {
                 io.to(roomName).emit("gameStartedGivePlayerInfo", document);
             }
 
-            if(document.whatTurn==="") dealersTurn(roomName, document.dealersHand, deckId);
+            const afterAllChangesDocument = await blackjack.findOne({"boardName":roomName});
+            if(!afterAllChangesDocument) return res.status(440).send("Game doesnt exist");
+
+            if(afterAllChangesDocument.whatTurn==="") dealersTurn(roomName, afterAllChangesDocument.dealersHand, deckId);
             return res.status(200).send("Added");
         })
 
