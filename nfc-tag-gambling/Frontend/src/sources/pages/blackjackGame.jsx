@@ -10,6 +10,8 @@ export default function BlackjackGame() {
     const [game, setGame] = useState('');
     const [dealerHand, setDealerHand] = useState([]);
     const [players, setPlayers] = useState([]);
+    const [gameOver, setGameOver] = useState(false);
+
   
     useEffect(() => {
         socket.emit("gameStarted");
@@ -24,6 +26,7 @@ export default function BlackjackGame() {
     }, []);
 
     function setPlayerValues(playerArray){
+        if(playerArray === "GameOver") return setGameOver(true);
         setGame(playerArray.playersTurn);
         setPlayers(playerArray.players);
         setDealerHand(playerArray.dealersHand);
@@ -32,6 +35,8 @@ export default function BlackjackGame() {
     return (
         <div className="blackjackgame-main">
             <div className='blackjackgame-table'>
+            {gameOver?<h1 className='blackjackgame-game-over-message'>There are no more players able to play left in the game</h1>:
+                <>
                 <div className='blackjackgame-table-top'>
                     <div className='blackjackgame-table-whose-turn'></div>
                     <div className='blackjackgame-table-dealer-hand'>
@@ -57,6 +62,7 @@ export default function BlackjackGame() {
                         <BlackjackPlayerProfile moneyBet={player.moneyBet} key={index} index={index} name={player.name} money={player.money} cards={player.cards}/>
                     ))}
                 </div>
+                </>}
             </div>
         </div>
     );

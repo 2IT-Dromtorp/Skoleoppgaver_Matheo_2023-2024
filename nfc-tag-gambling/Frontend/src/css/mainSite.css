@@ -1,0 +1,30 @@
+.mainSite-main{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: darkgreen;
+}
+
+.mainSite-main form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 10vh;
+    width: 20vw;
+}
+
+.mainSite-main form input{
+    height: 3vh;
+    width: 14vw;
+}
+
+.mainSite-main form button{
+    margin-top: 0.5vh;
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+}

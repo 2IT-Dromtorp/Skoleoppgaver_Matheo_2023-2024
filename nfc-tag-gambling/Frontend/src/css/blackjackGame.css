@@ -24,6 +24,11 @@
     box-shadow: black 0px 0px 20px 4px, inset black -1px 0px 13px 4px;
 }
 
+.blackjackgame-game-over-message{
+    font-weight: 600;
+    font-size: 300%;
+}
+
 .blackjackgame-table-top{
     display: flex;
     justify-content: center;

@@ -1,39 +1,48 @@
+import '../../css/mainSite.css'
 import { socket } from "../../App";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { RoomIdContext } from "../../context";
 
+import logo from '../../images/blackjack.png'
+
 export default function MainSite() {
   const navigate = useNavigate()
   const { setRoomId} = useContext(RoomIdContext)
+  const [nameOfNewRoom, setNameOfNewRoom] = useState("")
 
   function joinedRoom(name){
     if(!name) return;
-    setRoomId(name)
-    navigate("/lobby")
+    console.log(name)
+    setRoomId(name);
+    navigate("/lobby");
   }
 
   useEffect(() => {
     socket.emit("connection")
 
-    socket.on('hei', (hei) => console.log(hei));
     socket.on('joinedRoom', (roomName)=> joinedRoom(roomName))
+    socket.on('roomAlreadyExist', ()=>alert("A room of that name already exists"))
 
     return () => {
-      socket.off('hei', console.log);
-      socket.off('joinedRoom', joinedRoom);
+      socket.off('joinedRoom', alert);
     };
   }, []);
 
-  function createRoom(){
-    const roomName = prompt("What do you want the new room to be called");
-    socket.emit("createRoom", (roomName));
+  const createRoom = (e) =>{
+    e.preventDefault();
+    console.log(nameOfNewRoom)
+    socket.emit("createRoom", nameOfNewRoom);
   }
 
   return (
-    <>
-        <button onClick={()=>createRoom()}>CreateNewRoom</button>
-    </>
+    <div className='mainSite-main'>
+        <img src={logo} alt=''/>
+        <form onSubmit={createRoom}>
+            <input type='text' value={nameOfNewRoom} onInput={(e)=>setNameOfNewRoom(e.target.value)}/>
+            <button type='submit'>Create new room</button>
+        </form>
+    </div>
   );
 };

@@ -34,7 +34,7 @@ server.listen(port, () => {
         client.on("createRoom", async (roomName)=>{
             if(!roomName) return;
             const findDocumentOfSameName = await blackjack.findOne({"boardName":roomName});
-            if(findDocumentOfSameName) return;
+            if(findDocumentOfSameName) return client.emit("roomAlreadyExist");
             client.join(roomName);
             fetch("https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=6")
                 .then(response=>response.json())
@@ -82,6 +82,7 @@ server.listen(port, () => {
             const curRoom = getRoom();
             const forGettingPlayers = await blackjack.findOne({"boardName":curRoom});
             if(!forGettingPlayers) return;
+            if(!findNextPlayerThatIsYetToLose(forGettingPlayers.players, -1)) return io.to(curRoom).emit("gameStartedGivePlayerInfo", "GameOver");
             await blackjack.updateOne(
                 {"boardName":curRoom},
                 {$set:{playersTurn:forGettingPlayers.players[0].name, whatTurn:"bet", "players.$[].cards":[], dealersHand:[], "players.$[].roundResult":""}}
@@ -108,23 +109,23 @@ server.listen(port, () => {
 
             const indexOfName = whatPlayersTurn.players.findIndex(checkIfLastPlayerTurn);
 
-            if(action==="submit"&&indexOfName!==whatPlayersTurn.players.length-1){
-                await blackjack.updateOne(
-                    {boardName:roomName},
-                    {$set:{playersTurn:whatPlayersTurn.players[indexOfName+1].name}}
-                );
-            } else if(action==="submit"&&indexOfName===whatPlayersTurn.players.length-1){
-                await blackjack.updateOne(
-                    {boardName:roomName},
-                    {$set:{playersTurn:whatPlayersTurn.players[0].name,whatTurn:"play"}}
-                );
-                const findDocumentOfSameName = await blackjack.findOne({"boardName":roomName});
-                if(!findDocumentOfSameName) return res.status(440).send("Game doesnt exist");
-
-                io.to(roomName).emit("gameStartedGivePlayerInfo", findDocumentOfSameName);
-                io.to(roomName).emit("startGivingCards");
-                return res.status(200).send("Submitted");
-            }else{
+            if(action==="submit"){
+                const nextPlayerObject = findNextPlayerThatIsYetToLose(whatPlayersTurn.players, indexOfName)
+                const nameOfNext = nextPlayerObject.name
+                const shouldRestart = nextPlayerObject.nextLevel
+                if(shouldRestart){
+                    await blackjack.updateOne(
+                        {boardName:roomName},
+                        {$set:{playersTurn:nameOfNext, whatTurn:"play"}}
+                    )
+                } else{
+                    await blackjack.updateOne(
+                        {boardName:roomName},
+                        {$set:{playersTurn:nameOfNext}}
+                    )
+                }
+            }
+            else{
                 const moneyParsed = parseInt(action)
                 if(!moneyParsed) return res.status(440).send("You cant bet a string");
 
@@ -144,7 +145,8 @@ server.listen(port, () => {
             const findDocumentOfSameName = await blackjack.findOne({"boardName":roomName});
             if(!findDocumentOfSameName) return res.status(440).send("Game doesnt exist");
 
-            io.to(roomName).emit("gameStartedGivePlayerInfo", findDocumentOfSameName)
+            io.to(roomName).emit("gameStartedGivePlayerInfo", findDocumentOfSameName);
+            if(findDocumentOfSameName.whatTurn==="play") io.to(roomName).emit("startGivingCards");
             return res.status(200).send("Added");
         })
 
@@ -157,6 +159,7 @@ server.listen(port, () => {
             if(!deckId) return;
 
             for(let i = 0; i<allPlayerData.players.length;i++){
+                if(!allPlayerData.players[i].moneyBet) continue;
                 await fetch(`https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=${2}`)
                     .then(response=>response.json())
                     .then(async data=>{
@@ -220,7 +223,7 @@ server.listen(port, () => {
                 
             if(action==="stand"){
                 const nextPlayerObject = findNextPlayerThatIsYetToLose(whatPlayersTurn.players, indexOfName)
-                const name = nextPlayerObject.name
+                const nameOfNext = nextPlayerObject.name
                 const shouldRestart = nextPlayerObject.nextLevel
                 if(shouldRestart){
                     await blackjack.updateOne(
@@ -230,7 +233,7 @@ server.listen(port, () => {
                 } else{
                     await blackjack.updateOne(
                         {boardName:roomName},
-                        {$set:{playersTurn:name}}
+                        {$set:{playersTurn:nameOfNext}}
                     )
                 }
             }
@@ -240,7 +243,7 @@ server.listen(port, () => {
 
             if(addCardsTogether(document.players[indexOfName]) > 21){
                 const nextPlayerObject = findNextPlayerThatIsYetToLose(document.players, indexOfName)
-                const name = nextPlayerObject.name
+                const nameOfNext = nextPlayerObject.name
                 const shouldRestart = nextPlayerObject.nextLevel
                 if(shouldRestart){
                     await blackjack.updateOne(
@@ -250,7 +253,7 @@ server.listen(port, () => {
                 } else{
                     await blackjack.updateOne(
                         {boardName:roomName},
-                        {$set:{playersTurn:name}}
+                        {$set:{playersTurn:nameOfNext}}
                     )
                 }
                 const checkUp = await blackjack.findOne({"boardName":roomName});
