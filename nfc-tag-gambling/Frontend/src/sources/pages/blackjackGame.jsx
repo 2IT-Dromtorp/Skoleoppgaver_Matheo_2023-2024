@@ -51,7 +51,7 @@ export default function BlackjackGame() {
                                 <p>{game}</p>
                             </>
                         ):(
-                            <button onClick={()=>socket.emit("gameStarted")}>Start the next round</button>
+                            <button className="buttonDesign" onClick={()=>socket.emit("gameStarted")}>Start the next round</button>
                         )
                         }
                         

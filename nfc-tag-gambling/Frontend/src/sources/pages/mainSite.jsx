@@ -41,7 +41,7 @@ export default function MainSite() {
         <img src={logo} alt=''/>
         <form onSubmit={createRoom}>
             <input type='text' value={nameOfNewRoom} onInput={(e)=>setNameOfNewRoom(e.target.value)}/>
-            <button type='submit'>Create new room</button>
+            <button type='submit' className='buttonDesign'>Create new room</button>
         </form>
     </div>
   );

@@ -1,8 +1,58 @@
-.blackjackTable{
-    height: 100vh;
-    width: 100vw;
+.blackjackTable-outDesign{
+    height: 100%;
+    width: 100%;
+    background-color: #fffdd0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.blackjackTable-main{
+    color: white;
+    height: 85vh;
+    width: 85vw;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    background-color: darkgreen;
+    border: solid #892201 5vh;
+    border-radius: 20px;
+    box-shadow: black 0px 0px 20px 4px, inset black -1px 0px 13px 4px;
+}
+
+.blackjackTable-top{
+    height: 30%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 300%;
+}
+
+.blackjackTable-bottom{
+    height: 70%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.blackjackTable-players{
+    height: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    font-size: 200%;
+}
+
+.blackjackTable-start-game-button{
+    height: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

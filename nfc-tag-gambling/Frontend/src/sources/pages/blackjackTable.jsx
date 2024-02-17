@@ -26,10 +26,21 @@ export default function BlackjackTable() {
   }
 
   return (
-    <div className='blackjackTable'>
-        <h1>{roomId}</h1>
-        {players.map((player, index) => <p key={index}>{player}</p>)}
-        <button onClick={()=>startGame()}>Start the game</button>
+    <div className='blackjackTable-outDesign'>
+      <div className='blackjackTable-main'>
+        <div className='blackjackTable-top'>
+          <h1>{roomId}</h1>
+        </div>
+        <div  className='blackjackTable-bottom'>
+          <div className='blackjackTable-players'>
+            <h2>Players:</h2>
+            {players.map((player, index) => <p key={index}>{player}</p>)}
+          </div>
+          <div className='blackjackTable-start-game-button'>
+            <button className="buttonDesign" onClick={()=>startGame()}>Start the game</button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

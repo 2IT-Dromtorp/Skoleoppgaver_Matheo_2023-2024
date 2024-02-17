@@ -6,3 +6,13 @@ html, body, *{
     height: 100vh;
     width: 100vw;
 }
+
+.buttonDesign{
+    margin-top: 0.5vh;
+    border: solid black 1px;
+    border-radius: 5px;
+    background-color: white;
+    height: 4vh;
+    width: 10vw;
+    font-size: 120%;
+}
