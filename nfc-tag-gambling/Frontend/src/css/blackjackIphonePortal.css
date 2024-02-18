@@ -1,0 +1,76 @@
+.blackjackIphonePortal-main{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.blackjackIphonePortal-top{
+    height: 15%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.blackjackIphonePortal-top h1{
+    font-size: 300%;
+}
+
+.blackjackIphonePortal-buttons-for-betting-main{
+    height: 50%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.blackjackIphonePortal-bet-buttons-div{
+    height: 75%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; 
+    align-items: flex-start; 
+}
+
+.blackjackIphonePortal-betting-button{
+    width: calc(95% / 2);
+    height: 30%;
+    border: solid black 1px;
+    margin: 0;
+    font-size: 225%;
+}
+
+.blackjackIphonePortal-bet-buttons-submit{
+    height: 25%;
+    width: 97%;
+    border: none;
+    margin: 0;
+    border: solid black 1px;
+    border-radius: 10px;
+    font-size: 250%;
+}
+
+.blackjackIphonePortal-play-buttons{
+    margin-top: 5%;
+    height: 30%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+    /* overflow: hidden; */
+}
+
+.blackjackIphonePortal-play-buttons button{
+    margin: 0;
+    height: 100%;
+    width: 48%;
+    margin: solid black 1px;
+    font-size: 250%;
+}

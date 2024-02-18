@@ -1,6 +1,8 @@
+//Ok, så basiccally, det jeg tenker- Frontenden har timer hver gang den får tilsendt "gameStartedGivePlayerInfo", og hvis den går ut sender den inn "timeOutForPlayer", med verdien "game", og med den bruker vi den funksjonen jeg brukte for å finne ut hvem den neste personens tur er, og gir da også neste tur
 const { Server } = require("socket.io");
 const express = require("express");
 const {MongoClient} = require("mongodb");
+const http = require("http");
 
 const app = express();
 app.use(express.static("build"));
@@ -8,7 +10,6 @@ app.use(express.json());
 
 const url = "mongodb+srv://mathoepan:Skole123@matheodb.kuczdkk.mongodb.net/"
 
-const http = require("http");
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
@@ -21,11 +22,14 @@ const port = process.env.PORT || 8080;
 server.listen(port, () => {
     console.log("Running on port " + port)
 
+    //Connecting to the correct mongodb databse/collection
     const mongodb = new MongoClient(url);
     const database = mongodb.db("Gambling")
     const blackjack = database.collection("Blackjack")
 
+    //This ensures that no socket.io commands can happen unless someone is connected to the server
     io.on("connection", async (client)=>{
+        //getRoom is used to find the name of the room a certain client is connected to, and is used so the frontend dont have to send in the name of the room they're in
         function getRoom(){
             if(Array.from(client.rooms).length<=1) return;
             return Array.from(client.rooms)[Array.from(client.rooms).length-1];
@@ -63,7 +67,7 @@ server.listen(port, () => {
                 roundResult:""
             };
             const everything = await blackjack.findOne({"boardName":roomName});
-            if(!everything) return res.status(500).send("Game does not exist");
+            if(!everything) return res.status(404).send("Game does not exist");
             const allPlayers = everything.players
             if(!allPlayers||allPlayers.length>=4) return res.status(412).send("Game is full");
             const findOtherUserOfSameName = await blackjack.findOne({boardName:roomName,"players.name":name});
