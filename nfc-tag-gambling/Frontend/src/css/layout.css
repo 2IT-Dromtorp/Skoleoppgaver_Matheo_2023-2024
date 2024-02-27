@@ -14,5 +14,11 @@ html, body, *{
     background-color: white;
     height: 4vh;
     width: 10vw;
-    font-size: 120%;
+    font-size: 15px;
 }
+
+@media screen and (min-width: 1600px) {
+    .buttonDesign{
+        font-size: 120%;   
+    }
+  }

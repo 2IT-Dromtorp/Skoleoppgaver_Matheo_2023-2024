@@ -14,7 +14,6 @@ export default function MainSite() {
 
   function joinedRoom(name){
     if(!name) return;
-    console.log(name)
     setRoomId(name);
     navigate("/lobby");
   }
@@ -32,7 +31,6 @@ export default function MainSite() {
 
   const createRoom = (e) =>{
     e.preventDefault();
-    console.log(nameOfNewRoom)
     socket.emit("createRoom", nameOfNewRoom);
   }
 
