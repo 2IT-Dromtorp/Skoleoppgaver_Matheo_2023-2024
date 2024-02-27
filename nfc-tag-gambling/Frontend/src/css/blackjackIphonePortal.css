@@ -41,7 +41,7 @@
 .blackjackIphonePortal-betting-button{
     width: calc(95% / 2);
     height: 30%;
-    border: solid black 1px;
+    border: solid rgb(0, 0, 0) 1px;
     margin: 0;
     font-size: 225%;
 }
@@ -51,26 +51,25 @@
     width: 97%;
     border: none;
     margin: 0;
-    border: solid black 1px;
+    border: solid rgb(0, 0, 0) 1px;
     border-radius: 10px;
     font-size: 250%;
 }
 
 .blackjackIphonePortal-play-buttons{
-    margin-top: 5%;
+    padding: 12px;
     height: 30%;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-around;
     flex-direction: row;
-    /* overflow: hidden; */
 }
 
 .blackjackIphonePortal-play-buttons button{
     margin: 0;
     height: 100%;
     width: 48%;
-    margin: solid black 1px;
+    border: solid rgb(0, 0, 0) 1px;
     font-size: 250%;
 }

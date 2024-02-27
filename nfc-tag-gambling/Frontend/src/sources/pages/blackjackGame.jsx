@@ -8,26 +8,18 @@ import { useEffect, useState } from 'react';
 import { useRef } from 'react';
 
 export default function BlackjackGame() {
-    const [game, setGame] = useState('');
+    const [nameOfCurrentPlayer, setNameOfCurrentPlayer] = useState('');
     const [dealerHand, setDealerHand] = useState([]);
     const [players, setPlayers] = useState([]);
     const [gameOver, setGameOver] = useState(false);
     
     const timerRef = useRef(undefined)
-    function timeOutFunction(){
-        const timeOut = setTimeout(()=>{
-            console.log("DREP DEG SELV JÆVLA FAEN DRITT HELVETE")
-        },1000*20);
-        timerRef.current=timeOut
-    }
-
-
   
     useEffect(() => {
         function setPlayerValues(playerArray){
             clearTimeout(timerRef.current);
             if(playerArray === "GameOver") return setGameOver(true);
-            setGame(playerArray.playersTurn);
+            setNameOfCurrentPlayer(playerArray.playersTurn);
             setPlayers(playerArray.players);
             setDealerHand(playerArray.dealersHand);  
         }
@@ -44,10 +36,17 @@ export default function BlackjackGame() {
     }, []);
 
     useEffect(()=>{
+        function timeOutFunction(){
+            const timeOut = setTimeout(()=>{
+                socket.emit("timerOutNewPlayerTurn", nameOfCurrentPlayer);
+            },1000*15);
+            timerRef.current=timeOut
+        }
+
         if(dealerHand.length>2) return;
 
         timeOutFunction();
-    },[dealerHand])
+    },[dealerHand, nameOfCurrentPlayer])
     
     return (
         <div className="blackjackgame-main">
@@ -65,7 +64,7 @@ export default function BlackjackGame() {
                         {players[0]&&players[0].roundResult===""?(
                             <>
                                 <h2>The next turn is:</h2>
-                                <p>{game}</p>
+                                <p>{nameOfCurrentPlayer}</p>
                             </>
                         ):(
                             <button className="buttonDesign" onClick={()=>socket.emit("gameStarted")}>Start the next round</button>

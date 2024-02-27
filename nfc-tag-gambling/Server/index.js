@@ -99,8 +99,60 @@ server.listen(port, () => {
             io.to(curRoom).emit("gameStartedGivePlayerInfo", findDocumentOfSameName)
         })
 
+        client.on("timerOutNewPlayerTurn", async(nameOfPlayer)=>{
+            const curRoom = getRoom();
+            if(typeof(nameOfPlayer)!=="string") return;
+            const findDocumentOfSameName = Array.from(await blackjack.find({"boardName":curRoom}).project({whatTurn:1, players:1, dealersHand:1, deckId:1}).toArray())[0];
+            if(!findDocumentOfSameName) return;
+            const currentTurn = findDocumentOfSameName.whatTurn;
+            const playerArray = findDocumentOfSameName.players;
+            const dealersHand = findDocumentOfSameName.dealersHand;
+            const deckId = findDocumentOfSameName.deckId;
 
+            const indexOfName = findDocumentOfSameName.players.findIndex((element) => element.name === nameOfPlayer);
+            const nextPlayer = findNextPlayerThatIsYetToLose(playerArray, indexOfName);
+            
+            if(nextPlayer.nextLevel && currentTurn==="play"){
+                await blackjack.updateOne(
+                    {boardName:curRoom},
+                    { $set:{playersTurn:"", whatTurn:""}}
+                )
+                return dealersTurn(curRoom, dealersHand, deckId);
+            } else if (nextPlayer.nextLevel && currentTurn==="bet"){
+                await blackjack.updateOne(
+                    {boardName:curRoom},
+                    {$set:{playersTurn:nextPlayer.name, whatTurn:"play"}}
+                )
+            }  else {
+                await blackjack.updateOne(
+                    {boardName:curRoom},
+                    {$set:{playersTurn:nextPlayer.name}}
+                )
+            }
+
+            if(currentTurn==="bet"){
+                await blackjack.updateOne(
+                    {boardName:curRoom, "players.name":nameOfPlayer},
+                    {$inc:{"players.$.moneyBet":100}}
+                );
+            }
+            const documentAfterUpdates = await blackjack.findOne({boardName:curRoom});
+            if(!documentAfterUpdates) return;
+
+            io.to(curRoom).emit("gameStartedGivePlayerInfo", documentAfterUpdates);
+            if(documentAfterUpdates.whatTurn==="play") io.to(curRoom).emit("startGivingCards");
+        })
     })
+
+    //Express api-s
+    function findNextPlayerThatIsYetToLose(players, thisPlayersIndex){
+        for(let i = thisPlayersIndex+1; i<players.length; i++){
+            if(players[i].money>0) return {nextLevel:false, name:players[i].name}
+        }
+        for(let i = 0; i<players.length; i++){
+            if(players[i].money>0) return {nextLevel:true, name:players[i].name}
+        }
+    }
 
     app.get("/joinGame", async(req,res)=>{
         const name = req.query.username;
@@ -281,18 +333,7 @@ server.listen(port, () => {
             }
         }
         return playersHandAddedTogether;
-    }
-
-    function findNextPlayerThatIsYetToLose(players, thisPlayersIndex){
-        for(let i = thisPlayersIndex+1; i<players.length; i++){
-            if(players[i].money>0) return {nextLevel:false, name:players[i].name}
-        }
-        for(let i = 0; i<players.length; i++){
-            if(players[i].money>0) return {nextLevel:true, name:players[i].name}
-        }
-    }
-
-    
+    }    
     
     async function dealersTurn(roomName, dealersHandBeforeInsert, deckId){
         let dealerHandArray = [];
