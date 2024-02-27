@@ -1,3 +1,4 @@
+//Det enesete som er igjen å gjøre er å gjøre at stokken stokkes om når den går tom
 const { Server } = require("socket.io");
 const express = require("express");
 const {MongoClient} = require("mongodb");
