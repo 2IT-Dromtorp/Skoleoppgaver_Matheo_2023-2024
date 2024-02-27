@@ -52,10 +52,12 @@ server.listen(port, () => {
             const curRoom = getRoom();
             const forGettingPlayers = await blackjack.findOne({"boardName":curRoom});
             if(!forGettingPlayers) return;
-            if(!findNextPlayerThatIsYetToLose(forGettingPlayers.players, -1)) return io.to(curRoom).emit("gameStartedGivePlayerInfo", "GameOver");
+            const nextPlayersTurn = findNextPlayerThatIsYetToLose(forGettingPlayers.players, -1)
+            if(!nextPlayersTurn) return io.to(curRoom).emit("gameStartedGivePlayerInfo", "GameOver");
+            
             await blackjack.updateOne(
                 {"boardName":curRoom},
-                {$set:{playersTurn:forGettingPlayers.players[0].name, whatTurn:"bet", "players.$[].cards":[], dealersHand:[], "players.$[].roundResult":""}}
+                {$set:{playersTurn:nextPlayersTurn.name, whatTurn:"bet", "players.$[].cards":[], dealersHand:[], "players.$[].roundResult":""}}
             );
             const findDocumentOfSameName = await blackjack.findOne({"boardName":curRoom});
             if(!findDocumentOfSameName) return;
@@ -97,7 +99,7 @@ server.listen(port, () => {
             io.to(curRoom).emit("gameStartedGivePlayerInfo", findDocumentOfSameName)
         })
 
-        
+
     })
 
     app.get("/joinGame", async(req,res)=>{
