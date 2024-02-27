@@ -1,6 +1,6 @@
 import '../../css/blackjackIphonePortal.css'
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function BlackjackIphonePortal() {
     const [username, setUsername] = useState("");

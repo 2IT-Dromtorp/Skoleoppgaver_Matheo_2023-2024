@@ -5,15 +5,33 @@ import BlackjackPlayerProfile from './blackjackComponents/blackjackPlayerProfile
 import BlackjackDealerComponent from './blackjackComponents/blackjackDealerComponent';
 
 import { useEffect, useState } from 'react';
+import { useRef } from 'react';
 
 export default function BlackjackGame() {
     const [game, setGame] = useState('');
     const [dealerHand, setDealerHand] = useState([]);
     const [players, setPlayers] = useState([]);
     const [gameOver, setGameOver] = useState(false);
+    
+    const timerRef = useRef(undefined)
+    function timeOutFunction(){
+        const timeOut = setTimeout(()=>{
+            console.log("DREP DEG SELV JÆVLA FAEN DRITT HELVETE")
+        },1000*20);
+        timerRef.current=timeOut
+    }
+
 
   
     useEffect(() => {
+        function setPlayerValues(playerArray){
+            clearTimeout(timerRef.current);
+            if(playerArray === "GameOver") return setGameOver(true);
+            setGame(playerArray.playersTurn);
+            setPlayers(playerArray.players);
+            setDealerHand(playerArray.dealersHand);  
+        }
+
         socket.emit("gameStarted");
     
         socket.on("gameStartedGivePlayerInfo", (playerArray) => setPlayerValues(playerArray));
@@ -25,12 +43,11 @@ export default function BlackjackGame() {
         };
     }, []);
 
-    function setPlayerValues(playerArray){
-        if(playerArray === "GameOver") return setGameOver(true);
-        setGame(playerArray.playersTurn);
-        setPlayers(playerArray.players);
-        setDealerHand(playerArray.dealersHand);
-    }
+    useEffect(()=>{
+        if(dealerHand.length>2) return;
+
+        timeOutFunction();
+    },[dealerHand])
     
     return (
         <div className="blackjackgame-main">
@@ -41,7 +58,7 @@ export default function BlackjackGame() {
                     <div className='blackjackgame-table-whose-turn'></div>
                     <div className='blackjackgame-table-dealer-hand'>
                         {dealerHand.map((card, index) =>(
-                            <BlackjackDealerComponent key={index} url={card.image} index={index}/>
+                            <BlackjackDealerComponent key={index} url={card.image} index={index} length={dealerHand.length}/>
                         ))}
                     </div>
                     <div className='blackjackgame-table-whose-turn'>

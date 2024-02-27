@@ -96,6 +96,8 @@ server.listen(port, () => {
             if(!findDocumentOfSameName) return;
             io.to(curRoom).emit("gameStartedGivePlayerInfo", findDocumentOfSameName)
         })
+
+        
     })
 
     app.get("/joinGame", async(req,res)=>{

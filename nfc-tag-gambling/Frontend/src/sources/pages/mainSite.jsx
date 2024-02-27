@@ -12,13 +12,13 @@ export default function MainSite() {
   const { setRoomId} = useContext(RoomIdContext)
   const [nameOfNewRoom, setNameOfNewRoom] = useState("")
 
-  function joinedRoom(name){
-    if(!name) return;
-    setRoomId(name);
-    navigate("/lobby");
-  }
-
   useEffect(() => {
+    function joinedRoom(name){
+      if(!name) return;
+      setRoomId(name);
+      navigate("/lobby");
+    }
+
     socket.emit("connection")
 
     socket.on('joinedRoom', (roomName)=> joinedRoom(roomName))
@@ -27,7 +27,7 @@ export default function MainSite() {
     return () => {
       socket.off('joinedRoom', alert);
     };
-  }, []);
+  }, [setRoomId, navigate]);
 
   const createRoom = (e) =>{
     e.preventDefault();
