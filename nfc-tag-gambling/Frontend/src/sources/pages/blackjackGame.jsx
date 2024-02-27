@@ -57,7 +57,7 @@ export default function BlackjackGame() {
                     <div className='blackjackgame-table-whose-turn'></div>
                     <div className='blackjackgame-table-dealer-hand'>
                         {dealerHand.map((card, index) =>(
-                            <BlackjackDealerComponent key={index} url={card.image} index={index} length={dealerHand.length}/>
+                            <BlackjackDealerComponent key={index} url={card.image} index={index} length={nameOfCurrentPlayer} />
                         ))}
                     </div>
                     <div className='blackjackgame-table-whose-turn'>
