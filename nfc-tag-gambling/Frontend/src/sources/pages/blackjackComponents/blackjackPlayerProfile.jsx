@@ -3,8 +3,9 @@ import diamond from '../../../images/diamonds.png'
 import clubs from '../../../images/clubs.png'
 import favorites from '../../../images/favorites.png'
 import spades from '../../../images/spades.png'
+import { useEffect, useState } from 'react'
 
-export default function BlackjackPlayerProfile({ name, cards, money, index, moneyBet }) {
+export default function BlackjackPlayerProfile({ name, cards, money, index, moneyBet, playerTurn }) {
     const cardSymbols = [diamond, clubs, favorites, spades];
     function findSymbolAccordingToCardApi(stringFromAPI){
         if (stringFromAPI === "DIAMONDS") return diamond;
@@ -12,8 +13,16 @@ export default function BlackjackPlayerProfile({ name, cards, money, index, mone
         if (stringFromAPI === "SPADES") return spades;
         if (stringFromAPI === "HEARTS") return favorites;
     }
+
+    const [playersTurnColor, setPlayersTurnColor] = useState("");
+
+    useEffect(()=>{
+        if(playerTurn===name){
+            setPlayersTurnColor({border: "solid red 2px;"});
+        }
+    },[playerTurn, name])
     return (
-        <div className="blackjackplayerprofile-main">
+        <div className="blackjackplayerprofile-main" style={playersTurnColor}>
             <div className='blackjackplayerprofile-top-icon'>
                 <img src={cardSymbols[index]} alt=''/>
                 <h1>{name}</h1>

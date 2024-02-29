@@ -75,7 +75,7 @@ export default function BlackjackGame() {
                 </div>
                 <div className='blackjackgame-table-player-section'>
                     {players.map((player, index) => (
-                        <BlackjackPlayerProfile moneyBet={player.moneyBet} key={index} index={index} name={player.name} money={player.money} cards={player.cards}/>
+                        <BlackjackPlayerProfile playerTurn={nameOfCurrentPlayer} moneyBet={player.moneyBet} key={index} index={index} name={player.name} money={player.money} cards={player.cards}/>
                     ))}
                 </div>
                 </>}

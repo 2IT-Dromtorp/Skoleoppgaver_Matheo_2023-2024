@@ -1,12 +1,9 @@
 # Table of contents
 - [Introduction](#introduction)
-- [Socket.io](#socket.io)
-    - [Installation](#install-socket.io)
-- [MongoDB](#mongodb)
-    - [Installation](#install-mongodb)
-    - [Use](#how-to-use-mongodb)
-    - [Connect To MongoDB](#connect-to-mongodb-server)
-    - [MongoDB Commands](#mongodb-commands)
+- [Installations](#installations)
+- [Key functions](#key-functions)
+- [findValueOfCard](#findvalueofcard)
+
 
 ## Introduction
 
@@ -29,104 +26,68 @@ In our examples we will use:
     $ npm install
 ```
 
-## Socket.io
-### Install Socket.io
+## Installations
+
+In this project we use:
+
+- [Socket.io](https://www.npmjs.com/package/socket.io)
+- [MongoDB](https://www.npmjs.com/package/mongodb)
 
 To install `Socket.io` you use:
 ```sh
     $ npm install socket.io
 ```
 
-Jeg fortsetter med Socket.io senere
-
-## MongoDB
-
-To use MongoDB you have to have a MongoDB-database, which you can [here](https://www.mongodb.com/docs/manual/)
-
-
-### Install MongoDB
-
 To install `MongoDB` you use:
 ```sh
     $ npm install mongodb
 ```
 
-### How to use MongoDB
-#### Connect to MongoDB server
+## Key functions
+
+### findValueOfCard
+findValueOfCard is used to find the value of a card
 ```js
-    const {MongoClient} = require("mongodb");
-    //You have to import the MongoClient packet from mongobd
-
-    const url = "mongodb+srv://username:<password>@matheodb.kuczdkk.mongodb.net/"
-    //The URL is the URL provided to you by MongoDB Atlas, where you replace `<password>` with your password
-
-    const mongodb = new MongoClient(url);
-    const database = mongodb.db("database")
-    //The name of your database
-    const collection = database.collection("collection")
-    //The name of your collection
+    function findValueOfCard(cardInHand){ //cardInHand is one card object from the hand
+        const arrayOfTypesNotNumbers = ["QUEEN", "KING", "JACK"] //Here I define all the values a card can have that is not a number, but equal to 10
+        if(arrayOfTypesNotNumbers.includes(cardInHand.value)) return 10; //If the value of the card is in that array, it returns the number 10
+        else if(cardInHand.value === "ACE") return 11; //If the value is ACE returns 11
+        const valueIntParsed = parseInt(cardInHand.value); //If its not one of those it gets turnt into a number
+        if (!valueIntParsed) return; //If its undefined its not a valid card, and the function will return nothing
+        return valueIntParsed; //If it gets parsed correctly the function returns the number
+    }
 ```
 
-#### MongoDB commands
-
-When using MongoDB there is three commands you need to know:
-
-
-##### Insert
-
-When inserting a document into a collection you use the `insertOne`
-
+### addCardsTogether
+The following function is used to add together the hand of a player, from cards to a number, using [findValueOfCard](#findvalueofcard)
 ```js
-    await collection.insertOne({a:"1", b:"2"});
+    function addCardsTogether(player){ //The parameter is named player, and is an array containing the card objects
+        let playersHandarray = []
+        let playersHandAddedTogether = 0
+        for(let j = 0; j<player.cards.length; j++){
+            playersHandarray.push(findValueOfCard(player.cards[j])); //It pushes the number returned from the function into an array
+            playersHandAddedTogether += findValueOfCard(player.cards[j]) //And adds it to the toltal
+        }
+
+        while(true){ //After the array and total are defined, the code is checking of it can/should be set to a smaller number
+            if(playersHandAddedTogether>21&&playersHandarray.includes(11)){ //If the player has busted, and the array includes a 11
+                playersHandarray[playersHandarray.findIndex(x => x === 11)] = 1 //The 11 gets set to 1
+                playersHandAddedTogether -= 10 //And the total gets set to 10 less
+            } else { //This repeats until the condition is not true anymore, and then breaks
+                break; 
+            }
+        }
+        return playersHandAddedTogether; //The total gets returned
+    }  
 ```
 
-If you want to insert multiple documents you use the `insertMany` command
-
 ```js
-    await collection.insertMany([
-        {a:"1", b:"34"},
-        {a:"1", b:"1"}
-    ]);
+    function findNextPlayerThatIsYetToLose(players, thisPlayersIndex){ //The paramerters are the array with all the players, and the index of the player that took the last turn
+        for(let i = thisPlayersIndex+1; i<players.length; i++){
+            if(players[i].money>0) return {nextLevel:false, name:players[i].name} //It goes through the player-array, starting on the next player in the array, and if that player has more money than 0, it sends in the name of the new player, and that it should not go to next lvl
+        }
+        for(let i = 0; i<players.length; i++){
+            if(players[i].money>0) return {nextLevel:true, name:players[i].name}//It goes through the player-array, startingat the start, and if that player has more money than 0, it sends in the name of the new player, and that it should go to next lvl
+        }
+    }
 ```
-
-
-##### Update
-
-To update a document you use the `updateOne` method0
-
-```js
-    await collection.updateOne(
-        {a:"1", b:"2"}, //The first part is the filter, which shows which document you want to edit
-        {$set:{b:5}} //The second part is what you want to do with that document
-    );
-    //We now set the "b" of that document to 5, instead of "2"
-
-    await collection.updateOne(
-        {a:"1", b:5},
-        {$inc:{b:3}, $set:{a:"0"}} //You can update multiple parts of the document at the same time
-    );
-    //And here we incremented it with 3, which means it now is 8
-    //As well as set "a" to "0"
-```
-
-
-##### Find
-
-There are two ways to retrieve data from the MongoDB
-
-One is using the `findOne`-command, which will get the first document that matches the filter you set
-
-```js
-    const data = await collection.findOne({a:"0"});
-    //data = {a:"0", b:8}
-```
-
-The other is using the `find`-command, which will get all documents that matches the filter you set
-When using the `find`method you will also have to use the `toArray()` function at the end
-
-```js
-    const data = await collection.find({a:"1"}).toArray();
-    //data = [{a:"1", b:"34"},{a:"1", b:"1"}]
-```
-
-If the filter is empty the `findOne` method will retrieve the first document in the collection, while the `find` will retrieve all
