@@ -29,19 +29,9 @@ In our examples we will use:
 ## Installations
 
 In this project we use:
-
-- [Socket.io](https://www.npmjs.com/package/socket.io)
-- [MongoDB](https://www.npmjs.com/package/mongodb)
-
-To install `Socket.io` you use:
-```sh
-    $ npm install socket.io
-```
-
-To install `MongoDB` you use:
-```sh
-    $ npm install mongodb
-```
+|---|---|
+|Socket.io|(https://www.npmjs.com/package/socket.io)|
+|MongoDB|(https://www.npmjs.com/package/mongodb)|
 
 ## Key functions
 

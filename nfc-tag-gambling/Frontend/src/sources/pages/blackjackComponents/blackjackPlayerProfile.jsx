@@ -14,7 +14,7 @@ export default function BlackjackPlayerProfile({ name, cards, money, index, mone
         if (stringFromAPI === "HEARTS") return favorites;
     }
 
-    const [playersTurnColor, setPlayersTurnColor] = useState("");
+    const [playersTurnColor, setPlayersTurnColor] = useState({});
 
     useEffect(()=>{
         if(playerTurn===name){
