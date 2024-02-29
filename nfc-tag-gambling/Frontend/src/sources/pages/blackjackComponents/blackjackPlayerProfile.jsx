@@ -14,14 +14,16 @@ export default function BlackjackPlayerProfile({ name, cards, money, index, mone
         if (stringFromAPI === "HEARTS") return favorites;
     }
 
-    const [playersTurnColor, setPlayersTurnColor] = useState({});
+    const [playersTurnColor, setPlayersTurnColor] = useState({border: "solid gray 2px"});
 
     useEffect(()=>{
         if(playerTurn===name){
-            setPlayersTurnColor({border: "solid red 2px;"});
+            setPlayersTurnColor({border: "solid red 3px"});
         }
     },[playerTurn, name])
     return (
+        <>
+        {playersTurnColor&&
         <div className="blackjackplayerprofile-main" style={playersTurnColor}>
             <div className='blackjackplayerprofile-top-icon'>
                 <img src={cardSymbols[index]} alt=''/>
@@ -39,6 +41,7 @@ export default function BlackjackPlayerProfile({ name, cards, money, index, mone
             <div className='blackjackplayerprofile-bottom-icon'>
                 <img src={cardSymbols[index]} alt=''/>
             </div>
-        </div>
+        </div>}
+        </>
     );
 }
