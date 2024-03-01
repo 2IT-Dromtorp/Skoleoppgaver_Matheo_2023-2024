@@ -1,4 +1,5 @@
-# Table of contents
+# Blackjack
+## Table of contents
 - [Introduction](#introduction)
 - [Installations](#installations)
 - [Key functions](#key-functions)
