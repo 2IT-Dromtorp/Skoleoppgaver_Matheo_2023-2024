@@ -73,7 +73,7 @@ The following function is used to add together the hand of a player, from cards 
         return playersHandAddedTogether; //The total gets returned
     }  
 ```
-## findNextPlayerYetToLose
+### findNextPlayerYetToLose
 findNextPlayerYetToLose is used each time a player has finished it turn. It basically checks through the array, and finds the next player that is eligeble to play
 
 ```js
@@ -87,6 +87,6 @@ findNextPlayerYetToLose is used each time a player has finished it turn. It basi
     }
 ```
 
-### Licenses 
+## Licenses 
 
 ### MIT LICENSE
