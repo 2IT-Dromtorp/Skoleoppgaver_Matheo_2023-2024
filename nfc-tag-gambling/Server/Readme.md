@@ -2,7 +2,6 @@
 - [Introduction](#introduction)
 - [Installations](#installations)
 - [Key functions](#key-functions)
-- [findValueOfCard](#findvalueofcard)
 - [Licenses](#licenses)
 
 ## Introduction
