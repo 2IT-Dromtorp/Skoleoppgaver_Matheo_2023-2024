@@ -7,6 +7,9 @@
 
 ## Introduction
 
+This projects is used for playing Blackjack, and that is it's sole purpose
+It's specificcaly designed for Blackjack, but could with a few tweaks be used for other card-games
+
 To be able to use any of these packets you first need to [download and install Node.js](https://nodejs.org/en/download/).
 
 All installations is done using the [`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
@@ -71,6 +74,8 @@ The following function is used to add together the hand of a player, from cards 
         return playersHandAddedTogether; //The total gets returned
     }  
 ```
+## findNextPlayerYetToLose
+findNextPlayerYetToLose is used each time a player has finished it turn. It basically checks through the array, and finds the next player that is eligeble to play
 
 ```js
     function findNextPlayerThatIsYetToLose(players, thisPlayersIndex){ //The paramerters are the array with all the players, and the index of the player that took the last turn
