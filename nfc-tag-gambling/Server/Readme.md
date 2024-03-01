@@ -3,7 +3,7 @@
 - [Installations](#installations)
 - [Key functions](#key-functions)
 - [findValueOfCard](#findvalueofcard)
-
+- [Licenses](#licenses)
 
 ## Introduction
 
@@ -81,3 +81,7 @@ The following function is used to add together the hand of a player, from cards 
         }
     }
 ```
+
+### Licenses 
+
+### MIT LICENSE
