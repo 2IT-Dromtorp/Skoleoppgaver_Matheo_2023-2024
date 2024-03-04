@@ -1,6 +1,7 @@
 import '../../css/blackjackIphonePortal.css'
 
 import { useState } from 'react';
+import logo from '../../images/blackjack.png'
 
 export default function BlackjackIphonePortal() {
     const [username, setUsername] = useState("");
@@ -44,7 +45,8 @@ export default function BlackjackIphonePortal() {
     return (
         <div className="blackjackIphonePortal-main">
             {!joinedGame?
-                <form onSubmit={joinGame}>
+                <form className='blackjackIphonePortal-form' onSubmit={joinGame}>
+                    <img src={logo} alt=''/>
                     <input value={room} type='text' placeholder='Name of the room' onInput={e=>setRoom(e.target.value)}/>
                     <input value={username} type='text' placeholder='Username' onInput={e=>setUsername(e.target.value)}/>
                     <button type='submit'>Join the game</button>
