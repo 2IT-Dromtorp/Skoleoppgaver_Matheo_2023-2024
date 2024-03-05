@@ -141,7 +141,7 @@ server.listen(port, () => {
             if(!documentAfterUpdates) return;
 
             io.to(curRoom).emit("gameStartedGivePlayerInfo", documentAfterUpdates);
-            if(documentAfterUpdates.whatTurn==="play") io.to(curRoom).emit("startGivingCards");
+            if(documentAfterUpdates.whatTurn==="play"&&currentTurn==="bet") io.to(curRoom).emit("startGivingCards");
         })
     })
 

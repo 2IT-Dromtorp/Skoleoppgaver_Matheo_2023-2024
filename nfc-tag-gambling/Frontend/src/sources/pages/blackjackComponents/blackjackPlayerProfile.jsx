@@ -18,7 +18,9 @@ export default function BlackjackPlayerProfile({ name, cards, money, index, mone
 
     useEffect(()=>{
         if(playerTurn===name){
-            setPlayersTurnColor({border: "solid red 3px"});
+            setPlayersTurnColor({border: "solid red 6px"});
+        } else{
+            setPlayersTurnColor({border: "solid gray 3px"});
         }
     },[playerTurn, name])
     return (
