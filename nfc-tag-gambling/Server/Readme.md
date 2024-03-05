@@ -37,6 +37,23 @@ In this project we use:
 |Socket.io|(https://www.npmjs.com/package/socket.io)|
 |MongoDB|(https://www.npmjs.com/package/mongodb)|
 
+## Scripts
+
+### Frontend
+```js
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+```
+
+`npm run start` or `npm start` is used to start the react project
+`npm run build` is used to create a build folder, with the react site made static
+
+## Backend
+```js
+    "dev": "nodemon index.js"
+```
+
+
 ## Key functions
 
 ### findValueOfCard
