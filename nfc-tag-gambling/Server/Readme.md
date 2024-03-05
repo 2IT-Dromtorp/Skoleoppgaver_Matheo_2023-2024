@@ -25,8 +25,8 @@ or
 ```
 
 In our examples we will use:
-```sh
-    $ npm install
+```bash
+    npm install
 ```
 
 ## Installations
