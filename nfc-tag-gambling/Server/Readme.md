@@ -36,6 +36,7 @@ In this project we use:
 |---|---|
 |Socket.io|(https://www.npmjs.com/package/socket.io)|
 |MongoDB|(https://www.npmjs.com/package/mongodb)|
+|Deck Of Cards|(https://www.deckofcardsapi.com/)|
 
 ## Scripts
 
