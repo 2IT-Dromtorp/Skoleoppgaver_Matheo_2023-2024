@@ -1,4 +1,4 @@
-# Blackjack
+# Blackjack  
 ## Table of contents
 - [Introduction](#introduction)
 - [Installations](#installations)
