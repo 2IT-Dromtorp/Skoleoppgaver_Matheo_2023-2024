@@ -34,13 +34,13 @@ export default function BlackjackPlayerProfile({ name, cards, money, index, mone
             <div className='blackjackplayerprofile-information'>
                 <div className='blackjackplayerprofile-cards'>
                     {cards&&cards.map((card, index) => <p key={index}>{card.value} <img src={findSymbolAccordingToCardApi(card.suit)} alt=''/></p>)}
-                </div>
+                </div>    
+            </div>
+            <div className='blackjackplayerprofile-bottom-icon'>
                 <div className='blackjackplayerprofile-money'>
                     {moneyBet&&<p>Money bet: {moneyBet}</p>}
                     <p>Money left: {money}</p>
-                </div>     
-            </div>
-            <div className='blackjackplayerprofile-bottom-icon'>
+                </div>   
                 <img src={cardSymbols[index]} alt=''/>
             </div>
         </div>}
