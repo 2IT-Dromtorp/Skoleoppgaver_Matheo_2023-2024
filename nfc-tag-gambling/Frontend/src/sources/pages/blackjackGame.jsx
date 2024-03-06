@@ -62,10 +62,7 @@ export default function BlackjackGame() {
                     </div>
                     <div className='blackjackgame-table-whose-turn'>
                         {players[0]&&players[0].roundResult===""?(
-                            <>
-                                <h2>The next turn is:</h2>
-                                <p>{nameOfCurrentPlayer}</p>
-                            </>
+                            false
                         ):(
                             <button className="buttonDesign" onClick={()=>socket.emit("gameStarted")}>Start the next round</button>
                         )
