@@ -1,4 +1,4 @@
-# Blackjack
+# Blackjack  
 ## Table of contents
 - [Introduction](#introduction)
 - [Installations](#installations)
@@ -108,4 +108,4 @@ findNextPlayerYetToLose is used each time a player has finished it turn. It basi
 
 ## Licenses 
 
-### MIT LICENSE
+### MIT LICENSE  
