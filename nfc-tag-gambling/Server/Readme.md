@@ -108,4 +108,4 @@ findNextPlayerYetToLose is used each time a player has finished it turn. It basi
 
 ## Licenses 
 
-### MIT LICENSE
+### MIT LICENSE  
