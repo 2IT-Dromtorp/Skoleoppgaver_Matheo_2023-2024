@@ -6,15 +6,18 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "die": "powershell -command \"Start-Process powershell -Verb runAs wininit\""
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.0.2",
+    "@types/jsonwebtoken": "^9.0.6",
     "svelte": "^4.2.11",
     "vite": "^5.1.4"
   },
   "dependencies": {
     "firebase": "^10.8.1",
+    "jsonwebtoken": "^9.0.2",
     "svelte-routing": "^2.12.0"
   }
 }

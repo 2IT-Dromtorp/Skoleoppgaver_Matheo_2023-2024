@@ -1,17 +1,18 @@
 <script>
-    import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+    import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
     import { app } from '../firebase'
-
+    import { navigate } from "svelte-routing";
+    
     let email = ""
     let password = ""
 
-    function createUser(e){
+    function logIn(e){
         e.preventDefault();
         const auth = getAuth(app);
-        createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            const user = userCredential.user;
-            console.log(userCredential)
+        signInWithEmailAndPassword(auth, email, password)
+        .then(async (userCredential) => {
+            localStorage.setItem("jwt", await userCredential.user.getIdToken())
+            navigate("/user")
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -19,12 +20,11 @@
             console.log(errorCode,errorMessage)
         });
     }
-    
 </script>
 
 <div>
-    <h1>Create user</h1>
-    <form on:submit={createUser}>
+    <h1>Log In</h1>
+    <form on:submit={logIn}>
         <input autocomplete="username" required={true} type="email" bind:value={email}/>
         <input autocomplete="current-password" required={true} type="password" bind:value={password}/>
         <button type="submit">Submit</button>
