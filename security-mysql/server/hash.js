@@ -1,6 +1,8 @@
-function HashString(stringToBeHashed, rounds, saltFromCompare){
-    const salt = saltFromCompare||createSalt(7);
-    let preHashString = stringToBeHashed //+ salt
+function HashString(stringToBeHashed, saltFromCompare){
+    const saltLength = 15
+    const rounds =  1000
+    const salt = saltFromCompare||createSalt(saltLength);
+    let preHashString = stringToBeHashed + salt
     for(let j = 0; j<rounds;j++){
         let addedTogetherValueString = ""
         for(let i = 0; i<preHashString.length;i++){
@@ -9,18 +11,21 @@ function HashString(stringToBeHashed, rounds, saltFromCompare){
             const ran3 = (Math.round(preHashString[i].charCodeAt(0)*3/2)%((i*i)+1)===0) ? ran1*ran2*preHashString[Math.round(preHashString.length/2)].charCodeAt(0) : preHashString[Math.round(preHashString.length/2)].charCodeAt(0)
 
             const value = preHashString[i].charCodeAt(0) * ran1 * ran2 *ran3
-            addedTogetherValueString += ((value>>>0).toString(2));
+            const valueAfter = bytesToText(binaryToByte(((value>>>0).toString(2)))).join('');
+            addedTogetherValueString += valueAfter
+            if (addedTogetherValueString.length>(100-6-saltLength)) break;
         }
+        
         preHashString = addedTogetherValueString
     }
-    const arrayOfLetters = bytesToText(binaryToByte(preHashString));
-    return {hash:arrayOfLetters.join(''),salt:salt};
+
+    return `$mhj$${salt}$${preHashString}`;
 }
 
 function createSalt(numberOfLetters){
     let salt = ""
-    const min = 33
-    const max = 127
+    const min = 46
+    const max = 123
     for(let i=0;i<numberOfLetters; i++){
         const randomNumber = Math.random() * (max-min) + min
         salt += String.fromCharCode(randomNumber)
@@ -32,38 +37,40 @@ function binaryToByte(fullBinaryText){
     const arrayOfChars = Array.from(fullBinaryText);
     const arrayOfBytes = []
     for(let i = 0; i<arrayOfChars.length;i+=8){
-        arrayOfBytes.push(arrayOfChars.slice(i, i+7).join(""))
+        arrayOfBytes.push(arrayOfChars.slice(i, i+8).join(""))
     }
     return arrayOfBytes
 }
 
 function bytesToText(arrayOfBytes){
     const arrayOfLetters = []
-    for(let i = 0; i<arrayOfBytes.length; i++){
-        if(parseInt(arrayOfBytes[i], 2)<33){
-            arrayOfLetters.push(String.fromCharCode(parseInt(arrayOfBytes[i], 2)+33))
-            continue
-        }else if(parseInt(arrayOfBytes[i], 2)>126){
-            arrayOfLetters.push(String.fromCharCode(parseInt(arrayOfBytes[i], 2)-94))
-            continue
+    for(let i = 0; i<arrayOfBytes.length; i++){   
+        if(arrayOfBytes[i].length>5){
+            let int = parseInt(arrayOfBytes[i], 2)
+            while(int > 122 || int < 46){
+                if(int>122) int-=86;
+                if(int<46) int+=46
+            }
+            arrayOfLetters.push(String.fromCharCode(int))
         }
-        arrayOfLetters.push(String.fromCharCode(parseInt(arrayOfBytes[i], 2)))
     }
     return arrayOfLetters;
 }
 
-function Compare(cryptatedStringDB, input, rounds, salt){
-    const saltFromFront = salt || 0 
-    return cryptatedStringDB===HashString(input,rounds,saltFromFront).hash;
+function Compare(cryptated, input){
+    const splitHash = cryptated.split("$");
+    const salt = splitHash[2];
+    const hashedString = HashString(input,salt);
+    return cryptated===hashedString;
 }
 
 function a(){
-    const rounds = 2
     const input = "falk"
-    console.log(HashString(input, rounds).hash);
-    // console.log(Compare('hash', input, rounds, 0));
+    const hash = HashString(input);
+    console.log(hash)
+    console.log(Compare('$mhj$708H6e[`J=`UA.f$Bg.<NyC.U..>/Dr>U.9XP.5N4RP.PN4b>.kNplg.55..>yVn^.Z@LJR0>yPYN>Npl/pP4Rg.U.YFL.yu4', input));
 }
 
-a();
+// a();
 
 module.exports = {Compare, HashString};
