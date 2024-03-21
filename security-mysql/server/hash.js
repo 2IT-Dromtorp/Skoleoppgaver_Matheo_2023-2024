@@ -47,10 +47,13 @@ function bytesToText(arrayOfBytes){
     for(let i = 0; i<arrayOfBytes.length; i++){   
         if(arrayOfBytes[i].length>5){
             let int = parseInt(arrayOfBytes[i], 2)
-            while(int > 122 || int < 46){
+            while(int > 122 || int < 46||int===96||int===92){
                 if(int>122) int-=86;
                 if(int<46) int+=46
+                if(int===96) int +=15
+                if(int===92) int -=15
             }
+            if(int===96) console.log(int)
             arrayOfLetters.push(String.fromCharCode(int))
         }
     }
@@ -65,12 +68,12 @@ function Compare(cryptated, input){
 }
 
 function a(){
-    const input = "falk"
+    const input = "a"
     const hash = HashString(input);
     console.log(hash)
-    console.log(Compare('$mhj$708H6e[`J=`UA.f$Bg.<NyC.U..>/Dr>U.9XP.5N4RP.PN4b>.kNplg.55..>yVn^.Z@LJR0>yPYN>Npl/pP4Rg.U.YFL.yu4', input));
+    console.log(Compare('gare', input));
 }
 
-// a();
+a();
 
 module.exports = {Compare, HashString};
