@@ -67,14 +67,14 @@ function Compare(cryptated, input){
     return cryptated===hashedString;
 }
 
-function a(){
-    const input = "Troya Elise Huse-Fagerlid"
-    const hashedPass = '12$mhj$Bu1pKM5rj1jnNSeUZbqADr477VRSXPZbcHovAh84$5ewJzN68xYKKB2WV6cwPcJIin60dW0zX'
-    const hash = HashString(input,12);
-    console.log(hash)
-    console.log(Compare(hashedPass, input));
-}
+// function a(){
+//     const input = "Troya Elise Huse-Fagerlid"
+//     const hashedPass = '12$mhj$wWJavDlzWbxqFZi5pL1owbZ1SYxAkYjtXA8X13VL$Ks1V2CLk5tUUk8N7a5OlmqfzMSp7xgjc'
+//     const hash = HashString(input,12);
+//     console.log(hash)
+//     console.log(Compare(hashedPass, input));
+// }
 
-a();
+// a();
 
 module.exports = {Compare, HashString};

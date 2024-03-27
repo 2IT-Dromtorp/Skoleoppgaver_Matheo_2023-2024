@@ -1,15 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import './css/main.css'
+
+import {Route, Routes, BrowserRouter} from 'react-router-dom';
+
+import Layout from './structure/layout';
+import LogInPage from './structure/pages/logInPage';
+import CreateUser from './structure/pages/createUser';
+import LendingSite from './structure/pages/borrowingSite';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
           <Route path='/' element={<Layout />}>
-            <Route index element={<MainSiteGame />} />
-            <Route path="/test" element={<TestMessage />} />
-            <Route path="/lobby" element={<Lobby />} />
-            <Route path="/game" element={<Game />} />
+            <Route index element={<LogInPage />} />
+            <Route path="create-user" element={<CreateUser />} />
+            <Route path="lending" element={<LendingSite />} />
           </Route>
       </Routes>
     </BrowserRouter>
