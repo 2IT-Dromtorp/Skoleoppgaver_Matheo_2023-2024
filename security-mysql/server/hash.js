@@ -1,77 +1,78 @@
-function HashString(stringToBeHashed, saltFromCompare){
-    const saltLength = 15
-    const rounds =  1000
-    const salt = saltFromCompare||createSalt(saltLength);
-    let preHashString = stringToBeHashed + salt
-    for(let j = 0; j<rounds;j++){
-        let addedTogetherValueString = ""
-        for(let i = 0; i<preHashString.length;i++){
-            const ran1 = (i%3===0) ? 1*17 : 1 
-            const ran2 = (i+1%5===0) ? 2*ran1 : 2
-            const ran3 = (Math.round(preHashString[i].charCodeAt(0)*3/2)%((i*i)+1)===0) ? ran1*ran2*preHashString[Math.round(preHashString.length/2)].charCodeAt(0) : preHashString[Math.round(preHashString.length/2)].charCodeAt(0)
+const crypto = require('crypto')
 
-            const value = preHashString[i].charCodeAt(0) * ran1 * ran2 *ran3
-            const valueAfter = bytesToText(binaryToByte(((value>>>0).toString(2)))).join('');
-            addedTogetherValueString += valueAfter
-            if (addedTogetherValueString.length>(100-6-saltLength)) break;
+function HashString(stringToBeHashed, rounds, saltFromCompare){
+    const saltLength = 40
+    const salt = saltFromCompare||createSalt(saltLength);
+    let preHashString = stringToBeHashed
+    for(let j = 0; j<rounds;j++){
+        preHashString += salt
+        preHashString = binaryShift(preHashString);
+
+        for(let f = 0; f<1000;f++){
+            const evenArray = []
+            const oddArray = []
+            for(let i= 0; i<preHashString.length; i++){
+                if(i%2===0) evenArray.push(preHashString[i])
+                else oddArray.push(preHashString[i])
+            }
+            preHashString = oddArray.join("")+evenArray.join("");
         }
-        
-        preHashString = addedTogetherValueString
+
+        preHashString = preHashString.slice(0,32);
     }
 
-    return `$mhj$${salt}$${preHashString}`;
+    return `${rounds}$mhj$${salt}$${preHashString}`;
+}
+
+function binaryShift(fullString){
+    let binaryString = "";
+    for(let i = 0; i<fullString.length;i++){
+        binaryString += fullString[i].charCodeAt(0).toString(2);
+    }
+    return numToText(BigInt(binaryString), 62n);
+}
+
+function numToText(number, length){
+    const characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQURSTUVWXYZ";
+
+    let result = ''
+    let newNumber = number;
+
+    while(newNumber>0){
+        const reminder = newNumber%length;
+        result = characters[reminder] + result;
+        newNumber = (newNumber - reminder) / length;
+    }
+
+    return result;
 }
 
 function createSalt(numberOfLetters){
+    const characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQURSTUVWXYZ";
+
     let salt = ""
-    const min = 46
-    const max = 123
     for(let i=0;i<numberOfLetters; i++){
-        const randomNumber = Math.random() * (max-min) + min
-        salt += String.fromCharCode(randomNumber)
+        const randomNumber = crypto.randomInt(63)
+
+        salt += characters[randomNumber];
     }
     return salt;
-}
-
-function binaryToByte(fullBinaryText){
-    const arrayOfChars = Array.from(fullBinaryText);
-    const arrayOfBytes = []
-    for(let i = 0; i<arrayOfChars.length;i+=8){
-        arrayOfBytes.push(arrayOfChars.slice(i, i+8).join(""))
-    }
-    return arrayOfBytes
-}
-
-function bytesToText(arrayOfBytes){
-    const arrayOfLetters = []
-    for(let i = 0; i<arrayOfBytes.length; i++){   
-        if(arrayOfBytes[i].length>5){
-            let int = parseInt(arrayOfBytes[i], 2)
-            while(int > 122 || int < 46||int===96||int===92){
-                if(int>122) int-=86;
-                if(int<46) int+=46
-                if(int===96) int +=15
-                if(int===92) int -=15
-            }
-            if(int===96) console.log(int)
-            arrayOfLetters.push(String.fromCharCode(int))
-        }
-    }
-    return arrayOfLetters;
 }
 
 function Compare(cryptated, input){
     const splitHash = cryptated.split("$");
     const salt = splitHash[2];
-    const hashedString = HashString(input,salt);
+    const rounds = splitHash[0];
+    const hashedString = HashString(input,rounds,salt);
     return cryptated===hashedString;
 }
 
 function a(){
-    const input = "a"
-    const hash = HashString(input);
+    const input = "Troya Elise Huse-Fagerlid"
+    const hashedPass = '12$mhj$Bu1pKM5rj1jnNSeUZbqADr477VRSXPZbcHovAh84$5ewJzN68xYKKB2WV6cwPcJIin60dW0zX'
+    const hash = HashString(input,12);
     console.log(hash)
-    console.log(Compare('gare', input));
+    console.log(Compare(hashedPass, input));
 }
 
 a();
