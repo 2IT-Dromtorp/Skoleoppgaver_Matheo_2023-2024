@@ -1,9 +1,11 @@
 import { useState } from "react";
-
+import { useNavigate } from 'react-router-dom';
 
 export default function LogInPage() {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -17,19 +19,28 @@ export default function LogInPage() {
                     email:email,
                     password:password
                 })
-            })
+            });
+
+            if (!response.ok){
+                if(response.status===412) setEmail("");
+                const responseData = await response.json();
+                setPassword("");
+                alert(responseData.message);
+                return;
+            }
             
-            console.log(response.body)
+            const responseData = await response.json();
+            alert(responseData.message);
+            navigate("/");
         } catch(error){
-            console.error(error)
-        }
-        
+            console.error("Error during fetch:", error.message);
+        }        
     }
 
     return (
       <form onSubmit={handleLogin}>
-        <input required={true} autoComplete="email" type="email" onChange={(e)=>setEmail(e.target.value)}/>
-        <input required={true} autoComplete="password" type="password" onChange={(e)=>setPassword(e.target.value)}/>
+        <input required={true} autoComplete="email" type="email" onChange={(e)=>setEmail(e.target.value)} value={email}/>
+        <input required={true} autoComplete="password" type="password" onChange={(e)=>setPassword(e.target.value)} value={password}/>
         <button type="submit">Log inn</button>
       </form>
     );

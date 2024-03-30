@@ -68,8 +68,8 @@ function Compare(cryptated, input){
 }
 
 // function a(){
-//     const input = "Troya Elise Huse-Fagerlid"
-//     const hashedPass = '12$mhj$wWJavDlzWbxqFZi5pL1owbZ1SYxAkYjtXA8X13VL$Ks1V2CLk5tUUk8N7a5OlmqfzMSp7xgjc'
+//     const input = "PappaErKul"
+//     const hashedPass = '12$mhj$fdiUhQfMyrMuPV99UTqnx74NGNJvWT4Y876sEPAW$VNBFDowJ0fcRITNTDK3n13UWLirdUbkR'
 //     const hash = HashString(input,12);
 //     console.log(hash)
 //     console.log(Compare(hashedPass, input));

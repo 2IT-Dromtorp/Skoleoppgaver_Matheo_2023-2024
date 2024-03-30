@@ -1,0 +1,13 @@
+.itemcomponent-main{
+    min-height: 100px;
+    height: fit-content;
+    min-width: 400px;
+    width: fit-content;
+    border: solid black 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: transparent;
+    margin: 0;
+}

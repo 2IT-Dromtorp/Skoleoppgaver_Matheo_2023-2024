@@ -30,7 +30,7 @@ export default function CreateUser() {
             })
 
             if (!response.ok){
-                if(response.status===403) setEmail("");
+                if(response.status===412) setEmail("");
                 const responseData = await response.json();
                 setPassword("");
                 setPasswordCheck("");
@@ -40,7 +40,7 @@ export default function CreateUser() {
             
             const responseData = await response.json();
             alert(responseData.message);
-            navigate("/lending");
+            navigate("/");
         } catch(error){
             console.error("Error during fetch:", error.message);
         }
