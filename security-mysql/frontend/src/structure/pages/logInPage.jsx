@@ -30,7 +30,7 @@ export default function LogInPage() {
             }
             
             const responseData = await response.json();
-            alert(responseData.message);
+            alert(responseData.accessToken); //gjøre no med token idk hva yet
             navigate("/");
         } catch(error){
             console.error("Error during fetch:", error.message);

@@ -31,7 +31,17 @@ export default function ItemPage() {
 	async function borrowItem(){
 		const email = "jlorgkr" //per nå har jeg enda ikke ordnet hvordan jeg skal gjøre dette. orker ikke
 		try {
-			const response = await fetch(`/api/borrow-item?serialnumber=${serialnumber}&email=${email}`);
+			const response = await fetch("/api/borrow-request",{
+                method:"POST",
+                headers: {
+                    "Content-Type":"application/json"
+                },
+                body: JSON.stringify({
+                    email:email,
+                    serialnumber:serialnumber
+                })
+            });
+
 
 			if (!response.ok) {
 				const responseData = await response.json();
