@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+
+import { GetFetch } from '../functions.jsx';
 
 export default function ItemPage() {
+	const navigate = useNavigate();
 	const serialnumber = useParams().serialnumber;
 
 	const [itemInfo, setItemInfo] = useState([]);
 
 	async function fetchData() {
 		try {
-			const response = await fetch(`/api/item-info?serialnumber=${serialnumber}`);
+			const response = await GetFetch(`/api/item-info?serialnumber=${serialnumber}`);
+
+			if(response.status===401){
+				navigate("/log-in")
+			} 
 
 			if (!response.ok) {
 				const responseData = await response.json();
@@ -29,15 +36,15 @@ export default function ItemPage() {
 	}, [serialnumber])
 
 	async function borrowItem(){
-		const email = "jlorgkr" //per nå har jeg enda ikke ordnet hvordan jeg skal gjøre dette. orker ikke
 		try {
+			const accessToken = localStorage.getItem("accessToken");
 			const response = await fetch("/api/borrow-request",{
                 method:"POST",
                 headers: {
-                    "Content-Type":"application/json"
+                    "Content-Type":"application/json",
+					'Authorization': `Bearer ${accessToken}`	
                 },
                 body: JSON.stringify({
-                    email:email,
                     serialnumber:serialnumber
                 })
             });

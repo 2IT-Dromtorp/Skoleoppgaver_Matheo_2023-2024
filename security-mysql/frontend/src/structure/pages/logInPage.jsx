@@ -30,7 +30,7 @@ export default function LogInPage() {
             }
             
             const responseData = await response.json();
-            alert(responseData.accessToken); //gjøre no med token idk hva yet
+            localStorage.setItem("accessToken",responseData.accessToken);
             navigate("/");
         } catch(error){
             console.error("Error during fetch:", error.message);

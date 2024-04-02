@@ -22,6 +22,7 @@ server.listen(port, () => {
     const database = mongodb.db("Dromtorp");
     const dromtorpUsers = database.collection("Elever");
     const dromtorpItems = database.collection("Items");
+    const dromtorpRequests = database.collection("Requests");
     // const dromtorpRefreshTokens = database.collection("Items"); For en del av dette som kommer senere en gang
 
     app.post("/api/login", async (req,res)=>{
@@ -44,7 +45,7 @@ server.listen(port, () => {
 
             res.status(202).send({accessToken:accessToken});
         } 
-        else res.status(401).send({"message":"Wrong Email or Password"})
+        else res.status(403).send({"message":"Wrong Email or Password"})
     })
 
     app.post("/api/createuser", async (req,res)=>{
@@ -66,7 +67,7 @@ server.listen(port, () => {
 
         try{
             await dromtorpUsers.insertOne({
-                "given-name":givenname,
+                givenName:givenname,
                 surname:surname,
                 email:email,
                 phone:"",
@@ -79,16 +80,14 @@ server.listen(port, () => {
 
             const accessToken = createAccessToken(email, schoolclass);
             //const refreshToken = createRefreshToken(email, findUser.class); Brukes ikke til noe enda, kan ikke nok til å bruke det
-            res.status(202).send({accessToken:accessToken});
+            res.status(201).send({accessToken:accessToken});
         }
         catch(error){
             if(error.errorResponse.code===11000) return res.status(403).send({"message":"A user on that mail already exists"});
         }
     })
 
-    app.get("/api/list-items", authenticateToken, async (req, res) => {
-        const jwtUser = req.jwtUser;
-        
+    app.get("/api/list-items", authenticateToken, async (req, res) => {        
         const q = req.query;
 
         const limit = q.limit;
@@ -105,7 +104,7 @@ server.listen(port, () => {
         res.status(201).send({"data":listedItems});
     });
 
-    app.get("/api/item-info", async (req,res)=>{
+    app.get("/api/item-info", authenticateToken, async (req,res)=>{
         const q = req.query;
         if(!q) return res.status(404).send({"message":"Something went wrong"});
 
@@ -119,8 +118,33 @@ server.listen(port, () => {
         res.status(200).send({"data":item});
     });
 
-    app.post("/api/borrow-request", (req,res)=>{
+    app.post("/api/borrow-request", authenticateToken, async (req,res)=>{
         const b = req.body;
+        const serialNumber = b.serialnumber;
+        if(!serialNumber) res.status(406).send({message:"You did not send in a serial number to borrow"});
+
+        const jwtEmail = req.jwtUser.email;
+        if(!jwtEmail) res.status(403).send({message:"Your email is not registered. Try logging in again"});
+
+        const userTryingToBorrow = await dromtorpUsers.find({email:jwtEmail}).project({email:1,"givenName":1,surname:1,class:1}).toArray();
+        if(!userTryingToBorrow.length) res.status(404).send({message:"The item you're trying to borrow from does not exist"});
+
+        const itemInfoToBorrow = await dromtorpItems.find({serialNumber:serialNumber}).project({_id:0,extraInfo:0}).toArray();
+        if(!itemInfoToBorrow.length) res.status(404).send({message:"The item you're trying to borrow does not exist"});
+        if(itemInfoToBorrow[0].borrowedBy) res.status(409).send({message:"Someone has already borrowed this item"});
+
+        await dromtorpRequests.insertOne({
+            "item":{
+                serialNumberOfItem:itemInfoToBorrow[0].serialNumber, 
+                toolOfItem:itemInfoToBorrow[0].tool
+            }, 
+            "user":{
+                "emailOfUser":jwtEmail, 
+                "givenName":userTryingToBorrow[0].givenName, 
+                "surname":userTryingToBorrow[0].surname, 
+                "class":userTryingToBorrow[0].class
+            }
+        })
     })
 
 })
@@ -131,18 +155,18 @@ function authenticateToken(req, res, next) {
     if( token == null ) return res.sendStatus(401);
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if( err ) return res.sendStatus(403);
+        if( err ) return res.sendStatus(401);
         req.jwtUser = user; 
         next();
     })
 }
 
 function createAccessToken(email, schoolClass){
-    return jwt.sign({email:email,class:schoolClass}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30s'});
+    return jwt.sign({email:email,class:schoolClass}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '30m'});
 }
 
 function createRefreshToken(email, schoolClass){
-    return jwt.sign({email:email,class:schoolClass}, process.env.REFRESH_TOKEN_SECRET);
+    return jwt.sign({email:email,class:schoolClass}, process.env.REFRESH_TOKEN_SECRET); 
 }
 
 function validateEmail(email) {

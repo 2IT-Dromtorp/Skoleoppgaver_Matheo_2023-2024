@@ -39,7 +39,7 @@ export default function CreateUser() {
             }
             
             const responseData = await response.json();
-            alert(responseData.message);
+            localStorage.setItem("accessToken",responseData.accessToken);
             navigate("/");
         } catch(error){
             console.error("Error during fetch:", error.message);
