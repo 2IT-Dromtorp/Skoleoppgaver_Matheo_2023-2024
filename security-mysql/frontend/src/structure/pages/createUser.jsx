@@ -59,9 +59,9 @@ export default function CreateUser() {
             <option value="2ITB">2ITB</option>
             <option value="2MPA">2MPA</option>
             <option value="1IMX">1IMX</option>
-            <option value="LEARER">Lærer</option>
+            <option value="LAERER">Lærer</option>
         </select>
-        <button type="submit">Log in</button>
+        <button type="submit">Lag bruker</button>
       </form>
     );
 }

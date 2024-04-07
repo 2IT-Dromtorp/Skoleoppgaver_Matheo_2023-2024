@@ -34,10 +34,13 @@ server.listen(port, () => {
         
         const password = b.password;
         if(typeof(password)!="string") return res.status(412).send({"message":"Nuh uh"});
-        //Spør Andreas hvordan han hadde error handlet dette. Om du leser dette, hei andreas, hit me up
 
-        const findUser = await dromtorpUsers.findOne({"email":email})
-        if(!findUser) return;
+        const findUserArray = await dromtorpUsers.find({"email":email}).project({_id:0}).toArray();
+        if(!findUserArray.length) return res.sendStatus(409);
+        const findUser = findUserArray[0];
+        console.log(findUser.password)
+
+        console.log(findUser.password, password)
 
         if(Compare(findUser.password, password)){
             const accessToken = createAccessToken(email, findUser.class);
@@ -59,11 +62,13 @@ server.listen(port, () => {
         const givenname = b.givenname;
         const surname = b.surname;
         const schoolclass = b.schoolclass;
-        if(typeof(password)!="string"||typeof(givenname)!="string"||typeof(surname)!="string"||typeof(schoolclass)!="string") return res.status(403).send({"message":"Nuh uh"});
-        //Spør Andreas hvordan han hadde error handlet dette. Om du leser dette, hei andreas, hit me up
+        if(typeof(password)!="string"||typeof(givenname)!="string"||typeof(surname)!="string"||typeof(schoolclass)!="string") return res.sendStatus(403);
 
         const hashedPassword = HashString(password, 15)
-        //errorhandle hash??!?!?!?!?
+
+        //jeg må gjøre dette fordi pk ikke funker
+        const usersFromDB = await dromtorpUsers.find({email:email}).project({email:1}).toArray();
+        if(!usersFromDB.length) res.sendStatus(409);
 
         try{
             await dromtorpUsers.insertOne({
@@ -83,7 +88,7 @@ server.listen(port, () => {
             res.status(201).send({accessToken:accessToken});
         }
         catch(error){
-            if(error.errorResponse.code===11000) return res.status(403).send({"message":"A user on that mail already exists"});
+            console.log(error);
         }
     })
 
@@ -119,7 +124,7 @@ server.listen(port, () => {
     });
 
     app.post("/api/borrow-request", authenticateToken, async (req,res)=>{
-        const b = req.body;
+        const b = req.body; //Her kan jeg legge til blokkader mot at man kan sende inn flere requests mot samme bruker
         const serialNumber = b.serialnumber;
         if(!serialNumber) res.status(406).send({message:"You did not send in a serial number to borrow"});
 
@@ -133,20 +138,112 @@ server.listen(port, () => {
         if(!itemInfoToBorrow.length) res.status(404).send({message:"The item you're trying to borrow does not exist"});
         if(itemInfoToBorrow[0].borrowedBy) res.status(409).send({message:"Someone has already borrowed this item"});
 
+        const ranID = require("crypto").randomBytes(32).toString("base64");
+
         await dromtorpRequests.insertOne({
+            "ranId":ranID,
             "item":{
                 serialNumberOfItem:itemInfoToBorrow[0].serialNumber, 
                 toolOfItem:itemInfoToBorrow[0].tool
             }, 
             "user":{
                 "emailOfUser":jwtEmail, 
-                "givenName":userTryingToBorrow[0].givenName, 
+                "givenName":userTryingToBorrow[0].givenName,
                 "surname":userTryingToBorrow[0].surname, 
                 "class":userTryingToBorrow[0].class
             }
         })
+
+        res.sendStatus(200);
     })
 
+    app.get("/api/get-requests", authenticateToken, async (req,res)=>{
+        const jwtUser = req.jwtUser;
+        if(jwtUser.class!=="LAERER") return res.sendStatus(403);
+
+
+        const requestsArray = await dromtorpRequests.find().project({_id:0}).toArray();
+        res.status(200).send({"data":requestsArray});
+    })
+
+    app.post("/api/accept-request", authenticateToken, async (req,res)=> {
+        const jwtUser = req.jwtUser;
+        if(jwtUser.class!=="LAERER") return res.sendStatus(403);
+
+        const b = req.body;
+        const id = b.id;
+        if(!id) return res.sendStatus(412);
+
+        const requestInArray = await dromtorpRequests.find({ranId:id}).toArray();
+        if(!requestInArray.length) return res.sendStatus(400);
+        const request = requestInArray[0];
+
+        const doesUserExist = await dromtorpUsers.find({email:request.user.emailOfUser}).toArray();
+        if(!doesUserExist.length) return res.sendStatus(400);
+
+        const doesItemExist = await dromtorpItems.find({serialNumber:request.item.serialNumberOfItem}).toArray();
+        if(!doesItemExist.length) return res.sendStatus(400);
+
+        try{
+            await dromtorpUsers.updateOne(
+                {email:request.user.emailOfUser},
+                {$push:{borrowed:{serialNumber:request.item.serialNumberOfItem, tool:request.item.toolOfItem}}}
+            );
+    
+            await dromtorpItems.updateOne(
+                {serialNumber:request.item.serialNumberOfItem},
+                {$set:{borrowedBy:request.user.emailOfUser}}
+            );
+    
+            await dromtorpRequests.deleteOne({ranId:id});
+    
+            const requestAfterChange = await dromtorpRequests.find().project({_id:0}).toArray();
+            res.status(200).send({"data":requestAfterChange});    
+        } catch(err){
+            console.log(err);
+            const requestAfterChange = await dromtorpRequests.find().project({_id:0}).toArray();
+            res.status(501).send({"data":requestAfterChange,"message":"Something falied in your request"});    
+        }
+        
+    })
+
+    app.post("/api/deny-request", authenticateToken, async (req,res)=> {
+        const jwtUser = req.jwtUser;
+        if(jwtUser.class!=="LAERER") return res.sendStatus(403);
+
+        const b = req.body;
+        const id = b.id;
+        if(!id) return res.sendStatus(412);
+
+        const requestInArray = await dromtorpRequests.find({ranId:id}).toArray();
+        if(!requestInArray.length) return res.sendStatus(400);
+        const request = requestInArray[0];
+        try{
+            await dromtorpRequests.deleteOne({ranId:id});
+
+            const requestAfterChange = await dromtorpRequests.find().project({_id:0}).toArray();
+            res.status(200).send({"data":requestAfterChange});    
+        } catch(err){
+            console.log(err);
+            const requestAfterChange = await dromtorpRequests.find().project({_id:0}).toArray();
+            res.status(501).send({"data":requestAfterChange,"message":"Something falied in your request"});    
+        }
+    });
+
+    app.get("/api/get-user-info", authenticateToken, async (req,res)=> {
+        const jwtUser = req.jwtUser;
+        const q = req.query;
+        const email = q.email;
+
+        if(jwtUser.class!=="LAERER"&&jwtUser.email!==email) return res.sendStatus(403);
+
+        const userData = await dromtorpUsers.find({email:email}).project({_id:0, password:0}).toArray();
+        console.log(userData);
+
+        if(!userData.length) res.sendStatus(404);
+
+        res.status(200).send({"data":userData});
+    });
 })
 
 function authenticateToken(req, res, next) {

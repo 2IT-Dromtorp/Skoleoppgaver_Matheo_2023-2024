@@ -56,8 +56,7 @@ export default function ItemPage() {
 				return;
 			}
 
-			const dataFromFetch = (await response.json()).data;
-			setItemInfo(dataFromFetch);
+			alert("Your item request was registered");
 		}
 		catch (error) {
 			console.error(error);
