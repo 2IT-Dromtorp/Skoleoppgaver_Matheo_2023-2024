@@ -6,6 +6,7 @@ const http = require("http");
 const {HashString, Compare} = require('./hash')
 const {MongoClient} = require("mongodb");
 const jwt = require("jsonwebtoken");
+const { constants } = require("buffer");
 
 const app = express();
 app.use(express.static("build"));
@@ -25,6 +26,7 @@ server.listen(port, () => {
     const dromtorpRequests = database.collection("Requests");
     // const dromtorpRefreshTokens = database.collection("Items"); For en del av dette som kommer senere en gang
 
+
     app.post("/api/login", async (req,res)=>{
         const b = req.body;
         if(!b) return;
@@ -35,7 +37,9 @@ server.listen(port, () => {
         const password = b.password;
         if(typeof(password)!="string") return res.status(412).send({"message":"Nuh uh"});
 
-        const findUserArray = await dromtorpUsers.find({"email":email}).project({_id:0}).toArray();
+        const emailAfterChange = email.split("@")[0];
+
+        const findUserArray = await dromtorpUsers.find({"email":emailAfterChange}).project({_id:0}).toArray();
         if(!findUserArray.length) return res.sendStatus(409);
         const findUser = findUserArray[0];
         console.log(findUser.password)
@@ -43,8 +47,8 @@ server.listen(port, () => {
         console.log(findUser.password, password)
 
         if(Compare(findUser.password, password)){
-            const accessToken = createAccessToken(email, findUser.class);
-            //const refreshToken = createRefreshToken(email, findUser.class); Brukes ikke til noe enda, kan ikke nok til å bruke det
+            const accessToken = createAccessToken(emailAfterChange, findUser.class);
+            //const refreshToken = createRefreshToken(emailAfterChange, findUser.class); Brukes ikke til noe enda, kan ikke nok til å bruke det
 
             res.status(202).send({accessToken:accessToken});
         } 
@@ -66,15 +70,13 @@ server.listen(port, () => {
 
         const hashedPassword = HashString(password, 15)
 
-        //jeg må gjøre dette fordi pk ikke funker
-        const usersFromDB = await dromtorpUsers.find({email:email}).project({email:1}).toArray();
-        if(!usersFromDB.length) res.sendStatus(409);
+        const emailAsString = email.split("@")[0];
 
         try{
             await dromtorpUsers.insertOne({
                 givenName:givenname,
                 surname:surname,
-                email:email,
+                email:emailAsString,
                 phone:"",
                 password:hashedPassword,
                 address:"",
@@ -83,8 +85,8 @@ server.listen(port, () => {
                 class:schoolclass
             })
 
-            const accessToken = createAccessToken(email, schoolclass);
-            //const refreshToken = createRefreshToken(email, findUser.class); Brukes ikke til noe enda, kan ikke nok til å bruke det
+            const accessToken = createAccessToken(emailAsString, schoolclass);
+            //const refreshToken = createRefreshToken(emailAsString, findUser.class); Brukes ikke til noe enda, kan ikke nok til å bruke det
             res.status(201).send({accessToken:accessToken});
         }
         catch(error){
