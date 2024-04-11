@@ -246,6 +246,13 @@ server.listen(port, () => {
 
         res.status(200).send({"data":userData});
     });
+
+    app.get("/api/get-email-from-jwt", authenticateToken, (req,res) =>{
+        const jwtUserEmail = req.jwtUser.email;
+        if(!jwtUserEmail) return res.sendStatus(400);
+
+        res.status(200).send({"data":jwtUserEmail});
+    });
 })
 
 function authenticateToken(req, res, next) {

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { GetFetch } from '../../functions.jsx';
+import ItemComponent from '../components/itemComponent.jsx';
+import { Profile } from '../../../svg.jsx';
 
 export default function ProfilePage() {
 	const navigate = useNavigate();
@@ -21,7 +23,7 @@ export default function ProfilePage() {
                     return;
                 };
                 if(response.status===403){
-                    alert("You dont have permission to access this site"); //Dette er midlertidig
+                    alert("You dont have permission to access this site");
                     navigate("/");
                     return;
                 }
@@ -32,8 +34,6 @@ export default function ProfilePage() {
                     if(dataFromFetch.message) alert(dataFromFetch.message);
                     return;
                 }
-
-                console.log(dataFromFetch.data[0])
     
                 setUserInfo(dataFromFetch.data[0]);
             }
@@ -45,18 +45,33 @@ export default function ProfilePage() {
 	}, [])
 
 	return (
-	<>{userInfo.givenName&&
-        <>
-            <h1>{userInfo.givenName} {userInfo.surname}</h1>
-            <h2>{userInfo.email}</h2>
-            <p>{userInfo.class}</p>
-            {userInfo.phone&&<p>{userInfo.phone}</p>}
-            {userInfo.address&&<p>{userInfo.address}</p>}
+	<>{userInfo.givenName?
+        <div className='profile-main'>
+            <div className='profile-info'>
+                {true?
+                    <Profile className="profile-picture"/>
+                :
+                    <Profile/>
+                }
 
-            {userInfo.borrowed.map((item, index)=>
-                <p key={index}>{item.tool}</p>
-            )}
-        </>
-	}</>	
+                <div className='profile-main-info'>
+                    {userInfo.givenName} {userInfo.surname}
+                    {userInfo.class}
+                </div>
+                
+                <h3>{userInfo.email}@viken.no</h3>
+                {userInfo.phone&&<p>{userInfo.phone}</p>}
+                {userInfo.address&&<p>{userInfo.address}</p>}
+            </div>
+            
+            <div className='profile-loaned'>
+                {userInfo.borrowed.map((item, index)=>
+                    <ItemComponent key={index} tool={item.tool} serialNumber={item.serialNumber}/>
+                )}
+            </div>
+        </div>
+	:
+    "Loading..."
+    }</>	
 	);
 }
