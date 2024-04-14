@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 export default function LendingSite() {
   const navigate = useNavigate();
   const [listOfItems, setListOfItems] = useState([]);
+  const [listOfBorrowedItems, setListOfBorrowedItems] = useState([]);
 
   async function fetchData(number) {
     try{
@@ -23,9 +24,9 @@ export default function LendingSite() {
         return;
       } 
 
-      const arrayWithData = (await response.json()).data;
+      const arrayWithData = (await response.json());
 
-      setListOfItems(arrayWithData)
+      setListOfItems(arrayWithData.data)
     }
     catch(error){
       console.error(error);
@@ -41,7 +42,7 @@ export default function LendingSite() {
   return (
     <div className='borrowingsite-main'>          
       {listOfItems.length&&listOfItems.map((item, index)=>
-        <ItemComponent key={index} tool={item.tool} serialNumber={item.serialNumber}/>
+        <ItemComponent key={index} tool={item.tool} serialNumber={item.serialNumber} borrowedBy={item.borrowedBy}/>
       )}
     </div>
   );

@@ -30,7 +30,7 @@ export default function RequestComponent({id, userGivenName, userSurname, userEm
     }
 
     async function denyRequest(){
-        const response = await fetch("/api/accept-request", {
+        const response = await fetch("/api/deny-request", {
             method:"POST",
             headers:{
                 "Content-Type":"application/json",

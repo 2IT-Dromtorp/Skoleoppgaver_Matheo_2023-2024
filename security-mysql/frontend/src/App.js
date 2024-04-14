@@ -3,12 +3,13 @@ import './css/main.css'
 import {Route, Routes, BrowserRouter} from 'react-router-dom';
 
 import Layout from './structure/layout';
-import LogInPage from './structure/pages/logInPage';
-import CreateUser from './structure/pages/createUser';
+import LogInPage from './structure/pages/loginpage/logInPage';
+import CreateUser from './structure/pages/createuser/createUser';
 import LendingSite from './structure/pages/borrowingSite';
 import ItemPage from './structure/pages/itemPage';
 import RequestPage from './structure/pages/requestPage/requestPage';
 import ProfilePage from './structure/pages/profilePage/profilePage';
+import Users from './structure/pages/users/users';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="create-user" element={<CreateUser />} />
             <Route path="item/:serialnumber" element={<ItemPage />} />
             <Route path="requests" element={<RequestPage />} />
+            <Route path="users" element={<Users />} />
             <Route path="profile/:email" element={<ProfilePage />} />
           </Route>
       </Routes>

@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+
+import './logInPage.css'
 
 export default function LogInPage() {
     const [email, setEmail] = useState("");
@@ -38,14 +40,19 @@ export default function LogInPage() {
     }
 
     return (
-        <>
-            <form onSubmit={handleLogin}>
-                <input required={true} autoComplete="email" type="email" onChange={(e)=>setEmail(e.target.value)} value={email}/>
-                <input required={true} autoComplete="password" type="password" onChange={(e)=>setPassword(e.target.value)} value={password}/>
-                <button type="submit">Log inn</button>
-            </form>
-            <button onClick={()=>navigate("/create-user")}>Lag en ny bruker</button>
-        </>
+        <div className="login-main">
+            <div className="login-info">
+
+            </div>
+            <div className="login-login">
+                <form onSubmit={handleLogin} className="login-form">
+                    <input className="login-input-field" required={true} autoComplete="email" type="email" onChange={(e)=>setEmail(e.target.value)} value={email} placeholder="Email"/>
+                    <input className="login-input-field" required={true} autoComplete="password" type="password" onChange={(e)=>setPassword(e.target.value)} value={password} placeholder="Password"/>
+                    <button type="submit" className="login-login-button">Log in</button>
+                </form>
+                <Link to="/create-user" className="login-create-user-link">Create a new user</Link>
+            </div>
+        </div>
       
     );
 }

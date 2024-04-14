@@ -47,13 +47,17 @@ export default function RequestPage() {
 	}, [])
 
 	// Jeg skal også legge til at om man er logget inn som en lærer skal man kunne se hvem som har lånt ting, men orker ikke gjøre det nå
-	return (
-	<>{requestInfo.length&&
-		<div className="requestpage-main">
+	return (<>{requestInfo.length?
+		
+        <div className="requestpage-main">
             {requestInfo.map((request, index) => 
                 <RequestComponent key={index} setRequestInfo={()=>setRequestInfo()} id={request.ranId} userGivenName={request.user.givenName} userSurname={request.user.surname} userEmail={request.user.emailOfUser} userClass={request.user.class} itemSerialNumber={request.item.serialNumberOfItem} itemToolName={request.item.toolOfItem}/>
             )}
-		</div>
-	}</>	
-	);
+        </div>
+
+	:
+    
+    "There are currently no requests"
+    
+    }</>);
 }

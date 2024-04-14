@@ -42,9 +42,6 @@ server.listen(port, () => {
         const findUserArray = await dromtorpUsers.find({"email":emailAfterChange}).project({_id:0}).toArray();
         if(!findUserArray.length) return res.sendStatus(409);
         const findUser = findUserArray[0];
-        console.log(findUser.password)
-
-        console.log(findUser.password, password)
 
         if(Compare(findUser.password, password)){
             const accessToken = createAccessToken(emailAfterChange, findUser.class);
@@ -104,8 +101,7 @@ server.listen(port, () => {
 
         //jeg vil legge til at man ser de man allerede låner et annet sted, og vil fortsatt bruke denne. jeg har en ide om hvordan, men må få JWT til å fungere for å bruke det. intil det lager jeg bare en generalisert, som fungerer uten noen spesifikk brukerdata
 
-        const listedItems = await dromtorpItems.find().project({_id:0}).limit(limitInt).toArray();
-
+        const listedItems = await dromtorpItems.find().sort({tool: 1}).project({_id:0}).limit(limitInt).toArray();
         if(!listedItems.length) return res.status(404).send({"message":"There is no items"});
 
         res.status(201).send({"data":listedItems});
@@ -240,7 +236,6 @@ server.listen(port, () => {
         if(jwtUser.class!=="LAERER"&&jwtUser.email!==email) return res.sendStatus(403);
 
         const userData = await dromtorpUsers.find({email:email}).project({_id:0, password:0}).toArray();
-        console.log(userData);
 
         if(!userData.length) res.sendStatus(404);
 
@@ -248,11 +243,27 @@ server.listen(port, () => {
     });
 
     app.get("/api/get-email-from-jwt", authenticateToken, (req,res) =>{
-        const jwtUserEmail = req.jwtUser.email;
-        if(!jwtUserEmail) return res.sendStatus(400);
+        const jwtUserEmail = req.jwtUser;
+        if(!jwtUserEmail.email) return res.sendStatus(400);
 
-        res.status(200).send({"data":jwtUserEmail});
+        res.status(200).send({"email":jwtUserEmail.email, "sclass":jwtUserEmail.class});
     });
+
+    app.get("/api/getusers", authenticateToken, async (req,res) => {
+        const jwtUser = req.jwtUser;
+
+        if(jwtUser.class!=="LAERER") return res.sendStatus(403);
+
+        try {
+            const users = await dromtorpUsers.find().project({_id:0, password:0}).toArray();
+            if(!users.length) return res.sendStatus(500);
+
+            res.status(200).send({"data":users})
+        } catch (error) {
+            return res.sendStatus(500);
+            
+        }        
+    })
 })
 
 function authenticateToken(req, res, next) {

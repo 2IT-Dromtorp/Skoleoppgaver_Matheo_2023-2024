@@ -12,7 +12,7 @@
 }
 
 .navbar-main{
-    background-color: var(--secondary-color);
+    background-color: var(--main-color);
     height: 60px;
     width: 100%;
     flex-direction: row;
@@ -28,7 +28,6 @@
     fill: none;
     stroke: white;
     color: white;
-
 }
 
 .navbar-item.selected{

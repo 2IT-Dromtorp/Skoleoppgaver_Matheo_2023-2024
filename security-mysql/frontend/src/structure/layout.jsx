@@ -2,13 +2,14 @@ import {Link, Outlet} from 'react-router-dom';
 import './layout.css'
 import React, { useEffect, useState } from 'react';
 
-import { Profile, Viken } from '../svg.jsx'
+import { Profile, Viken, Request, Pupils } from '../svg.jsx'
 import { useLocation } from 'react-router-dom'
 import { GetFetch } from './functions.jsx';
 
 export default function Layout() {
     const loc = useLocation();
     const [email, setEmail] = useState("");
+    const [schoolclass, setSchoolclass] = useState("");
 
     useEffect(()=>{
       async function fetchEmail(){
@@ -18,7 +19,8 @@ export default function Layout() {
         }
 
         const data = await response.json();
-        setEmail(data.data);
+        setEmail(data.email);
+        setSchoolclass(data.sclass);
       }
 
       fetchEmail();
@@ -28,8 +30,14 @@ export default function Layout() {
       <div className='layout-main'>
         <div className='navbar-main'>
           <Link to="/"><Viken/></Link>
-          {/* <Link to={`/profile/${email}`}> {React.createElement(Profile, { className: `navbar-item${"profile" === loc.pathname.split('/')[1] ? ' selected' : ''}` })}</Link> */}
-          {/* <Link to={`/profile/${email}`}> {React.createElement(Profile, { className: `navbar-item${"profile" === loc.pathname.split('/')[1] ? ' selected' : ''}` })}</Link> */}
+
+          {schoolclass==="LAERER"?<>
+            <Link to={`/requests`}> {React.createElement(Request, { className: `navbar-item${"requests" === loc.pathname.split('/')[1] ? ' selected' : ''}` })}</Link>
+            <Link to={`/users`}> {React.createElement(Pupils, { className: `navbar-item${"users" === loc.pathname.split('/')[1] ? ' selected' : ''}` })}</Link>
+          </>:false}
+          
+          
+          
           <Link to={`/profile/${email}`}> {React.createElement(Profile, { className: `navbar-item${"profile" === loc.pathname.split('/')[1] ? ' selected' : ''}` })}</Link>
         </div>
         <div className='layout-outlet'>

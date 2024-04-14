@@ -1,0 +1,24 @@
+.usercomponent-main{
+    text-decoration: none;
+    background-color: var(--user-border-color);
+    color: black;
+    width: 500px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px 20px;
+    gap: 5px;
+    cursor: pointer;   
+    border: solid var(--main-color) 4px;   
+    border-radius: 7px;
+}
+
+.usercomponent-bottom-text{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+    font-size: 20px;
+}
