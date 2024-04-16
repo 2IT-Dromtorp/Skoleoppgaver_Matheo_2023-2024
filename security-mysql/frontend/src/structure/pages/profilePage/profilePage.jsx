@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { GetFetch } from '../../functions.jsx';
-import ItemComponent from '../components/itemComponent.jsx';
 import { Profile } from '../../../svg.jsx';
+import ItemComponent from '../components/itemComponent.jsx';
+import KinComponent from '../components/kinComponent/kinComponent.jsx';
 
 export default function ProfilePage() {
 	const navigate = useNavigate();
@@ -55,13 +56,23 @@ export default function ProfilePage() {
                 }
 
                 <div className='profile-main-info'>
-                    {userInfo.givenName} {userInfo.surname}
-                    {userInfo.class}
+                    <p className='profile-name'>{userInfo.givenName} {userInfo.surname}</p>
+                    <p className='profile-class'>{userInfo.class}</p>
                 </div>
                 
-                <h3>{userInfo.email}@viken.no</h3>
-                {userInfo.phone&&<p>{userInfo.phone}</p>}
-                {userInfo.address&&<p>{userInfo.address}</p>}
+                <div className='profile-sec-info'>
+                    <p>{userInfo.email}@viken.no</p>
+                    {userInfo.phone&&<p>{userInfo.phone}</p>}
+                    {userInfo.address&&<p>{userInfo.address}</p>}
+                </div>
+
+                <div className='profile-family'>
+                    <p>Family members:</p>
+                    {userInfo.kin.length&&userInfo.kin.map((member, index) => 
+                        <KinComponent key={index} name={member.name} address={member.address} phonenumber={member.phonenumber} email={member.email}/>
+                    )}
+                </div>
+
             </div>
             
             <div className='profile-loaned'>

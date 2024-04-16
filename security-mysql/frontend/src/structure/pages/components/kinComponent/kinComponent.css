@@ -1,0 +1,15 @@
+.kincomponent-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 5px 25px;
+    background-color: var(--user-border-color);
+    border: solid var(--main-color) 1px;
+    border-radius: 6px;
+    gap: 4px;
+}
+
+.kincomponent-name{
+    font-size: 20px;
+}
