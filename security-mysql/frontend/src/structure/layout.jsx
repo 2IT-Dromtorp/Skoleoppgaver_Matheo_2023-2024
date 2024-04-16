@@ -1,15 +1,16 @@
 import {Link, Outlet} from 'react-router-dom';
 import './layout.css'
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { Profile, Viken, Request, Pupils } from '../svg.jsx'
 import { useLocation } from 'react-router-dom'
 import { GetFetch } from './functions.jsx';
+import { EmailContext, SchoolclassContext } from '../context.js'
 
 export default function Layout() {
     const loc = useLocation();
-    const [email, setEmail] = useState("");
-    const [schoolclass, setSchoolclass] = useState("");
+    const {email, setEmail} = useContext(EmailContext);
+    const {schoolclass, setSchoolclass} = useContext(SchoolclassContext);
 
     useEffect(()=>{
       async function fetchEmail(){
@@ -24,7 +25,7 @@ export default function Layout() {
       }
 
       fetchEmail();
-    },[]);
+    },[schoolclass]);
 
     return (
       <div className='layout-main'>

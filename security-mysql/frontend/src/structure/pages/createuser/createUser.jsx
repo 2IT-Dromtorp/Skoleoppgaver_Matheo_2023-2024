@@ -1,18 +1,29 @@
 import '../loginpage/logInPage.css'
 import './createuser.css'
 
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate, Link } from 'react-router-dom';
+import { EmailContext, SchoolclassContext } from "../../../context";
+
 
 export default function CreateUser() {
     const [givenName, setGivenName] = useState("")
     const [surname, setSurname] = useState("")
-    const [email, setEmail] = useState("")
+    const [email, setEmailLoc] = useState("")
     const [password, setPassword] = useState("");
     const [passwordCheck, setPasswordCheck] = useState("");
-    const [schoolclass, setSchoolclass] = useState("None")
+    const [schoolclass, setSchoolclassLoc] = useState("None")
+
+    const {setEmail} = useContext(EmailContext);
+    const {setSchoolclass} = useContext(SchoolclassContext);
 
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        setEmail("");
+        setSchoolclass("");
+        localStorage.setItem("accessToken","");
+    },[])
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -34,7 +45,7 @@ export default function CreateUser() {
             })
 
             if (!response.ok){
-                if(response.status===412) setEmail("");
+                if(response.status===412) setEmailLoc("");
                 const responseData = await response.json();
                 setPassword("");
                 setPasswordCheck("");
@@ -44,6 +55,8 @@ export default function CreateUser() {
             
             const responseData = await response.json();
             localStorage.setItem("accessToken",responseData.accessToken);
+            setEmail(email);
+            setSchoolclass(schoolclass);
             navigate("/");
         } catch(error){
             console.error("Error during fetch:", error.message);
@@ -59,10 +72,10 @@ export default function CreateUser() {
                 <form onSubmit={handleLogin} className="login-form">
                     <input className="createuser-input-field" required={true} type="text" onChange={(e)=>setGivenName(e.target.value)} value={givenName} placeholder="Firstname"/>
                     <input className="createuser-input-field" required={true} type="text" onChange={(e)=>setSurname(e.target.value)} value={surname} placeholder="Lastname"/>
-                    <input className="createuser-input-field" required={true} autoComplete="email" type="email" onChange={(e)=>setEmail(e.target.value)} value={email} placeholder="Email"/>
+                    <input className="createuser-input-field" required={true} autoComplete="email" type="email" onChange={(e)=>setEmailLoc(e.target.value)} value={email} placeholder="Email"/>
                     <input className="createuser-input-field" required={true} autoComplete="password" type="password" onChange={(e)=>setPassword(e.target.value)} value={password} placeholder="Password" minLength={8}/>
                     <input className="createuser-input-field" required={true} autoComplete="password" type="password" onChange={(e)=>setPasswordCheck(e.target.value)} value={passwordCheck} placeholder="Repeat your password" minLength={8}/>
-                    <select required={true} onChange={(e)=>setSchoolclass(e.target.value)} value={schoolclass} placeholder="Your class" className='createuser-input-field'>
+                    <select required={true} onChange={(e)=>setSchoolclassLoc(e.target.value)} value={schoolclass} placeholder="Your class" className='createuser-input-field'>
                         <option value="None"></option>
                         <option value="2ITA">2ITA</option>
                         <option value="2ITB">2ITB</option>

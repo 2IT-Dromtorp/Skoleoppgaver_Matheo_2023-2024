@@ -10,4 +10,24 @@ const RequestInfoProvider = ({ children }) => {
     );
 };
 
-export { RequestInfoContext, RequestInfoProvider };
+const EmailContext = createContext({});
+const EmailProvider = ({ children }) => {
+    const [email, setEmail] = useState("");
+    return (
+        <EmailContext.Provider value={{email, setEmail}}>
+            {children}
+        </EmailContext.Provider>
+    );
+};
+
+const SchoolclassContext = createContext({});
+const SchoolclassProvider = ({ children }) => {
+    const [schoolclass, setSchoolclass] = useState("");
+    return (
+        <SchoolclassContext.Provider value={{schoolclass, setSchoolclass}}>
+            {children}
+        </SchoolclassContext.Provider>
+    );
+};
+
+export { RequestInfoContext, RequestInfoProvider, EmailContext, EmailProvider, SchoolclassContext, SchoolclassProvider };

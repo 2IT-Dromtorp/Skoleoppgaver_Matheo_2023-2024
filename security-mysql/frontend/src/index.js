@@ -4,13 +4,17 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { RequestInfoProvider } from './context';
+import { RequestInfoProvider, EmailProvider, SchoolclassProvider } from './context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <RequestInfoProvider>
-        <App />
-    </RequestInfoProvider>
+    <EmailProvider>
+        <SchoolclassProvider>
+            <RequestInfoProvider>
+                <App />
+            </RequestInfoProvider>
+        </SchoolclassProvider>
+    </EmailProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

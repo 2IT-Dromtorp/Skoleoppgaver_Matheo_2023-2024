@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { GetFetch } from '../functions.jsx';
+import { GetFetch } from '../../functions.jsx';
+import { EmailContext} from '../../../context.js'
 
 export default function ItemPage() {
 	const navigate = useNavigate();
 	const serialnumber = useParams().serialnumber;
 
 	const [itemInfo, setItemInfo] = useState([]);
+	const {email} = useContext(EmailContext);
 
 	async function fetchData() {
 		try {
@@ -63,7 +65,32 @@ export default function ItemPage() {
 		}
 	}
 
-	// Jeg skal også legge til at om man er logget inn som en lærer skal man kunne se hvem som har lånt ting, men orker ikke gjøre det nå
+	async function returnItem() {
+		try{
+			const accessToken = localStorage.getItem("accessToken");
+			const response = await fetch("/api/returnitem", {
+				method:"POST",
+				headers:{
+					"Content-Type":"application/json",
+					'Authorization': `Bearer ${accessToken}`	
+				},
+				body:JSON.stringify({
+					email:email,
+					serialnumber:serialnumber
+				})
+			})
+
+			if(!response.ok){
+				return;
+			}
+			const resdata = await response.json();
+			setItemInfo(resdata.data)
+		}
+		catch(error){
+			console.error(error);
+		}
+	}
+
 	return (
 	<>{itemInfo.length&&
 		<div className="itempage-main">
@@ -72,7 +99,14 @@ export default function ItemPage() {
 			<p>{itemInfo[0].extraInfo}</p>
 
 			{itemInfo[0].borrowedBy?
-				<p>Someone has already borrowed this item</p>
+				(
+					<>
+						<p>{itemInfo[0].borrowedBy} has already borrowed this item</p>
+						{itemInfo[0].borrowedBy === "This user" ? <button onClick={()=>returnItem()}>Return</button> :false}
+						
+					</>
+
+				)
 			:
 				<button onClick={()=>borrowItem()}>Borrow</button>
 			}

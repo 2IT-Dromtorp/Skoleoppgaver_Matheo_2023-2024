@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 export default function LendingSite() {
   const navigate = useNavigate();
   const [listOfItems, setListOfItems] = useState([]);
-  const [listOfBorrowedItems, setListOfBorrowedItems] = useState([]);
 
   async function fetchData(number) {
     try{

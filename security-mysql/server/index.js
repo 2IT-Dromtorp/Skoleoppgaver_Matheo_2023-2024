@@ -47,7 +47,7 @@ server.listen(port, () => {
             const accessToken = createAccessToken(emailAfterChange, findUser.class);
             //const refreshToken = createRefreshToken(emailAfterChange, findUser.class); Brukes ikke til noe enda, kan ikke nok til å bruke det
 
-            res.status(202).send({accessToken:accessToken});
+            res.status(202).send({"accessToken":accessToken, "data":findUser.class});
         } 
         else res.status(403).send({"message":"Wrong Email or Password"})
     })
@@ -114,9 +114,18 @@ server.listen(port, () => {
         const serialNumber = q.serialnumber;
         if(!serialNumber) return res.status(404).send({"message":"You did not send in a serial number"});
 
-        const item = await dromtorpItems.find({serialNumber:serialNumber}).project({_id:0}).toArray();
+        const jwtUser = req.jwtUser;
 
+        let item = await dromtorpItems.find({serialNumber:serialNumber}).project({_id:0}).toArray();
         if(!item.length) return res.status(404).send({"message":"There does not exist an item with that serial number"});
+
+        if(jwtUser.class!=="LAERER" && item[0].borrowedBy && jwtUser.email !== item[0].borrowedBy){
+            item[0].borrowedBy = "Someone"
+        } else if(jwtUser.class!=="LAERER" && jwtUser.email === item[0].borrowedBy){
+            item[0].borrowedBy = "This user"
+        }   else if(jwtUser!=="LAERER"){
+            item[0].borrowedBy = ""
+        }
 
         res.status(200).send({"data":item});
     });
@@ -263,7 +272,31 @@ server.listen(port, () => {
             return res.sendStatus(500);
             
         }        
-    })
+    });
+
+    app.post("/api/returnitem", authenticateToken, async (req,res) => {
+        const jwtUser = req.jwtUser;
+        const b = req.body;
+        const email = b.email;
+        const serialnumber = b.serialnumber;
+        if(typeof(email)!=="string"||typeof(serialnumber)!=="string") return res.sendStatus(412);
+        if(jwtUser.email!==email&&jwtUser.class==="LAERER") return res.sendStatus(403);
+
+        const itemData = await dromtorpItems.find({serialNumber:serialnumber}).project({serialNumber:1}).toArray();
+        if(!itemData.length) return res.sendStatus(500);
+
+        const userData = await dromtorpUsers.find({email:email}).project({email:1}).toArray();
+        if(!userData.length) return res.sendStatus(500);
+
+        await dromtorpItems.updateOne({serialNumber:serialnumber},{$set:{borrowedBy:""}});
+
+        await dromtorpUsers.updateOne({email:email},{$pull:{borrowed:{serialNumber:serialnumber}}});
+
+        const itemDataafter = await dromtorpItems.find({serialNumber:serialnumber}).project({_id:0}).toArray();
+        if(!itemDataafter.length) return res.sendStatus(500);
+
+        res.status(200).send({"data":itemDataafter});
+    });
 })
 
 function authenticateToken(req, res, next) {
