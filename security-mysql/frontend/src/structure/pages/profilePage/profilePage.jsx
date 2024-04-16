@@ -72,7 +72,6 @@ export default function ProfilePage() {
                         <KinComponent key={index} name={member.name} address={member.address} phonenumber={member.phonenumber} email={member.email}/>
                     )}
                 </div>
-
             </div>
             
             <div className='profile-loaned'>
