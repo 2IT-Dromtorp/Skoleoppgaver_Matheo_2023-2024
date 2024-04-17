@@ -67,6 +67,8 @@ server.listen(port, () => {
         const familyMembers = b.familyMembers;
         if(typeof(password)!="string"||typeof(givenname)!="string"||typeof(surname)!="string"||typeof(schoolclass)!="string") return res.sendStatus(403);
 
+        if(familyMembers.length>3) return res.sendStatus(412)
+
         const hashedPassword = HashString(password, 15)
 
         const emailAsString = email.split("@")[0];
