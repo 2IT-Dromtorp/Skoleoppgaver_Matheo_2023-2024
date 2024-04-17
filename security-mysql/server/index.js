@@ -133,17 +133,17 @@ server.listen(port, () => {
     app.post("/api/borrow-request", authenticateToken, async (req,res)=>{
         const b = req.body; //Her kan jeg legge til blokkader mot at man kan sende inn flere requests mot samme bruker
         const serialNumber = b.serialnumber;
-        if(!serialNumber) res.status(406).send({message:"You did not send in a serial number to borrow"});
+        if(!serialNumber) return res.status(406).send({message:"You did not send in a serial number to borrow"});
 
         const jwtEmail = req.jwtUser.email;
-        if(!jwtEmail) res.status(403).send({message:"Your email is not registered. Try logging in again"});
+        if(!jwtEmail) return res.status(403).send({message:"Your email is not registered. Try logging in again"});
 
         const userTryingToBorrow = await dromtorpUsers.find({email:jwtEmail}).project({email:1,"givenName":1,surname:1,class:1}).toArray();
-        if(!userTryingToBorrow.length) res.status(404).send({message:"The item you're trying to borrow from does not exist"});
+        if(!userTryingToBorrow.length) return res.status(404).send({message:"The item you're trying to borrow from does not exist"});
 
         const itemInfoToBorrow = await dromtorpItems.find({serialNumber:serialNumber}).project({_id:0,extraInfo:0}).toArray();
-        if(!itemInfoToBorrow.length) res.status(404).send({message:"The item you're trying to borrow does not exist"});
-        if(itemInfoToBorrow[0].borrowedBy) res.status(409).send({message:"Someone has already borrowed this item"});
+        if(!itemInfoToBorrow.length) return res.status(404).send({message:"The item you're trying to borrow does not exist"});
+        if(itemInfoToBorrow[0].borrowedBy) return res.status(409).send({message:"Someone has already borrowed this item"});
 
         const ranID = require("crypto").randomBytes(32).toString("base64");
 
