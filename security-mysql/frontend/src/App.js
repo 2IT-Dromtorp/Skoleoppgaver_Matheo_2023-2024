@@ -10,6 +10,8 @@ import ItemPage from './structure/pages/itempage/itemPage';
 import RequestPage from './structure/pages/requestPage/requestPage';
 import ProfilePage from './structure/pages/profilePage/profilePage';
 import Users from './structure/pages/users/users';
+import CreateNewItem from './structure/pages/createNewItem/createNewItem';
+import EditItem from './structure/pages/editItem/editItem';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
             <Route path="requests" element={<RequestPage />} />
             <Route path="users" element={<Users />} />
             <Route path="profile/:email" element={<ProfilePage />} />
+            <Route path="create-new-item" element={<CreateNewItem />} />
+            <Route path="edit-item/:serialnumber" element={<EditItem />} />
           </Route>
       </Routes>
     </BrowserRouter>

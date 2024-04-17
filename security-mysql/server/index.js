@@ -355,6 +355,85 @@ server.listen(port, () => {
         res.status(200).send({"data":itemDataafter});
     });
 
+    app.post("/api/create-item", authenticateToken, async (req,res)=>{
+        const jwtUser = req.jwtUser;
+        if(jwtUser.class!=="LAERER") return res.sendStatus(403);
+        
+        const b = req.body;
+        const serialNumber = b.serialnumber;
+        const tool = b.tool;
+        const extraInfo = b.extraInfo;
+        const imgUrl = b.imgUrl;
+
+        if(!serialNumber||!tool||typeof(serialNumber)!=="string"||typeof(tool)!=="string") return res.sendStatus(412);
+
+        try{
+            await dromtorpItems.insertOne({
+                serialNumber:serialNumber,
+                tool:tool,
+                borrowedBy:"",
+                imgUrl:typeof(imgUrl)==="string"?imgUrl:"",
+                extraInfo:typeof(extraInfo)==="string"?extraInfo:"",
+            });;
+
+            res.sendStatus(200);
+        } catch(err){
+            res.status(500).send(err);
+        }
+    });
+
+    app.put("/api/edit-item", authenticateToken, async (req,res)=>{
+        const jwtUser = req.jwtUser;
+        if(jwtUser.class!=="LAERER") return res.sendStatus(403);
+        
+        const b = req.body;
+        const serialNumber = b.serialnumber;
+        const tool = b.tool;
+        const extraInfo = b.extraInfo;
+        const imgUrl = b.imgUrl;
+        const oldSerial = b.oldSerial;
+
+        if(!serialNumber||!tool||!oldSerial||typeof(serialNumber)!=="string"||typeof(oldSerial)!=="string"||typeof(tool)!=="string") return res.sendStatus(412);
+
+        try{
+            await dromtorpItems.updateOne({serialNumber:oldSerial},{$set:{
+                serialNumber:serialNumber,
+                tool:tool,
+                imgUrl:typeof(imgUrl)==="string"?imgUrl:"",
+                extraInfo:typeof(extraInfo)==="string"?extraInfo:"",
+            }});;
+
+            res.sendStatus(200);
+        } catch(err){
+            console.log(err)
+            res.status(500).send(err);
+        }
+    });
+
+    app.get("/api/item-edit-info", authenticateToken, async (req,res)=>{
+        const jwtUser = req.jwtUser;
+        if(jwtUser.class!=="LAERER") return res.sendStatus(403);
+
+        const q = req.query;
+        if(!q) return res.status(404).send({"message":"Something went wrong"});
+
+        const serialNumber = q.serialnumber;
+        if(!serialNumber) return res.status(404).send({"message":"You did not send in a serial number"});
+
+        let item = await dromtorpItems.find({serialNumber:serialNumber}).project({_id:0}).toArray();
+        if(!item.length) return res.status(404).send({"message":"There does not exist an item with that serial number"});
+
+        if(jwtUser.class!=="LAERER" && item[0].borrowedBy && jwtUser.email !== item[0].borrowedBy){
+            item[0].borrowedBy = "Someone"
+        } else if(jwtUser.email === item[0].borrowedBy){
+            item[0].borrowedBy = "This user"
+        } else if(jwtUser!=="LAERER" && !item[0].borrowedBy){
+            item[0].borrowedBy = ""
+        }
+
+        res.status(200).send({"data":item});
+    });
+
 
     app.get('*', (req, res) => {
         res.sendFile(__dirname + '/build/index.html');

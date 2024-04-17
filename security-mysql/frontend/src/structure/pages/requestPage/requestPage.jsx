@@ -1,6 +1,6 @@
 import './requestPage.css'
 
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { RequestInfoContext } from '../../../context.js'
@@ -12,30 +12,22 @@ export default function RequestPage() {
 	const navigate = useNavigate();
 
 	const {requestInfo, setRequestInfo} = useContext(RequestInfoContext);
-
+    const [fetchOk, setFetchOk] = useState();
 	
 
 	useEffect(() => {
         async function fetchData() {
             try {
-                const response = await GetFetch(`/api/get-requests`);
-    
-                if(response.status===401){
-                    navigate("/log-in");
-                    return;
-                };
-                if(response.status===403){
-                    alert("You dont have permission to access this site"); //Dette er midlertidig
-                    navigate("/");
-                    return;
-                }
-    
+                const response = await GetFetch(`/api/get-requests`, navigate);
+                    
                 if (!response.ok) {
                     const responseData = await response.json();
                     if(responseData.message) alert(responseData.message);
                     return;
                 }
-    
+
+                setFetchOk(response.ok);
+                
                 const dataFromFetch = (await response.json()).data;
                 setRequestInfo(dataFromFetch);
             }
@@ -55,9 +47,11 @@ export default function RequestPage() {
             )}
         </div>
 
-	:
+	: (
+        fetchOk?"There are currently no requests":"Loading"
+    )
     
-    "There are currently no requests"
+    
     
     }</>);
 }

@@ -12,11 +12,7 @@ export default function LendingSite() {
   useEffect( ()=>{
     async function fetchData(number) {
       try{
-        const response = await GetFetch(`/api/list-items?limit=${number}`);
-  
-        if(response.status===401){
-          navigate("/log-in")
-        } 
+        const response = await GetFetch(`/api/list-items?limit=${number}`, navigate);
   
         if(!response.ok){
           const responseData = await response.json();

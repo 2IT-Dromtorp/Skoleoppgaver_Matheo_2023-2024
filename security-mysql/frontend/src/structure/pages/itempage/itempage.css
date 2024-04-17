@@ -6,6 +6,7 @@
     gap: 5px;
 }
 
+
 .itempage-borrow-button{
     padding: 7px 25px;
     font-size: 30px;
@@ -14,10 +15,40 @@
     border-radius: 5px;
     background-color: var(--main-color);
     cursor: pointer;
+    text-decoration: none;
 }
 
 .itempage-return-button{
     margin-top: 5px;
     background-color: #922a2a;
     border: solid black 2px;
+}
+
+.itempage-bottom-buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.itempage-return-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.itempage-return-container-button-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.otherUserBorrowed{
+    font-size: 20px;
+    font-weight: 500;
 }

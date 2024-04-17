@@ -17,17 +17,7 @@ export default function ProfilePage() {
 	useEffect(() => {
         async function fetchData() {
             try {
-                const response = await GetFetch(`/api/get-user-info?email=${email}`);
-    
-                if(response.status===401){
-                    navigate("/log-in");
-                    return;
-                };
-                if(response.status===403){
-                    alert("You dont have permission to access this site");
-                    navigate("/");
-                    return;
-                }
+                const response = await GetFetch(`/api/get-user-info?email=${email}`, navigate);
     
                 const dataFromFetch = await response.json()
 
