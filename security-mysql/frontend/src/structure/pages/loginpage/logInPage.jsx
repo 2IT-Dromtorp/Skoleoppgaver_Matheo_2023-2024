@@ -18,7 +18,7 @@ export default function LogInPage() {
         setEmail("");
         setSchoolclass("");
         localStorage.setItem("accessToken","");
-    },[])
+    },[setSchoolclass, setEmail])
 
     const handleLogin = async (e) => {
         e.preventDefault();

@@ -20,7 +20,7 @@
     flex-direction: column;
     background-color: white;
     padding: 10px 30px;
-    border: solid black 2px;
+    border: solid rgb(100, 100, 100) 1px;
     border-radius: 10px;
 }
 
@@ -29,17 +29,19 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 7px;
+    gap: 15px;
     border-bottom: solid black 1px;
     padding: 10px 0;
 }
 
 .login-input-field {
-    height: 30px;
-    width: 180px;
-    border: solid black 1px;
+    height: 50px;
+    width: 300px;
     border-radius: 4px;
     font-size: 20px;
+    border: none;
+    background-color: rgb(237, 237, 237);
+    padding: 4px 10px;
 }
 
 .login-login-button{
@@ -48,18 +50,18 @@
     background-color: var(--main-color);
     border: solid var(--user-border-color) 1px;
     color: white;
-    font-size: 20px;
+    font-size: 30px;
     padding: 7px 60px;
 }
 
 .login-create-user-link{
     margin-top: 10px;
-    background-color: rgb(0, 209, 0);
-    border: solid black 1px;
-    padding: 7px 15px;
+    padding: 7px 0;
     font-size: 18px;
-    text-decoration: none;
-    color: black;
     font-weight: 500;
-    border-radius: 5px;
+    color: black;
+}
+
+.login-create-user-link:active{
+    color: purple;
 }

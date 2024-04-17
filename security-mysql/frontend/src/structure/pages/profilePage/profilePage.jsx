@@ -43,7 +43,7 @@ export default function ProfilePage() {
             }
         }
 		fetchData();
-	}, [])
+	}, [email, navigate])
 
 	return (
 	<>{userInfo.givenName?
@@ -66,12 +66,12 @@ export default function ProfilePage() {
                     {userInfo.address&&<p>{userInfo.address}</p>}
                 </div>
 
-                <div className='profile-family'>
+                {userInfo.kin.length?<div className='profile-family'>
                     <p>Family members:</p>
                     {userInfo.kin.length&&userInfo.kin.map((member, index) => 
                         <KinComponent key={index} name={member.name} address={member.address} phonenumber={member.phonenumber} email={member.email}/>
                     )}
-                </div>
+                </div>:""}
             </div>
             
             <div className='profile-loaned'>

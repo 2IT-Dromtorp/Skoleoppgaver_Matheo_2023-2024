@@ -25,7 +25,7 @@ export default function Layout() {
       }
 
       fetchEmail();
-    },[schoolclass]);
+    },[schoolclass, setSchoolclass, setEmail]);
 
     return (
       <div className='layout-main'>

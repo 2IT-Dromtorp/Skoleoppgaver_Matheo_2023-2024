@@ -1,6 +1,6 @@
 import './requestPage.css'
 
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { RequestInfoContext } from '../../../context.js'
@@ -44,7 +44,7 @@ export default function RequestPage() {
             }
         }
 		fetchData();
-	}, [])
+	}, [setRequestInfo, navigate])
 
 	// Jeg skal også legge til at om man er logget inn som en lærer skal man kunne se hvem som har lånt ting, men orker ikke gjøre det nå
 	return (<>{requestInfo.length?

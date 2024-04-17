@@ -30,7 +30,7 @@ export default function CreateUser() {
         setEmail("");
         setSchoolclass("");
         localStorage.setItem("accessToken","");
-    },[])
+    },[setEmail, setSchoolclass])
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -101,7 +101,7 @@ export default function CreateUser() {
 
                 <form onSubmit={handleLogin} className="login-form">
                     <select required={true} onChange={(e)=>setSchoolclassLoc(e.target.value)} value={schoolclass} placeholder="Your class" className='createuser-input-field'>
-                        <option value="None"></option>
+                        <option value="None">Select a class</option>
                         <option value="2ITA">2ITA</option>
                         <option value="2ITB">2ITB</option>
                         <option value="2MPA">2MPA</option>

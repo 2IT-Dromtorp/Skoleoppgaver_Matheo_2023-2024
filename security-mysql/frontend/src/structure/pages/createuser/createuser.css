@@ -1,7 +1,9 @@
 .createuser-input-field{
-    height: 30px;
-    width: 180px;
-    border: solid black 1px;
+    height: 50px;
+    width: 300px;
     border-radius: 4px;
     font-size: 15px;
+    background-color: rgb(237, 237, 237);
+    border: none;
+    padding: 4px 10px;
 }

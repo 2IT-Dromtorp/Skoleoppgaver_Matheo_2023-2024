@@ -8,10 +8,10 @@ export default function ItemComponent({ tool, serialNumber, url, borrowedBy }) {
   const [isBurrowed, setIsBorrowed] = useState("");
 
   useEffect(()=> {
-    if(borrowedBy!=""){
+    if(borrowedBy!==""){
       setIsBorrowed("burrowed")
     }  
-  },[])
+  },[borrowedBy])
   
   return (
     <button className={`itemcomponent-main ${isBurrowed}`} onClick={() => navigate(`/item/${serialNumber}`)}>

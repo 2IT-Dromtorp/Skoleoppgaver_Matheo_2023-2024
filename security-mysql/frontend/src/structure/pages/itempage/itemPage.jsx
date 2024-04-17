@@ -13,29 +13,29 @@ export default function ItemPage() {
 	const [itemInfo, setItemInfo] = useState([]);
 	const { email } = useContext(EmailContext);
 
-	async function fetchData() {
-		try {
-			const response = await GetFetch(`/api/item-info?serialnumber=${serialnumber}`);
-
-			if (response.status === 401) {
-				navigate("/log-in")
-			}
-
-			if (!response.ok) {
-				const responseData = await response.json();
-				alert(responseData.message);
-				return;
-			}
-
-			const dataFromFetch = (await response.json()).data;
-			setItemInfo(dataFromFetch);
-		}
-		catch (error) {
-			console.error(error);
-		}
-	}
-
 	useEffect(() => {
+		async function fetchData() {
+			try {
+				const response = await GetFetch(`/api/item-info?serialnumber=${serialnumber}`);
+	
+				if (response.status === 401) {
+					navigate("/log-in")
+				}
+	
+				if (!response.ok) {
+					const responseData = await response.json();
+					alert(responseData.message);
+					return;
+				}
+	
+				const dataFromFetch = (await response.json()).data;
+				setItemInfo(dataFromFetch);
+			}
+			catch (error) {
+				console.error(error);
+			}
+		}
+		
 		fetchData();
 	}, [serialnumber])
 
@@ -53,10 +53,12 @@ export default function ItemPage() {
 				})
 			});
 
-
+			console.log(response.ok)
+			
 			if (!response.ok) {
-				const responseData = await response.json();
-				alert(responseData.message);
+				if(response.status===409){
+					alert("You have already submitted a request for this item");
+				}
 				return;
 			}
 

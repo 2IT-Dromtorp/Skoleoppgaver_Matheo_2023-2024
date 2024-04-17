@@ -1,7 +1,6 @@
 .requestcomponent-main{
     margin-right: 10px;
-    background-color: rgb(247, 247, 247);
-    border: solid black 3px;
+    border: solid rgb(55, 55, 55) 2px;
     border-radius: 10px;
     display: flex;
     justify-content: center;
@@ -21,6 +20,11 @@
 
 .requestcomponent-info{
     padding: 0 20px;
+    color: black;
+}
+
+.requestcomponent-info:active {
+    color: purple;
 }
 
 .requestcomponent-options-container{
@@ -39,6 +43,8 @@
     padding: 0 5px;
     color: white;
     border: solid black 1px;
+    cursor: pointer;
+    border-radius: 4px;
 }
 
 .apply{
@@ -46,5 +52,5 @@
 }
 
 .deny{
-    background-color: rgb(255, 0, 0);
+    background-color: #922a2a;
 }

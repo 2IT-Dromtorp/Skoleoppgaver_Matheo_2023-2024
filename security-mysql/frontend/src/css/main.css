@@ -3,7 +3,8 @@ html, body, *{
 }
 
 :root{
-    --main-color: #003b5c;
+    --main-color: #1e6087;
+    /* --main-color: #003b5c; */
     --secondary-color:black;
     --user-border-color:#7fc1ff;
 }

@@ -31,7 +31,7 @@ app.use((req, res, next) => {
         ipRequests[ip] = curRequests;
     }
     let requestType = "api";
-    let maxRate = "10";
+    let maxRate = "50";
     const requests = curRequests.requests[requestType];
     const now = Date.now();
     const pushRequest = () => {
@@ -189,29 +189,36 @@ server.listen(port, () => {
         if(!jwtEmail) return res.status(403).send({message:"Your email is not registered. Try logging in again"});
 
         const userTryingToBorrow = await dromtorpUsers.find({email:jwtEmail}).project({email:1,"givenName":1,surname:1,class:1}).toArray();
-        if(!userTryingToBorrow.length) return res.status(404).send({message:"The item you're trying to borrow from does not exist"});
+        if(!userTryingToBorrow.length) return res.status(404).send({message:"The user you're trying to borrow from does not exist"});
 
         const itemInfoToBorrow = await dromtorpItems.find({serialNumber:serialNumber}).project({_id:0,extraInfo:0}).toArray();
         if(!itemInfoToBorrow.length) return res.status(404).send({message:"The item you're trying to borrow does not exist"});
         if(itemInfoToBorrow[0].borrowedBy) return res.status(409).send({message:"Someone has already borrowed this item"});
 
+        const prevRequest = await dromtorpRequests.find({"user.emailOfUser": jwtEmail, "item.serialNumberOfItem":serialNumber}).project({ranId:1}).toArray();
+        if(prevRequest.length) return res.sendStatus(409);
+
         const ranID = require("crypto").randomBytes(32).toString("base64");
 
-        await dromtorpRequests.insertOne({
-            "ranId":ranID,
-            "item":{
-                serialNumberOfItem:itemInfoToBorrow[0].serialNumber, 
-                toolOfItem:itemInfoToBorrow[0].tool
-            }, 
-            "user":{
-                "emailOfUser":jwtEmail, 
-                "givenName":userTryingToBorrow[0].givenName,
-                "surname":userTryingToBorrow[0].surname, 
-                "class":userTryingToBorrow[0].class
-            }
-        })
-
-        res.sendStatus(200);
+        try{
+            await dromtorpRequests.insertOne({
+                "ranId":ranID,
+                "item":{
+                    serialNumberOfItem:itemInfoToBorrow[0].serialNumber, 
+                    toolOfItem:itemInfoToBorrow[0].tool
+                }, 
+                "user":{
+                    "emailOfUser":jwtEmail, 
+                    "givenName":userTryingToBorrow[0].givenName,
+                    "surname":userTryingToBorrow[0].surname, 
+                    "class":userTryingToBorrow[0].class
+                }
+            })
+    
+            res.sendStatus(200);
+        } catch (err) {
+            res.sendStatus(500);
+        }
     })
 
     app.get("/api/get-requests", authenticateToken, async (req,res)=>{

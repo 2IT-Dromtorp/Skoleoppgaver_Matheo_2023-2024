@@ -1,7 +1,7 @@
 .borrowingsite-main{
     padding: 10px 50px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;

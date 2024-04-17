@@ -9,30 +9,30 @@ export default function LendingSite() {
   const navigate = useNavigate();
   const [listOfItems, setListOfItems] = useState([]);
 
-  async function fetchData(number) {
-    try{
-      const response = await GetFetch(`/api/list-items?limit=${number}`);
-
-      if(response.status===401){
-        navigate("/log-in")
-      } 
-
-      if(!response.ok){
-        const responseData = await response.json();
-        alert(responseData.message);
-        return;
-      } 
-
-      const arrayWithData = (await response.json());
-
-      setListOfItems(arrayWithData.data)
-    }
-    catch(error){
-      console.error(error);
-    }
-  }
-
   useEffect( ()=>{
+    async function fetchData(number) {
+      try{
+        const response = await GetFetch(`/api/list-items?limit=${number}`);
+  
+        if(response.status===401){
+          navigate("/log-in")
+        } 
+  
+        if(!response.ok){
+          const responseData = await response.json();
+          alert(responseData.message);
+          return;
+        } 
+  
+        const arrayWithData = (await response.json());
+  
+        setListOfItems(arrayWithData.data)
+      }
+      catch(error){
+        console.error(error);
+      }
+    }
+    
     fetchData(25);
   },[])
 
@@ -40,9 +40,9 @@ export default function LendingSite() {
 
   return (
     <div className='borrowingsite-main'>          
-      {listOfItems.length&&listOfItems.map((item, index)=>
+      {listOfItems.length?listOfItems.map((item, index)=>
         <ItemComponent key={index} tool={item.tool} serialNumber={item.serialNumber} borrowedBy={item.borrowedBy}/>
-      )}
+      ):"Loading..."}
     </div>
   );
 }
