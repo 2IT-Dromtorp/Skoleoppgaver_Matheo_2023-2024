@@ -1,0 +1,23 @@
+.itempage-main{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.itempage-borrow-button{
+    padding: 7px 25px;
+    font-size: 30px;
+    color: white;
+    border: solid var(--user-border-color);
+    border-radius: 5px;
+    background-color: var(--main-color);
+    cursor: pointer;
+}
+
+.itempage-return-button{
+    margin-top: 5px;
+    background-color: #922a2a;
+    border: solid black 2px;
+}

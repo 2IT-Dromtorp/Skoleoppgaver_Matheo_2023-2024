@@ -6,7 +6,6 @@ const http = require("http");
 const {HashString, Compare} = require('./hash')
 const {MongoClient} = require("mongodb");
 const jwt = require("jsonwebtoken");
-const { constants } = require("buffer");
 
 const app = express();
 app.use(express.static("build"));
@@ -21,7 +20,7 @@ server.listen(port, () => {
 
     const mongodb = new MongoClient(url);
     const database = mongodb.db("Dromtorp");
-    const dromtorpUsers = database.collection("Elever");
+    const dromtorpUsers = database.collection("Users");
     const dromtorpItems = database.collection("Items");
     const dromtorpRequests = database.collection("Requests");
     // const dromtorpRefreshTokens = database.collection("Items"); For en del av dette som kommer senere en gang
@@ -63,6 +62,9 @@ server.listen(port, () => {
         const givenname = b.givenname;
         const surname = b.surname;
         const schoolclass = b.schoolclass;
+        const phone = b.phone;
+        const address = b.address;
+        const familyMembers = b.familyMembers;
         if(typeof(password)!="string"||typeof(givenname)!="string"||typeof(surname)!="string"||typeof(schoolclass)!="string") return res.sendStatus(403);
 
         const hashedPassword = HashString(password, 15)
@@ -74,11 +76,11 @@ server.listen(port, () => {
                 givenName:givenname,
                 surname:surname,
                 email:emailAsString,
-                phone:"",
+                phone:phone,
                 password:hashedPassword,
-                address:"",
+                address:address,
                 borrowed:[],
-                kin:[],
+                kin:familyMembers,
                 class:schoolclass
             })
 
@@ -121,9 +123,9 @@ server.listen(port, () => {
 
         if(jwtUser.class!=="LAERER" && item[0].borrowedBy && jwtUser.email !== item[0].borrowedBy){
             item[0].borrowedBy = "Someone"
-        } else if(jwtUser.class!=="LAERER" && jwtUser.email === item[0].borrowedBy){
+        } else if(jwtUser.email === item[0].borrowedBy){
             item[0].borrowedBy = "This user"
-        }   else if(jwtUser!=="LAERER"){
+        } else if(jwtUser!=="LAERER" && !item[0].borrowedBy){
             item[0].borrowedBy = ""
         }
 
@@ -246,7 +248,7 @@ server.listen(port, () => {
 
         const userData = await dromtorpUsers.find({email:email}).project({_id:0, password:0}).toArray();
 
-        if(!userData.length) res.sendStatus(404);
+        if(!userData.length) return res.sendStatus(404);
 
         res.status(200).send({"data":userData});
     });
@@ -296,6 +298,11 @@ server.listen(port, () => {
         if(!itemDataafter.length) return res.sendStatus(500);
 
         res.status(200).send({"data":itemDataafter});
+    });
+
+
+    app.get('*', (req, res) => {
+        res.sendFile(__dirname + '/build/index.html');
     });
 })
 
