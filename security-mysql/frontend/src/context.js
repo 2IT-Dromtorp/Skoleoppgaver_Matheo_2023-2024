@@ -30,4 +30,17 @@ const SchoolclassProvider = ({ children }) => {
     );
 };
 
-export { RequestInfoContext, RequestInfoProvider, EmailContext, EmailProvider, SchoolclassContext, SchoolclassProvider };
+const DialogContentContext = createContext({});
+const DialogContentProvider = ({ children }) => {
+    const [dialogContent, setDialogContent] = useState({
+        operation: "",
+        data: []
+    });
+    return (
+        <DialogContentContext.Provider value={{dialogContent, setDialogContent}}>
+            {children}
+        </DialogContentContext.Provider>
+    );
+};
+
+export { RequestInfoContext, RequestInfoProvider, EmailContext, EmailProvider, SchoolclassContext, SchoolclassProvider, DialogContentContext, DialogContentProvider };

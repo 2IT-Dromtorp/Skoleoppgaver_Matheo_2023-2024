@@ -4,14 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { RequestInfoProvider, EmailProvider, SchoolclassProvider } from './context';
+import { RequestInfoProvider, EmailProvider, SchoolclassProvider, DialogContentProvider } from './context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <EmailProvider>
         <SchoolclassProvider>
             <RequestInfoProvider>
-                <App />
+                <DialogContentProvider>  
+                    <App/>
+                </DialogContentProvider>
             </RequestInfoProvider>
         </SchoolclassProvider>
     </EmailProvider>
