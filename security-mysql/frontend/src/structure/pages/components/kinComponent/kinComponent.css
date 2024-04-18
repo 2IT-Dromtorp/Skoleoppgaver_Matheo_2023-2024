@@ -3,13 +3,43 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding: 5px 25px;
+    padding: 5px 5px;
     background-color: var(--user-border-color);
     border: solid var(--main-color) 1px;
     border-radius: 6px;
-    gap: 4px;
 }
 
 .kincomponent-name{
     font-size: 20px;
+}
+
+.kin-close-button-svg{
+    fill: black;
+    stroke: black;
+    height: 25px;
+}
+
+.kin-close-button-button{
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.kin-close-button-container{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: row;
+}
+
+.kincomponent-info-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 3px 25px;
+    gap: 5px;
+
 }

@@ -103,12 +103,12 @@ export default function CreateUser() {
         }
 
         return(
-            <form onSubmit={(e) => submitData(e)}>
-                <input type='text' required={true} value={famname} onChange={(e)=>setFamname(e.target.value)} placeholder='Name'/>
-                <input type='text' required={true} value={famemail} onChange={(e)=>setFamemail(e.target.value)} placeholder='Email'/>
-                <input type='text' required={true} value={famphonenumber} onChange={(e)=>setFamphonenumber(e.target.value)} placeholder='Phone'/>
-                <input type='text' required={true} value={famaddress} onChange={(e)=>setFamadress(e.target.value)} placeholder='Address'/>
-                <button type='submit'>Submit</button>
+            <form onSubmit={(e) => submitData(e)} className='dialog-add-family-member-form'>
+                <input type='text' required={true} value={famname} onChange={(e)=>setFamname(e.target.value)} placeholder='Name' className='dialog-add-family-member-input'/>
+                <input autoComplete="email" type="email" required={true} value={famemail} onChange={(e)=>setFamemail(e.target.value)} placeholder='Email' className='dialog-add-family-member-input'/>
+                <input type="tel" pattern="[0-9]{8}" required={true} value={famphonenumber} onChange={(e)=>setFamphonenumber(e.target.value)} placeholder='Phone number' className='dialog-add-family-member-input'/>
+                <input type='text' required={true} value={famaddress} onChange={(e)=>setFamadress(e.target.value)} placeholder='Address' className='dialog-add-family-member-input'/>
+                <button type='submit' className='dialog-add-family-member-submit-button'>Submit</button>
             </form>
         )
     };
@@ -124,7 +124,7 @@ export default function CreateUser() {
             <div className="login-login">
 
                 <form onSubmit={handleLogin} className="login-form">
-                    <select required={true} onChange={(e)=>setSchoolclassLoc(e.target.value)} value={schoolclass} placeholder="Your class" className='createuser-input-field'>
+                    <select required={true} onChange={(e)=>setSchoolclassLoc(e.target.value)} value={schoolclass} placeholder="Your class" className='createuser-input-field createuser-select-field'>
                         <option value="None">Select a class</option>
                         <option value="2ITA">2ITA</option>
                         <option value="2ITB">2ITB</option>
@@ -139,15 +139,18 @@ export default function CreateUser() {
                     <input className="createuser-input-field" required={true} autoComplete="password" type="password" onChange={(e)=>setPassword(e.target.value)} value={password} placeholder="Password" minLength={8}/>
                     <input className="createuser-input-field" required={true} autoComplete="password" type="password" onChange={(e)=>setPasswordCheck(e.target.value)} value={passwordCheck} placeholder="Repeat your password" minLength={8}/>
                     
-                    <input className="createuser-input-field" required={!schoolclass==="LAERER"} type="tel" pattern="[0-9]{8}" placeholder='Phone number' value={phone} onChange={(e)=>setPhone(e.target.value)}/>
-                    <input className="createuser-input-field" required={!schoolclass==="LAERER"} autoComplete="address" type="text" onChange={(e)=>setAddress(e.target.value)} value={address} placeholder="Address"/>
+                    <input className="createuser-input-field" required={schoolclass!=="LAERER"} type="tel" pattern="[0-9]{8}" placeholder='Phone number' value={phone} onChange={(e)=>setPhone(e.target.value)}/>
+                    <input className="createuser-input-field" required={schoolclass!=="LAERER"} autoComplete="address" type="text" onChange={(e)=>setAddress(e.target.value)} value={address} placeholder="Address"/>
                     
-                    <button type="button" onClick={()=>setShowDialog(true)}>Add a family member</button>
+                    {schoolclass!=="LAERER"?<button type="button" onClick={()=>setShowDialog(true)} className='createuser-input-add-family-button'>Add a family member</button>:""}
 
-                    {dialogContent.operation==="addFamilyMember"?dialogContent.data.map((member, index) =>
-                        <KinComponent key={index} name={member.name} address={member.address} phonenumber={member.phone} email={member.email}/>
+                    {dialogContent.operation==="addFamilyMember"&&dialogContent.data.length?dialogContent.data.map((member, index) =>
+                        <KinComponent key={index} index={index} name={member.name} address={member.address} phonenumber={member.phone} email={member.email} use="createUser"/>
                         
-                    ):"No family members added"}
+                    ):(
+                        schoolclass!=="LAERER"?"No family members added":""
+                    )
+                    }
                     
                     <button type="submit" className="login-login-button">Create User</button>
                 </form>
