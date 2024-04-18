@@ -5,7 +5,7 @@ import { useContext } from 'react';
 
 import { Close } from '../../../../svg';
 
-export default function KinComponent({name, email, address, phonenumber, use, index}) {
+export default function KinComponent({name, email, address, phonenumber, use="", index, addClassName=""}) {
     const {dialogContent, setDialogContent} = useContext(DialogContentContext);
 
     function deleteItem() {           
@@ -17,7 +17,7 @@ export default function KinComponent({name, email, address, phonenumber, use, in
       }
 
     return(
-        <div className='kincomponent-main'>
+        <div className={`kincomponent-main ${addClassName}`}>
             {use==="createUser"
             ?
             <div className='kin-close-button-container'>

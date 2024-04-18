@@ -126,8 +126,59 @@ export default function EditUser() {
         )
     };
 
+    async function changePassword(e){
+        e.preventDefault();
+        const accessToken = localStorage.getItem("accessToken");
+        if(newPassword!==newPasswordRepeat) return alert("The password needs to be the same");
+        const response = await fetch("/api/update-user-password", {
+            method:"PUT",
+            headers:{
+                "Content-type":"application/json",
+                'Authorization': `Bearer ${accessToken}`	
+            },
+            body:JSON.stringify({
+                email:email,
+                oldPass:oldPassword,
+                newPass:newPassword
+            })
+        });
+        if(response.status===401){
+            navigate("/log-in")
+        }
+        if(response.status===400){
+            navigate("/")
+        }
+        if(response.status===403){
+            alert("Wrong password")
+        }
+        if(response.status===409){
+            alert("The old and new password can't be the same");
+        }
+        if(!response.ok){
+            return;
+        }
+
+        alert("Password was successfully changed");
+        navigate(`/profile/${email}`);
+    }
+
     return(
-        <>{userData.email&&usersClass==="LAERER"?
+        <>
+        {usersClass.email===email?
+            <form className='edituser-password-container' onSubmit={(e)=>changePassword(e)}>
+                <p className='edituser-password-text'>Change your password</p>
+                
+                <input className="createuser-input-field" required={true} type="password" onChange={(e)=>setOldPassword(e.target.value)} value={oldPassword} placeholder="Old password" minLength={8}/>
+                <input className="createuser-input-field" required={true} type="password" onChange={(e)=>setNewPassword(e.target.value)} value={newPassword} placeholder="New password" minLength={8}/>
+                <input className="createuser-input-field" required={true} type="password" onChange={(e)=>setNewPasswordRepeat(e.target.value)} value={newPasswordRepeat} placeholder="Confirm your new password" minLength={8}/>
+                
+                <button type="submit" className="login-login-button">Save Changes</button>
+                <Link className="login-login-button edituser-discard-button" to={`/profile/${email}`}>Discard changes</Link>
+            </form>
+        :""}
+
+
+        {userData.email&&usersClass.class==="LAERER"?
             <>
                 {showDialog?<DialogBox DataFromUser={DataForFamilyDialog}/>:""}
 
@@ -165,6 +216,8 @@ export default function EditUser() {
         :(userData.email?
             
             <div className='edituser-editpassword-main'>
+                <h1>You'll need a teacher to edit your profile</h1>
+                <h2>You can however change your password</h2>
                 <p className="createuser-input-field edituser-cant-edit-field">{givenName}</p>
                 <p className="createuser-input-field edituser-cant-edit-field">{surname}</p>
                 <p className="createuser-input-field edituser-cant-edit-field">{locemail}</p>
@@ -173,13 +226,17 @@ export default function EditUser() {
                 <p className="createuser-input-field edituser-cant-edit-field">{address}</p>
 
                 {dialogContent.operation==="addFamilyMember"&&dialogContent.data.length?dialogContent.data.map((member, index) =>
-                    <KinComponent key={index} index={index} name={member.name} address={member.address} phonenumber={member.phone} email={member.email} use="display"/>
+                    <KinComponent addClassName="edituser-family-cant-edit" key={index} index={index} name={member.name} address={member.address} phonenumber={member.phone} email={member.email} use="display"/>
                 ):"You must have at least one family member"}
                 
-                <input className="createuser-input-field" required={true} type="text" onChange={(e)=>setGivenName(e.target.value)} value={givenName} placeholder="Firstname"/>
 
             </div>
             
-        :"Loading...")}</>
+        :"Loading...")}
+        
+
+        </>
+
+        
     )
 }

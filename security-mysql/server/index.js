@@ -443,7 +443,7 @@ server.listen(port, () => {
         const userData = await dromtorpUsers.find({email:email}).project({_id:0,borrowed:0,password:0}).toArray();
         if(!userData.length) return res.sendStatus(412);
 
-        res.status(200).send({"data":userData[0], "userClass":jwtUser.class});
+        res.status(200).send({"data":userData[0], "userClass":jwtUser});
     });
 
     app.put("/api/update-user-teacher", authenticateToken, async(req,res) => {
@@ -489,7 +489,30 @@ server.listen(port, () => {
             console.log(error);
             res.sendStatus(500);
         }
-    })
+    });
+
+    app.put("/api/update-user-password", authenticateToken, async(req,res)=>{
+        const jwtUser = req.jwtUser;
+
+        const b = req.body;
+        const email = b.email;
+
+        if(jwtUser.email!==email) return res.sendStatus(400);
+
+        const newPass = b.newPass;
+        const oldPass = b.oldPass;
+
+        if(!checkValues(newPass, "string", true, false)) return res.sendStatus(412);
+        if(!checkValues(oldPass, "string", true, false)) return res.sendStatus(412);
+        if(newPass.length<8||oldPass.length<8) return res.sendStatus(412);
+
+        const prevHashedPass = await dromtorpUsers.find({email:email}).project({password:1}).toArray();
+        if(!prevHashedPass.length) return res.sendStatus(500);
+
+        if(!Compare(prevHashedPass[0].password, oldPass)) return res.sendStatus(403);
+        
+        if(oldPass===newPass) return res.send(409);
+    });
 
     app.get('*', (req, res) => {
         res.sendFile(__dirname + '/build/index.html');

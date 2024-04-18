@@ -20,4 +20,24 @@
     align-items: center;
     justify-content: flex-start;
     cursor: not-allowed;
+    color: rgb(197, 197, 197);
+}
+
+.edituser-family-cant-edit{
+    cursor: not-allowed;
+    color: rgb(107, 107, 107);
+}
+
+.edituser-password-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px 50px;
+    gap: 10px;
+}
+
+.edituser-password-text{
+    font-size: 40px;
+    font-weight: 500;
 }
