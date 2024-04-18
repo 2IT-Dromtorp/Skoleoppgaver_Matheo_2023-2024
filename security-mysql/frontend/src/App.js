@@ -12,6 +12,7 @@ import ProfilePage from './structure/pages/profilePage/profilePage';
 import Users from './structure/pages/users/users';
 import CreateNewItem from './structure/pages/createNewItem/createNewItem';
 import EditItem from './structure/pages/editItem/editItem';
+import EditUser from './structure/pages/editUser/editUser';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="profile/:email" element={<ProfilePage />} />
             <Route path="create-new-item" element={<CreateNewItem />} />
             <Route path="edit-item/:serialnumber" element={<EditItem />} />
+            <Route path="edit-user/:email" element={<EditUser/>} />
           </Route>
       </Routes>
     </BrowserRouter>

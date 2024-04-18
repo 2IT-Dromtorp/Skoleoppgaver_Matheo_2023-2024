@@ -1,7 +1,7 @@
 import './profilePage.css'
 
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { GetFetch } from '../../functions.jsx';
 import { Profile } from '../../../svg.jsx';
@@ -38,6 +38,9 @@ export default function ProfilePage() {
 	return (
 	<>{userInfo.givenName?
         <div className='profile-main'>
+
+            <Link to={`/edit-user/${email}`} className='profile-edit-user-link'>Edit user</Link>
+
             <div className='profile-info'>
                 {true?
                     <Profile className="profile-picture"/>
@@ -59,7 +62,7 @@ export default function ProfilePage() {
                 {userInfo.kin.length?<div className='profile-family'>
                     <p>Family members:</p>
                     {userInfo.kin.length&&userInfo.kin.map((member, index) => 
-                        <KinComponent key={index} name={member.name} address={member.address} phonenumber={member.phonenumber} email={member.email}/>
+                        <KinComponent key={index} name={member.name} address={member.address} phonenumber={member.phone} email={member.email}/>
                     )}
                 </div>:""}
             </div>

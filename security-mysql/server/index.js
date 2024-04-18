@@ -45,7 +45,6 @@ app.use((req, res, next) => {
         let amount = 0;
         for (let i = 0; i < requests.length; i++) {
             const request = requests[i];
-            //collect all the last minute
             if ((now - request.date) <= 60 * 1000) {
                 amount += 1;
             }
@@ -434,11 +433,75 @@ server.listen(port, () => {
         res.status(200).send({"data":item});
     });
 
+    app.get("/api/user-data-for-edit", authenticateToken, async(req,res) =>{
+        const jwtUser = req.jwtUser;
+        const q = req.query;
+        const email = q.email;
+
+        if(jwtUser.class!=="LAERER"&&jwtUser.email!==email) return res.sendStatus(403);
+
+        const userData = await dromtorpUsers.find({email:email}).project({_id:0,borrowed:0,password:0}).toArray();
+        if(!userData.length) return res.sendStatus(412);
+
+        res.status(200).send({"data":userData[0], "userClass":jwtUser.class});
+    });
+
+    app.put("/api/update-user-teacher", authenticateToken, async(req,res) => {
+        const jwtUser = req.jwtUser;
+        if(jwtUser.class!=="LAERER") return res.sendStatus(403);
+        
+        const b = req.body;
+
+        const email = b.email;
+        if(!validateEmail(email)) return res.status(412).send({"message":"Email is not correct"});
+        
+        const oldEmail = b.oldEmail;
+        const givenname = b.givenName;
+        const surname = b.surname;
+        const schoolclass = b.class;
+        const phone = b.phone;
+        const address = b.address;
+        const familyMembers = b.familyMembers;
+
+        if(!checkValues(oldEmail, "string", true, false)) return res.sendStatus(412);
+        if(!checkValues(givenname, "string", true, false)) return res.sendStatus(412);
+        if(!checkValues(surname, "string", true, false)) return res.sendStatus(412);
+        if(!checkValues(schoolclass, "string", true, false)) return res.sendStatus(412);
+        if(!checkValues(phone, "string", true, false)) return res.sendStatus(412);
+        if(!checkValues(address, "string", true, false)) return res.sendStatus(412);
+        if(!checkValues(familyMembers, typeof([]), false, true)) return res.sendStatus(412);
+
+        try {
+            dromtorpUsers.updateOne({email:oldEmail},
+                {$set:{
+                    givenName:givenname,
+                    surname:surname,
+                    email:email.split("@")[0],
+                    phone:phone,
+                    address:address,
+                    kin:familyMembers,
+                    class:schoolclass
+                }}
+            );
+
+            res.sendStatus(200)
+        } catch (error) {
+            console.log(error);
+            res.sendStatus(500);
+        }
+    })
 
     app.get('*', (req, res) => {
         res.sendFile(__dirname + '/build/index.html');
     });
 })
+
+function checkValues(data, datatype, cantBeFalse, isArrayWhichCantBeEmpty){
+    if(typeof(data)!==datatype) return false;
+    if(cantBeFalse&&!data) return false;
+    if(isArrayWhichCantBeEmpty&!data.length) return false;
+    return true;
+}
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];

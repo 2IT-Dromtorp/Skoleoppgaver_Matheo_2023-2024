@@ -1,0 +1,23 @@
+.edituser-form{
+    border: none;
+}
+
+.edituser-discard-button{
+    background-color: #922a2a;
+    text-decoration: none;
+    padding: 7px 50.5px;
+}
+
+.edituser-editpassword-main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.edituser-cant-edit-field{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: not-allowed;
+}
