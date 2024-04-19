@@ -1,23 +1,27 @@
 import './profilePage.css'
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { GetFetch } from '../../functions.jsx';
-import { Profile } from '../../../svg.jsx';
+import { Profile, Exit } from '../../../svg.jsx';
 import ItemComponent from '../components/itemComponent.jsx';
 import KinComponent from '../components/kinComponent/kinComponent.jsx';
 
+import { EmailContext } from '../../../context.js';
+
 export default function ProfilePage() {
 	const navigate = useNavigate();
-    const {email} = useParams();
+    const {emaila} = useParams();
 
     const [userInfo, setUserInfo] = useState({});
+
+    const {email} = useContext(EmailContext);
 
 	useEffect(() => {
         async function fetchData() {
             try {
-                const response = await GetFetch(`/api/get-user-info?email=${email}`, navigate);
+                const response = await GetFetch(`/api/get-user-info?email=${emaila}`, navigate);
     
                 const dataFromFetch = await response.json()
 
@@ -33,13 +37,13 @@ export default function ProfilePage() {
             }
         }
 		fetchData();
-	}, [email, navigate])
+	}, [emaila, navigate])
 
 	return (
 	<>{userInfo.givenName?
         <div className='profile-main'>
 
-            <Link to={`/edit-user/${email}`} className='profile-edit-user-link'>Edit user</Link>
+            <Link to={`/edit-user/${emaila}`} className='profile-edit-user-link'>Edit user</Link>
 
             <div className='profile-info'>
                 {true?
@@ -59,7 +63,7 @@ export default function ProfilePage() {
                     {userInfo.address&&<p>{userInfo.address}</p>}
                 </div>
 
-                {userInfo.kin.length?<div className='profile-family'>
+                {userInfo.kin&&userInfo.kin.length?<div className='profile-family'>
                     <p>Family members:</p>
                     {userInfo.kin.length&&userInfo.kin.map((member, index) => 
                         <KinComponent key={index} name={member.name} address={member.address} phonenumber={member.phone} email={member.email}/>
@@ -72,6 +76,8 @@ export default function ProfilePage() {
                     <ItemComponent key={index} tool={item.tool} serialNumber={item.serialNumber}/>
                 )}
             </div>
+
+            {email===emaila?<Link className='profile-log-out-button' to={"/log-in"}>Log out<Exit className="profile-log-out-svg"/></Link>:""}
         </div>
 	:
     "Loading..."

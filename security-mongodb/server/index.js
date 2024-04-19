@@ -67,8 +67,7 @@ server.listen(port, () => {
     const dromtorpUsers = database.collection("Users");
     const dromtorpItems = database.collection("Items");
     const dromtorpRequests = database.collection("Requests");
-    // const dromtorpRefreshTokens = database.collection("Items"); For en del av dette som kommer senere en gang
-
+    const dromtorpHistoryLoans = database.collection("HistoryLoan");
 
     app.post("/api/login", async (req,res)=>{
         const b = req.body;
@@ -82,13 +81,12 @@ server.listen(port, () => {
 
         const emailAfterChange = email.split("@")[0];
 
-        const findUserArray = await dromtorpUsers.find({"email":emailAfterChange}).project({_id:0}).toArray();
+        const findUserArray = await dromtorpUsers.find({"email":emailAfterChange}).project({password:1, class:1}).toArray();
         if(!findUserArray.length) return res.sendStatus(409);
         const findUser = findUserArray[0];
 
         if(Compare(findUser.password, password)){
             const accessToken = createAccessToken(emailAfterChange, findUser.class);
-            //const refreshToken = createRefreshToken(emailAfterChange, findUser.class); Brukes ikke til noe enda, kan ikke nok til å bruke det
 
             res.status(202).send({"accessToken":accessToken, "data":findUser.class});
         } 
@@ -106,12 +104,18 @@ server.listen(port, () => {
         const givenname = b.givenname;
         const surname = b.surname;
         const schoolclass = b.schoolclass;
+        if(typeof(password)!="string"||typeof(givenname)!="string"||typeof(surname)!="string"||typeof(schoolclass)!="string") return res.sendStatus(403);
+        
+
         const phone = b.phone;
         const address = b.address;
         const familyMembers = b.familyMembers;
-        if(typeof(password)!="string"||typeof(givenname)!="string"||typeof(surname)!="string"||typeof(schoolclass)!="string") return res.sendStatus(403);
-
-        if(familyMembers.length>3) return res.sendStatus(412)
+        
+        if(schoolclass!=="LAERER"){
+            if(!checkValues(phone,"string", true, false)||phone.length!==8) return res.sendStatus(412);
+            if(!checkValues(address,"string", true, false)) return res.sendStatus(412);
+            if(!checkValues(familyMembers,typeof([]), false, true)) return res.sendStatus(412);
+        }
 
         const hashedPassword = HashString(password, 15);
 
@@ -119,19 +123,18 @@ server.listen(port, () => {
 
         try{
             await dromtorpUsers.insertOne({
+                class:schoolclass,
                 givenName:givenname,
                 surname:surname,
                 email:emailAsString,
-                phone:phone,
                 password:hashedPassword,
-                address:address,
                 borrowed:[],
-                kin:familyMembers,
-                class:schoolclass
+                ...(phone.length && { phone:phone }),
+                ...(address.length && { address:address }),
+                ...(familyMembers.length && { kin:familyMembers }),
             })
 
             const accessToken = createAccessToken(emailAsString, schoolclass);
-            //const refreshToken = createRefreshToken(emailAsString, findUser.class); Brukes ikke til noe enda, kan ikke nok til å bruke det
             res.status(201).send({accessToken:accessToken});
         }
         catch(error){
@@ -147,8 +150,6 @@ server.listen(port, () => {
         const limitInt = parseInt(limit);
 
         if(!limitInt) return res.status(404).send({"message":"The limit is not a number"});
-
-        //jeg vil legge til at man ser de man allerede låner et annet sted, og vil fortsatt bruke denne. jeg har en ide om hvordan, men må få JWT til å fungere for å bruke det. intil det lager jeg bare en generalisert, som fungerer uten noen spesifikk brukerdata
 
         const listedItems = await dromtorpItems.find().sort({tool: 1}).project({_id:0}).limit(limitInt).toArray();
         if(!listedItems.length) return res.status(404).send({"message":"There is no items"});
@@ -237,11 +238,11 @@ server.listen(port, () => {
         const id = b.id;
         if(!id) return res.sendStatus(412);
 
-        const requestInArray = await dromtorpRequests.find({ranId:id}).toArray();
+        const requestInArray = await dromtorpRequests.find({ranId:id}).project({_id:0}).toArray();
         if(!requestInArray.length) return res.sendStatus(400);
         const request = requestInArray[0];
 
-        const doesUserExist = await dromtorpUsers.find({email:request.user.emailOfUser}).toArray();
+        const doesUserExist = await dromtorpUsers.find({email:request.user.emailOfUser}).project({emali:1}).toArray();
         if(!doesUserExist.length) return res.sendStatus(400);
 
         const doesItemExist = await dromtorpItems.find({serialNumber:request.item.serialNumberOfItem}).toArray();
@@ -257,8 +258,17 @@ server.listen(port, () => {
                 {serialNumber:request.item.serialNumberOfItem},
                 {$set:{borrowedBy:request.user.emailOfUser}}
             );
-    
+
             await dromtorpRequests.deleteOne({ranId:id});
+
+            await dromtorpHistoryLoans.insertOne({
+                ranId:request.ranId,
+                item:request.item,
+                user:request.user,
+                loanStartTime:getCurrentTimeEuroFormat(),
+                loanEndTime:""
+            })
+    
     
             const requestAfterChange = await dromtorpRequests.find().project({_id:0}).toArray();
             res.status(200).send({"data":requestAfterChange});    
@@ -344,9 +354,17 @@ server.listen(port, () => {
         const userData = await dromtorpUsers.find({email:email}).project({email:1}).toArray();
         if(!userData.length) return res.sendStatus(500);
 
-        await dromtorpItems.updateOne({serialNumber:serialnumber},{$set:{borrowedBy:""}});
+        try {
+            await dromtorpItems.updateOne({serialNumber:serialnumber},{$set:{borrowedBy:""}});
 
-        await dromtorpUsers.updateOne({email:email},{$pull:{borrowed:{serialNumber:serialnumber}}});
+            await dromtorpUsers.updateOne({email:email},{$pull:{borrowed:{serialNumber:serialnumber}}});
+
+            await dromtorpHistoryLoans.updateOne({"user.emailOfUser":email, "item.serialNumberOfItem":serialnumber, loanEndTime:""},{$set:{loanEndTime:getCurrentTimeEuroFormat()}});
+        } catch (error) {
+            return res.sendStatus(500)
+        }
+
+        
 
         const itemDataafter = await dromtorpItems.find({serialNumber:serialnumber}).project({_id:0}).toArray();
         if(!itemDataafter.length) return res.sendStatus(500);
@@ -594,5 +612,16 @@ function validateEmail(email) {
     if(!email.includes("@") || !email.includes(".")) return false;
     if(email.indexOf("@")>email.indexOf(".")) return false;
     if(email.indexOf("@")===0 || email.indexOf(".")===email.length-1) return false;
+    if(email.split("@")[1]!=="viken.no") return false;
     return true;
+}
+
+function getCurrentTimeEuroFormat(){
+    let date_time = new Date();
+    let day = ("0" + date_time.getDate()).slice(-2);
+    let month = ("0" + (date_time.getMonth() + 1)).slice(-2);
+    let year = date_time.getFullYear();
+    let hours = date_time.getHours();
+    let minutes = date_time.getMinutes();
+    return `${day}.${month}.${year} ${hours}:${minutes}`;
 }

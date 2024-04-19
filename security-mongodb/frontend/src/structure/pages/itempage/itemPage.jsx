@@ -100,7 +100,7 @@ export default function ItemPage() {
 
 
 				{itemInfo[0].imgUrl ?
-					<img src={itemInfo[0].imgUrl} alt='' />
+					<img src={itemInfo[0].imgUrl} alt='' className='itempage-image'/>
 					: false}
 
 				<div className='itempage-bottom-buttons'>

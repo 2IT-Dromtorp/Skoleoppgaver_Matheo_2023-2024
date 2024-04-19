@@ -61,10 +61,8 @@ export default function CreateUser() {
 
             if (!response.ok){
                 if(response.status===412) setEmailLoc("");
-                const responseData = await response.json();
                 setPassword("");
                 setPasswordCheck("");
-                alert(responseData.message);
                 return;
             }
             

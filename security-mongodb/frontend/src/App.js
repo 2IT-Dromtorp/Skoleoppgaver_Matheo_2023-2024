@@ -25,7 +25,7 @@ function App() {
             <Route path="item/:serialnumber" element={<ItemPage />} />
             <Route path="requests" element={<RequestPage />} />
             <Route path="users" element={<Users />} />
-            <Route path="profile/:email" element={<ProfilePage />} />
+            <Route path="profile/:emaila" element={<ProfilePage />} />
             <Route path="create-new-item" element={<CreateNewItem />} />
             <Route path="edit-item/:serialnumber" element={<EditItem />} />
             <Route path="edit-user/:email" element={<EditUser/>} />
