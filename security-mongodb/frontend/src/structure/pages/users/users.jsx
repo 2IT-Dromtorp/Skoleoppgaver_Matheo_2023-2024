@@ -11,18 +11,20 @@ export default function Users() {
     const [users, setUsers] = useState([]);
 
     useEffect(()=> {
-        fetchUsers();
-    },[])
-
-    async function fetchUsers(){
-        const response = await GetFetch("/api/getusers", navigate);
-        if(!response||!response.ok){
-            return;
+        async function fetchUsers(){
+            const response = await GetFetch("/api/getusers", navigate);
+            if(!response||!response.ok){
+                return;
+            }
+    
+            const data = await response.json();
+            setUsers(data.data)  
         }
+        
+        fetchUsers();
+    },[navigate])
 
-        const data = await response.json();
-        setUsers(data.data)  
-    }
+    
 
     return(
         <div className='users-main'>

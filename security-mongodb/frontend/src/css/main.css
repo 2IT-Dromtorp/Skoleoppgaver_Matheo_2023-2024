@@ -7,4 +7,5 @@ html, body, *{
     /* --main-color: #003b5c; */
     --secondary-color:black;
     --user-border-color:#7fc1ff;
+    --discard-color: #922a2a;
 }

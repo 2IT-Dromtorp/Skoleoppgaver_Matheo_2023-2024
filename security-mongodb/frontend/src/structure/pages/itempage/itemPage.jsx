@@ -35,7 +35,7 @@ export default function ItemPage() {
 		}
 
 		fetchData();
-	}, [serialnumber])
+	}, [serialnumber,navigate])
 
 	async function borrowItem() {
 		try {

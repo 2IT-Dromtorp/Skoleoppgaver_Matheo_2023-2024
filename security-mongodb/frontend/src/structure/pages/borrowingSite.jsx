@@ -30,7 +30,7 @@ export default function LendingSite() {
     }
     
     fetchData(25);
-  },[])
+  },[navigate])
 
   
 

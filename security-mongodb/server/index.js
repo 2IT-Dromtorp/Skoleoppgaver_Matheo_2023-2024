@@ -113,7 +113,7 @@ server.listen(port, () => {
 
         if(familyMembers.length>3) return res.sendStatus(412)
 
-        const hashedPassword = HashString(password, 15)
+        const hashedPassword = HashString(password, 15);
 
         const emailAsString = email.split("@")[0];
 
@@ -512,6 +512,50 @@ server.listen(port, () => {
         if(!Compare(prevHashedPass[0].password, oldPass)) return res.sendStatus(403);
         
         if(oldPass===newPass) return res.send(409);
+
+        const hashedNewPass = HashString(newPass, 15);
+
+        try {
+            dromtorpUsers.updateOne({email:email},{$set:{password:hashedNewPass}});
+            res.sendStatus(200);
+        } catch (error) {
+            console.log(error);
+            res.sendStatus(500);
+        }
+    });
+
+    app.delete("/api/delete-user", authenticateToken, (req,res)=> {
+        const jwtUser = req.jwtUser;
+        if(jwtUser.class!=="LAERER"||email==="admin"||email===jwtUser.email) return res.sendStatus(403);
+
+        const b = req.body;
+        const email = b.email;
+        if(!checkValues(email, "string", true, false)) return res.sendStatus(412);
+
+        try {
+            dromtorpUsers.deleteOne({email:email});
+            res.sendStatus(200);
+        } catch (error) {
+            console.log(error);
+            res.sendStatus(500);
+        }
+    });
+
+    app.delete("/api/delete-item", authenticateToken, (req,res)=> {
+        const jwtUser = req.jwtUser;
+        if(jwtUser.class!=="LAERER") return res.sendStatus(403);
+
+        const b = req.body;
+        const serialnumber = b.serialnumber;
+        if(!checkValues(serialnumber, "string", true, false)) return res.sendStatus(412);
+
+        try {
+            dromtorpItems.deleteOne({serialNumber:serialnumber});
+            res.sendStatus(200);
+        } catch (error) {
+            console.log(error);
+            res.sendStatus(500);
+        }
     });
 
     app.get('*', (req, res) => {

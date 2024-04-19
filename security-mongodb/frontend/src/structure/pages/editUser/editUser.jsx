@@ -46,7 +46,7 @@ export default function EditUser() {
         }
 
         fetchData();
-    },[email]);
+    },[email, navigate,setDialogContent]);
 
     useEffect(()=> {
         if(!userData.email) return;
@@ -58,7 +58,7 @@ export default function EditUser() {
         setGivenName(userData.givenName);
         setSurname(userData.surname);
         setPhone(userData.phone);
-    },[userData])
+    },[userData,setDialogContent])
 
     const handlesumbit = async (e) => {
         e.preventDefault();
@@ -162,15 +162,42 @@ export default function EditUser() {
         navigate(`/profile/${email}`);
     }
 
+    async function deleteUser() {
+        const accessToken = localStorage.getItem("accessToken");
+        const response = await fetch("/api/delete-user", {
+            method:"DELETE",
+            headers:{
+                "Content-type":"application/json",
+                'Authorization': `Bearer ${accessToken}`	
+            },
+            body:JSON.stringify({
+                email:email
+            })
+        });
+        if(response.status===401){
+            return navigate("/log-in");
+        }
+        if(response.status===403){
+            alert("You dont have access to this command");
+            return navigate("/");
+        }
+        if(response.status===412) alert("The email was not valid");
+        if(!response.ok){
+            return;
+        }
+        navigate("/users");
+    }
+
     return(
         <>
         {usersClass.email===email?
             <form className='edituser-password-container' onSubmit={(e)=>changePassword(e)}>
                 <p className='edituser-password-text'>Change your password</p>
                 
-                <input className="createuser-input-field" required={true} type="password" onChange={(e)=>setOldPassword(e.target.value)} value={oldPassword} placeholder="Old password" minLength={8}/>
-                <input className="createuser-input-field" required={true} type="password" onChange={(e)=>setNewPassword(e.target.value)} value={newPassword} placeholder="New password" minLength={8}/>
-                <input className="createuser-input-field" required={true} type="password" onChange={(e)=>setNewPasswordRepeat(e.target.value)} value={newPasswordRepeat} placeholder="Confirm your new password" minLength={8}/>
+                <input style={{display: "none"}} className="createuser-input-field" required={true} autoComplete="email" type="email" onChange={(e)=>setEmail(e.target.value)} value={locemail} placeholder="Email"/>
+                <input autoComplete='current-password' className="createuser-input-field" required={true} type="password" onChange={(e)=>setOldPassword(e.target.value)} value={oldPassword} placeholder="Old password" minLength={8}/>
+                <input autoComplete='new-password' className="createuser-input-field" required={true} type="password" onChange={(e)=>setNewPassword(e.target.value)} value={newPassword} placeholder="New password" minLength={8}/>
+                <input autoComplete='new-password' className="createuser-input-field" required={true} type="password" onChange={(e)=>setNewPasswordRepeat(e.target.value)} value={newPasswordRepeat} placeholder="Confirm your new password" minLength={8}/>
                 
                 <button type="submit" className="login-login-button">Save Changes</button>
                 <Link className="login-login-button edituser-discard-button" to={`/profile/${email}`}>Discard changes</Link>
@@ -181,6 +208,8 @@ export default function EditUser() {
         {userData.email&&usersClass.class==="LAERER"?
             <>
                 {showDialog?<DialogBox DataFromUser={DataForFamilyDialog}/>:""}
+
+                <button type="button" onClick={()=>deleteUser()} className='login-login-button edituser-discard-button'>Delete user</button>
 
                 <form onSubmit={handlesumbit} className="login-form edituser-form">
                     <select required={true} onChange={(e)=>setSchoolclass(e.target.value)} value={schoolclass} placeholder="Your class" className='createuser-input-field createuser-select-field'>

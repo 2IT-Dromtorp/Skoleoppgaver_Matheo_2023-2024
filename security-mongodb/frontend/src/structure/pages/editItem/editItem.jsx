@@ -38,7 +38,7 @@ export default function EditItem() {
         }
 
         fetchData();
-    }, [serialnumber]);
+    }, [serialnumber, navigate]);
 
     async function updateItem(e) {
         e.preventDefault();
@@ -69,9 +69,36 @@ export default function EditItem() {
         navigate(`/item/${serialNumberFromFetch}`);
     }
 
+    async function deleteItem() {
+        const accessToken = localStorage.getItem("accessToken");
+        const response = await fetch("/api/delete-item", {
+            method:"DELETE",
+            headers:{
+                "Content-type":"application/json",
+                'Authorization': `Bearer ${accessToken}`	
+            },
+            body:JSON.stringify({
+                serialnumber:serialnumber
+            })
+        });
+        if(response.status===401){
+            return navigate("/log-in");
+        }
+        if(response.status===403){
+            alert("You dont have access to this command");
+            return navigate("/");
+        }
+        if(response.status===412) alert("The email was not valid");
+        if(!response.ok){
+            return;
+        }
+        alert("Deleted Item");
+        navigate("/");
+    }
+
     return (
         <>
-            {serialNumberFromFetch&&tool&&imgUrl&&extraInfo ?
+            {serialNumberFromFetch ?
 
                 <>
                     <form className='new-item-new-item-form' onSubmit={(e) => updateItem(e)}>
@@ -81,6 +108,7 @@ export default function EditItem() {
                         <input type='text' className='new-item-input-field' placeholder='ImageURL' value={imgUrl} onChange={(e) => setImgUrl(e.target.value)} />
                         <button type='submit' className='new-item-form-submit-button edititem-save-button'>Save changes</button>
                         <Link to={`/item/${serialNumberFromFetch}`} className='new-item-form-submit-button edititem-discard-button'>Discard Changes</Link>
+                        <button type='button' className='new-item-form-submit-button new-item-delete-item-button' onClick={()=>deleteItem()}>Delete item</button>
                     </form>
                 </>
 

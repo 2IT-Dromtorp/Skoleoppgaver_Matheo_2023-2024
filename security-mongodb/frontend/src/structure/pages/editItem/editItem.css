@@ -1,0 +1,15 @@
+.edititem-discard-button{
+    background-color: var(--discard-color);
+    padding: 12px 180px;
+}
+
+.edititem-save-button{
+    padding: 15px 190px;
+    cursor: pointer;
+}
+
+.new-item-delete-item-button{
+    background-color: var(--discard-color);
+    margin-top: 30px;
+    cursor: pointer;
+}
