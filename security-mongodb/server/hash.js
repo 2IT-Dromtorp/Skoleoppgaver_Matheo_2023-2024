@@ -18,6 +18,8 @@ function HashString(stringToBeHashed, rounds, saltFromCompare){
             preHashString = oddArray.join("")+evenArray.join("");
         }
 
+        console.log(preHashString)
+
         preHashString = preHashString.slice(0,32);
     }
 
@@ -67,14 +69,46 @@ function Compare(cryptated, input){
     return cryptated===hashedString;
 }
 
-// function a(){
-//     const input = "PappaErKul"
-//     const hashedPass = '12$mhj$fdiUhQfMyrMuPV99UTqnx74NGNJvWT4Y876sEPAW$VNBFDowJ0fcRITNTDK3n13UWLirdUbkR'
-//     const hash = HashString(input,12);
-//     console.log(hash)
-//     console.log(Compare(hashedPass, input));
-// }
+function a(){
+    const input = "PappaErKul"
+    console.log(changeBinary(input))
+    // const hashedPass = '12$mhj$fdiUhQfMyrMuPV99UTqnx74NGNJvWT4Y876sEPAW$VNBFDowJ0fcRITNTDK3n13UWLirdUbkR'
+    // const hash = HashString(input,12);
+    // console.log(hash)
+    // console.log(Compare(hashedPass, input));
+}
 
-// a();
+function changeBinary(fullString){
+    const bitsLong = 512;
+    let binaryString = "";
+    for(let i = 0; i<fullString.length;i++){
+        binaryString += fullString[i].charCodeAt(0).toString(2);
+    }
+    let arrayOfBitBoxes = [];
+    for(let i = 0; i<binaryString.length; i+=bitsLong){
+        arrayOfBitBoxes.push(binaryString.substring(i, i+bitsLong));
+    }
+
+    if(arrayOfBitBoxes[arrayOfBitBoxes.length-1].length<bitsLong){
+        const lengthToGet = bitsLong-arrayOfBitBoxes[arrayOfBitBoxes.length-1].length;
+        for(let i = 0; i<lengthToGet;i++){
+            arrayOfBitBoxes[arrayOfBitBoxes.length-1]+="0";
+        }
+    }
+
+    let bitStringAfterXor = "";
+    for(let i = 0; i<arrayOfBitBoxes.length;i++){
+        if(i===0){
+            bitStringAfterXor=BigInt(parseInt(arrayOfBitBoxes[i], 2));
+            continue;
+        }
+        bitStringAfterXor = bitStringAfterXor ^ BigInt(parseInt(arrayOfBitBoxes[i], 2));
+
+    }
+    
+    return numToText(bitStringAfterXor, 62n);
+}
+
+a();
 
 module.exports = {Compare, HashString};

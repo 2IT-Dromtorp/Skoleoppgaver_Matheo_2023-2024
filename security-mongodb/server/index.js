@@ -15,50 +15,6 @@ const server = http.createServer(app);
 const port = process.env.PORT || 8080;
 const url = "mongodb+srv://mathoepan:Skole123@matheodb.kuczdkk.mongodb.net/"
 
-const ipRequests = {};
-
-app.use((req, res, next) => {
-    const ip = req.socket.remoteAddress;
-    let curRequests = ipRequests[ip];
-    if (curRequests === undefined) {
-        curRequests = {
-            ip: ip,
-            requests: {
-                content: [],
-                api: [],
-            },
-        };
-        ipRequests[ip] = curRequests;
-    }
-    let requestType = "api";
-    let maxRate = "50";
-    const requests = curRequests.requests[requestType];
-    const now = Date.now();
-    const pushRequest = () => {
-        requests.push({
-            url: req.url,
-            date: now,
-        });
-        next();
-    }
-    if (requests.length > 0) {
-        let amount = 0;
-        for (let i = 0; i < requests.length; i++) {
-            const request = requests[i];
-            if ((now - request.date) <= 60 * 1000) {
-                amount += 1;
-            }
-        }
-        if (amount <= maxRate) {
-            pushRequest();
-        } else {
-            res.status(429).send('Too many requests');
-        }
-    } else {
-        pushRequest();
-    }
-});
-
 server.listen(port, () => {
     console.log(port);
 

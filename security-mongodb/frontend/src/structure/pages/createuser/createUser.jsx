@@ -34,7 +34,11 @@ export default function CreateUser() {
         setEmail("");
         setSchoolclass("");
         localStorage.setItem("accessToken","");
-    },[setEmail, setSchoolclass])
+        setDialogContent({
+            operation: "",
+            data: []
+        })
+    },[setEmail, setSchoolclass, setDialogContent])
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -101,13 +105,16 @@ export default function CreateUser() {
         }
 
         return(
+            <>
             <form onSubmit={(e) => submitData(e)} className='dialog-add-family-member-form'>
                 <input type='text' required={true} value={famname} onChange={(e)=>setFamname(e.target.value)} placeholder='Name' className='dialog-add-family-member-input'/>
                 <input autoComplete="email" type="email" required={true} value={famemail} onChange={(e)=>setFamemail(e.target.value)} placeholder='Email' className='dialog-add-family-member-input'/>
                 <input type="tel" pattern="[0-9]{8}" required={true} value={famphonenumber} onChange={(e)=>setFamphonenumber(e.target.value)} placeholder='Phone number' className='dialog-add-family-member-input'/>
                 <input type='text' required={true} value={famaddress} onChange={(e)=>setFamadress(e.target.value)} placeholder='Address' className='dialog-add-family-member-input'/>
                 <button type='submit' className='dialog-add-family-member-submit-button'>Submit</button>
+                <button type='button' className='dialog-add-family-member-submit-button dialog-discard-button' onClick={()=>setShowDialog(false)}>Discard changes</button>
             </form>
+            </>
         )
     };
 
@@ -116,9 +123,6 @@ export default function CreateUser() {
         {showDialog?<DialogBox DataFromUser={DataForFamilyDialog}/>:""}
 
         <div className="login-main">
-            {/* <div className="login-info">
-
-            </div> */}
             <div className="login-login">
                 <p className='login-log-in-header'>Create a new user</p>
                 <form onSubmit={handleLogin} className="login-form">

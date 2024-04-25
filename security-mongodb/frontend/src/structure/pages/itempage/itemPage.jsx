@@ -123,7 +123,7 @@ export default function ItemPage() {
 
 									:
 
-									<p className='otherUserBorrowed'>{itemInfo[0].borrowedBy} has already borrowed this item</p>
+									<p className='otherUserBorrowed'>{itemInfo[0].borrowedBy}@viken.no has already borrowed this item</p>
 
 						)
 						:
