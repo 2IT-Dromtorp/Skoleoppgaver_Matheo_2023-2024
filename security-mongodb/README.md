@@ -1,4 +1,4 @@
-# Blackjack  
+# Borrow from Drømtorp  
 ## Table of contents
 - [Introduction](#introduction)
 - [Installations](#installations)
@@ -61,7 +61,25 @@ In this project we use:
 
 
 ## Key functions
+- [checkValues](#checkValues)
 
+### checkValues
+checkValues is used for error-handling. It's not perfect, and could do more, but it works and spares me from doing a lot of code/error handling
+It gets the variable to be checked, what type it should be, and more info
+
+*cantBeFalse* means that the value is a data where empty means false, and that should not be false.
+Some examples of such false values are *""* or *0*. *[]* or *{}* are however not false values
+
+*isArrayWhichCantBeEmpty* means that the value is an array, and should not be empty. It's making up for one of the values missed by the *cantBeFalse* value, the *[]* - empty array
+
+```js
+function checkValues(data, datatype, cantBeFalse, isArrayWhichCantBeEmpty) {
+    if (typeof (data) !== datatype) return false;
+    if (cantBeFalse && !data) return false;
+    if (isArrayWhichCantBeEmpty & !data.length) return false;
+    return true;
+}
+```
 
 
 ## Licenses 
