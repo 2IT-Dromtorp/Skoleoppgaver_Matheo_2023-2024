@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config(); //Must be here, it is what creates the env-variables
 
 const express = require("express");
 const cors = require("cors")

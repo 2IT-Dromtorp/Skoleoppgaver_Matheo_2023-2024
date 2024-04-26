@@ -122,6 +122,7 @@ export default function EditUser() {
                 <input type="tel" pattern="[0-9]{8}" required={true} value={famphonenumber} onChange={(e)=>setFamphonenumber(e.target.value)} placeholder='Phone number' className='dialog-add-family-member-input'/>
                 <input type='text' required={true} value={famaddress} onChange={(e)=>setFamadress(e.target.value)} placeholder='Address' className='dialog-add-family-member-input'/>
                 <button type='submit' className='dialog-add-family-member-submit-button'>Submit</button>
+                <button type='button' className='dialog-add-family-member-submit-button dialog-discard-button' onClick={()=>setShowDialog(false)}>Discard changes</button>
             </form>
         )
     };

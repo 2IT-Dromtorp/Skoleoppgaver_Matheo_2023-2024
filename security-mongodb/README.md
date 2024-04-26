@@ -3,6 +3,7 @@
 - [Introduction](#introduction)
 - [Installations](#installations)
 - [Key functions](#key-functions)
+- [Description of Endpoints](#Description-of-Endpoints)
 - [Licenses](#licenses)
 
 ## Introduction
@@ -222,6 +223,10 @@ export async function GetFetch(url, navigate){
     return response;
 }
 ```
+
+## Description of Endpoints
+All endpoints work in similar ways. They start with error handling, and in most cases then proceeds to do some MongoDb commands. 
+All endpoint are pretty self-explanatory, if there are anything you don't understand it's most likely something about MongoDb, so check their documentato\ion
 
 ## Licenses 
 
