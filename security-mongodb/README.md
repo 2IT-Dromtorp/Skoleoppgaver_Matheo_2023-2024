@@ -166,9 +166,6 @@ function getCurrentTimeEuroFormat() {
 ### Frontend Functions
 - [Routing i App.js](#Routing-i-App.js)
 - [The GetFetch Function](#GetFetch)
-- [Routing i App.js](#Routing-i-App.js)
-- [Routing i App.js](#Routing-i-App.js)
-- [Routing i App.js](#Routing-i-App.js)
 
 #### Routing i App.js
 This project uses something that is called *Outlet-routing*
