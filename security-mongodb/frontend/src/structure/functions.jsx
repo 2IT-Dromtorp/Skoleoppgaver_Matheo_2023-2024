@@ -9,4 +9,4 @@ export async function GetFetch(url, navigate){
     if(response.status===401&&navigate) return navigate("/log-in");
     if(response.status===403&&navigate) return navigate("/");
     return response;
-  }
+}
