@@ -13,6 +13,7 @@ import Users from './structure/pages/users/users';
 import CreateNewItem from './structure/pages/createNewItem/createNewItem';
 import EditItem from './structure/pages/editItem/editItem';
 import EditUser from './structure/pages/editUser/editUser';
+import AllLoans from './structure/pages/allLoans/allLoans';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="create-new-item" element={<CreateNewItem />} />
             <Route path="edit-item/:serialnumber" element={<EditItem />} />
             <Route path="edit-user/:email" element={<EditUser/>} />
+            <Route path="history-loans" element={<AllLoans />} />
           </Route>
       </Routes>
     </BrowserRouter>

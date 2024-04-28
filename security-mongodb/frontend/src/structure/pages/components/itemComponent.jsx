@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './itemComponent.css'
 import { useNavigate } from 'react-router-dom';
 
-export default function ItemComponent({ tool, serialNumber, url, borrowedBy }) {
+export default function ItemComponent({ tool, serialNumber, url, borrowedBy}) {
   const navigate = useNavigate();
 
   const [isBurrowed, setIsBorrowed] = useState("");

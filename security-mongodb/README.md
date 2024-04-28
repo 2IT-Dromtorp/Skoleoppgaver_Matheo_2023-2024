@@ -223,7 +223,7 @@ export async function GetFetch(url, navigate){
 
 ## Description of Endpoints
 All endpoints work in similar ways. They start with error handling, and in most cases then proceeds to do some MongoDb commands. 
-All endpoint are pretty self-explanatory, if there are anything you don't understand it's most likely something about MongoDb, so check their documentato\ion
+All endpoint are pretty self-explanatory, if there are anything you don't understand it's most likely something about MongoDb, so check their documentatoion
 
 ## Licenses 
 

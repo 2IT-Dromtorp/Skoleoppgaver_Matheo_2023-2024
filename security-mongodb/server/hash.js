@@ -18,8 +18,6 @@ function HashString(stringToBeHashed, rounds, saltFromCompare){
             preHashString = oddArray.join("")+evenArray.join("");
         }
 
-        console.log(preHashString)
-
         preHashString = preHashString.slice(0,32);
     }
 
@@ -69,14 +67,14 @@ function Compare(cryptated, input){
     return cryptated===hashedString;
 }
 
-function a(){
-    const input = "PappaErKul"
-    console.log(changeBinary(input))
-    // const hashedPass = '12$mhj$fdiUhQfMyrMuPV99UTqnx74NGNJvWT4Y876sEPAW$VNBFDowJ0fcRITNTDK3n13UWLirdUbkR'
-    // const hash = HashString(input,12);
-    // console.log(hash)
-    // console.log(Compare(hashedPass, input));
-}
+// function a(){
+//     const input = "PappaErKul"
+//     console.log(changeBinary(input))
+//     // const hashedPass = '12$mhj$fdiUhQfMyrMuPV99UTqnx74NGNJvWT4Y876sEPAW$VNBFDowJ0fcRITNTDK3n13UWLirdUbkR'
+//     // const hash = HashString(input,12);
+//     // console.log(hash)
+//     // console.log(Compare(hashedPass, input));
+// }
 
 function changeBinary(fullString){
     const bitsLong = 512;
@@ -108,7 +106,5 @@ function changeBinary(fullString){
     
     return numToText(bitStringAfterXor, 62n);
 }
-
-a();
 
 module.exports = {Compare, HashString};

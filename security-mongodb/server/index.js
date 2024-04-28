@@ -7,6 +7,7 @@ const { HashString, Compare } = require('./hash')
 const { MongoClient } = require("mongodb");
 const jwt = require("jsonwebtoken");
 
+
 const app = express();
 app.use(express.static("build"));
 app.use(express.json());
@@ -534,6 +535,14 @@ server.listen(port, () => {
             console.log(error);
             res.sendStatus(500);
         }
+    });
+
+    app.get("/api/get-all-loans", authenticateToken, async(req,res)=> {
+        const jwtUser = req.jwtUser;
+        if (jwtUser.class !== "LAERER") return res.sendStatus(403);
+
+        const allLoans = await dromtorpHistoryLoans.find().project({_id:0}).toArray();
+        res.status(200).send({"data":allLoans})
     });
 
     app.get('*', (req, res) => {
