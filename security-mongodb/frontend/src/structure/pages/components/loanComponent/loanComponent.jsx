@@ -7,7 +7,7 @@ export default function LoanComponent({item, user, loanStartTime, loanEndTime}) 
     return(
         <div className='loancomponent-main'>
             <UserComponent givenName={user.givenName} surname={user.surname} email={user.emailOfUser} sclass={user.class}/>
-            <ItemComponent tool={item.toolOfItem} serialNumber={item.serialNumberOfItem} borrowedBy={loanEndTime}/>
+            <ItemComponent tool={item.toolOfItem} serialNumber={item.serialNumberOfItem} borrowedBy={""}/>
             <div className='loancomponent-bottom-bar'>
                 <div>
                     <p>Item loaned at:</p>

@@ -13,7 +13,7 @@ app.use(express.static("build"));
 app.use(express.json());
 app.use(cors());
 const server = http.createServer(app);
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 8080;
 const url = "mongodb+srv://mathoepan:Skole123@matheodb.kuczdkk.mongodb.net/"
 
 server.listen(port, () => {

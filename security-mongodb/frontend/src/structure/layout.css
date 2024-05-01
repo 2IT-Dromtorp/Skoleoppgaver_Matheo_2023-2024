@@ -34,3 +34,7 @@
 .navbar-item.selected{
     fill: white;
 }
+
+.navbar-item.clock{
+    stroke: black;
+}

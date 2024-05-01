@@ -2,7 +2,7 @@ import {Link, Outlet} from 'react-router-dom';
 import './layout.css'
 import React, { useContext, useEffect } from 'react';
 
-import { Profile, Viken, Request, Pupils, NewItem } from '../svg.jsx'
+import { Profile, Viken, Request, Pupils, NewItem, Clock } from '../svg.jsx'
 import { useLocation } from 'react-router-dom'
 import { GetFetch } from './functions.jsx';
 import { EmailContext, SchoolclassContext } from '../context.js'
@@ -35,6 +35,7 @@ export default function Layout() {
           {schoolclass==="LAERER"?<>
             <Link to={`/create-new-item`}> {React.createElement(NewItem, { className: `navbar-item${"create-new-item" === loc.pathname.split('/')[1] ? ' selected' : ''}` })}</Link>
             <Link to={`/requests`}> {React.createElement(Request, { className: `navbar-item${"requests" === loc.pathname.split('/')[1] ? ' selected' : ''}` })}</Link>
+            <Link to={`/history-loans`}> {React.createElement(Clock, { className: `navbar-item${"history-loans" === loc.pathname.split('/')[1] ? ' selected clock' : ''}` })}</Link>
             <Link to={`/users`}> {React.createElement(Pupils, { className: `navbar-item${"users" === loc.pathname.split('/')[1] ? ' selected' : ''}` })}</Link>
           </>:false}
           
