@@ -50,10 +50,11 @@ server.listen(port, () => {
         else res.status(403).send({ "message": "Wrong Email or Password" })
     })
 
-    app.post("/api/createuser", async (req, res) => {
-        const b = req.body;
-        if (!b) return;
+    app.post("/api/createuser", authenticateToken, async (req, res) => {
+        const jwtUser = req.jwtUser.class;
+        if(jwtUser!=="LAERER") return res.sendStatus(403);
 
+        const b = req.body;
         const email = b.email;
         if (!validateEmail(email)) return res.status(412).send({ "message": "Email is not correct" });
 
@@ -61,7 +62,7 @@ server.listen(port, () => {
         const givenname = b.givenname;
         const surname = b.surname;
         const schoolclass = b.schoolclass;
-        if (typeof (password) != "string" || typeof (givenname) != "string" || typeof (surname) != "string" || typeof (schoolclass) != "string") return res.sendStatus(403);
+        if (typeof (password) != "string" || typeof (givenname) != "string" || typeof (surname) != "string" || typeof (schoolclass) != "string") return res.sendStatus(412);
 
 
         const phone = b.phone;
@@ -505,10 +506,11 @@ server.listen(port, () => {
 
     app.delete("/api/delete-user", authenticateToken, (req, res) => {
         const jwtUser = req.jwtUser;
-        if (jwtUser.class !== "LAERER" || email === "admin" || email === jwtUser.email) return res.sendStatus(403);
 
         const b = req.body;
         const email = b.email;
+        if (jwtUser.class !== "LAERER" || email === "admin" || email === jwtUser.email) return res.sendStatus(403);
+
         if (!checkValues(email, "string", true, false)) return res.sendStatus(412);
 
         try {

@@ -30,7 +30,6 @@
     align-items: center;
     flex-direction: column;
     gap: 15px;
-    border-bottom: solid black 1px;
     padding: 10px 0;
 }
 
@@ -52,18 +51,6 @@
     color: white;
     font-size: 30px;
     padding: 7px 60px;
-}
-
-.login-create-user-link{
-    margin-top: 10px;
-    padding: 7px 0;
-    font-size: 18px;
-    font-weight: 500;
-    color: black;
-}
-
-.login-create-user-link:active{
-    color: purple;
 }
 
 .login-log-in-header{

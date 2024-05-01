@@ -6,6 +6,8 @@ import { GetFetch } from '../../functions.jsx';
 import UserComponent from '../components/usercomponent/userComponent.jsx';
 import { useNavigate } from 'react-router-dom';
 
+import { Link } from 'react-router-dom';
+
 export default function Users() {
     const navigate = useNavigate();
     const [users, setUsers] = useState([]);
@@ -28,6 +30,7 @@ export default function Users() {
 
     return(
         <div className='users-main'>
+            <Link className='profile-edit-user-link' to={"/create-user"}>Create a new user</Link>
             {users&&users.map((user, index) => 
                 <UserComponent key={index} email={user.email} givenName={user.givenName} surname={user.surname} sclass={user.class}/>
             )}

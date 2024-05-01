@@ -65,7 +65,6 @@ export default function LogInPage() {
                     <input className="login-input-field" required={true} autoComplete="password" type="password" onChange={(e)=>setPassword(e.target.value)} value={password} placeholder="Password*"/>
                     <button type="submit" className="login-login-button">Log in</button>
                 </form>
-                <Link to="/create-user" className="login-create-user-link">Create a new user</Link>
             </div>
         </div>
       

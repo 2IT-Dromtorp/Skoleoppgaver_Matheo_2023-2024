@@ -231,7 +231,7 @@ export default function EditUser() {
                     
                     {schoolclass!=="LAERER"?<button type="button" onClick={()=>setShowDialog(true)} className='createuser-input-add-family-button'>Add a family member</button>:""}
 
-                    {dialogContent.operation==="addFamilyMember"&&dialogContent.data.length?dialogContent.data.map((member, index) =>
+                    {dialogContent.operation==="addFamilyMember"&&dialogContent.data&&dialogContent.data.length?dialogContent.data.map((member, index) =>
                         <KinComponent key={index} index={index} name={member.name} address={member.address} phonenumber={member.phone} email={member.email} use="createUser"/>
                     ):(
                         schoolclass!=="LAERER"?"You must have at least one family member":""

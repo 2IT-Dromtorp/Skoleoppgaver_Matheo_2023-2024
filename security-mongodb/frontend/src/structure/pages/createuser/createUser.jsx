@@ -2,11 +2,12 @@ import '../loginpage/logInPage.css'
 import './createuser.css'
 
 import { useState, useContext, useEffect } from "react";
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { EmailContext, SchoolclassContext, DialogContentContext } from "../../../context";
 
-import DialogBox from '../../dialogBox/dialogBox';
+import { PostFetch } from '../../functions';
 
+import DialogBox from '../../dialogBox/dialogBox';
 import KinComponent from '../components/kinComponent/kinComponent';
 
 export default function CreateUser() {
@@ -31,53 +32,33 @@ export default function CreateUser() {
     const navigate = useNavigate();
 
     useEffect(()=>{
-        setEmail("");
-        setSchoolclass("");
-        localStorage.setItem("accessToken","");
         setDialogContent({
             operation: "",
             data: []
         })
-    },[setEmail, setSchoolclass, setDialogContent])
+    },[])
 
     const handleLogin = async (e) => {
         e.preventDefault();
         if(password!==passwordCheck) return alert("The password does not match");
         if(schoolclass==="None") return alert("You have to choose a class");
         if(schoolclass!=="LAERER"&&!dialogContent.data.length) return alert("You have to add at least one family member");
-        try{
-            const response = await fetch("/api/createuser",{
-                method:"POST",
-                headers: {
-                    "Content-Type":"application/json"
-                },
-                body: JSON.stringify({
-                    email:email,
-                    password:password,
-                    givenname:givenName,
-                    surname:surname,
-                    schoolclass:schoolclass,
-                    phone:phone,
-                    address:address,
-                    familyMembers:dialogContent.data
-                })
-            })
+        
+            const response = await PostFetch("/api/createuser",JSON.stringify(
+                JSON.stringify({email:email,password:password,givenname:givenName,surname:surname,schoolclass:schoolclass,phone:phone,address:address,familyMembers:dialogContent.data})
+            ), navigate);
 
             if (!response.ok){
-                if(response.status===412) setEmailLoc("");
-                setPassword("");
-                setPasswordCheck("");
-                return;
+                if(response.status===412){ 
+                    setPassword("");
+                    setPasswordCheck("");
+                    return;
+                }
             }
             
             const responseData = await response.json();
-            localStorage.setItem("accessToken",responseData.accessToken);
-            setEmail(email);
-            setSchoolclass(schoolclass);
             navigate("/");
-        } catch(error){
-            console.error("Error during fetch:", error.message);
-        }
+        
     }
 
     function DataForFamilyDialog() {
@@ -156,7 +137,6 @@ export default function CreateUser() {
                     
                     <button type="submit" className="login-login-button">Create User</button>
                 </form>
-                <Link to="/log-in" className="login-create-user-link">Already have a user? Log in</Link>
             </div>
         </div>
         </>
