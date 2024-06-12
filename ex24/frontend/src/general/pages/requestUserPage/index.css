@@ -1,0 +1,47 @@
+.request-user-page-main{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+.request-user-page-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 40px;
+    box-sizing: border-box;
+}
+
+.request-user-page-info-header{
+    font-size: 55px;
+    font-weight: 500;
+}
+
+.request-user-page-info-p{
+    max-width: 300px;
+    margin-bottom: 20px;
+}
+
+.request-user-page-create-user{
+    padding: 20px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.request-user-page-create-user p{
+    font-size: 40px;
+}
+
+.request-user-page-form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.request-user-page-form-submit{
+    padding: 7px 20px;
+}

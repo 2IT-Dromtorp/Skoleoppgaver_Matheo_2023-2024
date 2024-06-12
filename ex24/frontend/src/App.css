@@ -1,3 +1,8 @@
 html, body, *{
   margin: 0;
 }
+
+:root{
+  --main-color: #1e6087;
+  --user-border-color:#7fc1ff;
+}
