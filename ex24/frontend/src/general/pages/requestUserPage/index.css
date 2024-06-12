@@ -32,7 +32,7 @@
     justify-content: center;
 }
 
-.request-user-page-create-user p{
+.request-user-page-create-user-p{
     font-size: 40px;
 }
 
@@ -44,4 +44,11 @@
 
 .request-user-page-form-submit{
     padding: 7px 20px;
+}
+
+.request-user-page-create-user-p-register-info{
+    margin-bottom: 10px;
+    font-size: 20px;
+    max-width: 500px;
+    text-align: center;
 }

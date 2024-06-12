@@ -7,6 +7,8 @@ import MainSite from './general/pages/mainSite/mainSite';
 import LogInPage from './general/pages/loginpage/logInPage';
 import RequestUserPage from './general/pages/requestUserPage/requestUserPage';
 import Tournaments from './general/pages/tournament/tournaments';
+import Userpage from './general/pages/userpage/userpage';
+import Register from './general/pages/register/register';
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path='/login' element={<LogInPage/>} />
         <Route path='/:sport/join' element={<RequestUserPage/>} />
         <Route path='/tournaments' element={<Tournaments/>} />
+        <Route path='/my-page' element={<Userpage/>} />
+        <Route path='/register' element={<Register/>} />
       </Route>
     </Routes>
     </BrowserRouter>

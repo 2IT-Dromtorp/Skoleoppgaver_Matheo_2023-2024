@@ -1,0 +1,55 @@
+.mainsite-main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 35px;
+}
+
+.mainsite-main-header{
+    font-size: 50px;
+}
+
+.mainsite-ball-desc{
+    max-width: 600px;
+    font-size:25px;
+    text-align: center;
+    font-weight: 400;
+}
+
+.mainsite-offer-container{
+    max-width: 1500px;
+    display: flex;
+    gap: 15px;
+    overflow-y: hidden;
+    overflow-x: auto;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    border: solid rgb(78, 78, 78) 3px;
+    border-radius: 8px;
+    padding: 20px 20px;
+    margin-top: 10px;
+}
+
+.mainsite-content-holder{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 20px;
+    gap: 10px;
+}
+
+.mainsite-link-to-tour{
+    padding: 10px 25px;
+    text-decoration: none;
+    cursor: pointer;
+    background-color: var(--main-color);
+    border-radius: 10px;
+    color: white;
+    font-size: 34px;
+}
+
+.mainsite-offer-text{
+    font-size: 30px;
+    font-weight: 499;
+}

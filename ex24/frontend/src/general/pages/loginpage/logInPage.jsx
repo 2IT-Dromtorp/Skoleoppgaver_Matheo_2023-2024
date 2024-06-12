@@ -1,14 +1,34 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 import './logInPage.css'
 
 export default function LogInPage() {
+    const navigate = useNavigate();
+
     const [emailloc, setemailloc] = useState("");
     const [password, setPassword] = useState("");
 
     const handleLogin = async (e) => {
         e.preventDefault();
         
+        const response = await fetch("/api/login",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                email:emailloc,
+                password:password
+            })
+        });
+
+        const resData = await response.json();
+
+        if(!response.ok) return alert(resData);
+
+        localStorage.setItem("accessToken",resData);
+        navigate("/my-page");
     }
 
     return (
