@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import './logInPage.css'
 
@@ -34,13 +34,16 @@ export default function LogInPage() {
     return (
         <div className="login-main">
             <div className="login-login">
-                 <p className="login-log-in-header">Log in</p>
+                 <p className="login-log-in-header">Logg inn</p>
 
                 <form onSubmit={handleLogin} className="login-form">
                     <input className="login-input-field" required={true} autoComplete="email" type="email" onChange={(e)=>setemailloc(e.target.value)} value={emailloc} placeholder="Email*"/>
                     <input className="login-input-field" required={true} autoComplete="password" type="password" onChange={(e)=>setPassword(e.target.value)} value={password} placeholder="Passord*"/>
-                    <button type="submit" className="login-login-button">Logg inn</button>
+                    <button type="submit" className="mainsite-link-to-tour login-login-button login-login-button-padding">Logg inn</button>
                 </form>
+
+                <h2>Har du ikke en bruker?</h2>
+                <Link to={"/register"} className='mainsite-link-to-tour'>Registrer deg her</Link>
             </div>
         </div>
       

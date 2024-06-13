@@ -47,11 +47,11 @@ export default function RequestUserPage(){
                 <Leader name={sportInfo.leader.name} phone={sportInfo.leader.phone} email={sportInfo.leader.email}/>
             </div>
             <div className='request-user-page-create-user'>
-                <p className='request-user-page-create-user-p'>{sportInfo.fullName}</p>
                 {localStorage.getItem("accessToken")?                
-                    <button className="login-login-button request-user-page-form-submit" onClick={()=>handlesubmit()}>Meld deg på {sportInfo.fullName.toLowerCase()}</button>
-                :<>
-                    <p className='request-user-page-create-user-p-register-info'>For å melde seg på en aktivitet må man først registrere seg på siden vår</p>
+                    <button className="mainsite-link-to-tour request-user-page-sign-up-button" onClick={()=>handlesubmit()}>Meld deg på {sportInfo.fullName.toLowerCase()}</button>
+                    :<>
+                    <p className='request-user-page-create-user-p'>{sportInfo.fullName}</p>
+                    <p className='request-user-page-create-user-p-register-info'>For å melde deg på en aktivitet må du først registrere deg på siden vår</p>
                     <Link to={"/register"} className='mainsite-link-to-tour'>Registrer deg</Link>
                 </>}
             </div>

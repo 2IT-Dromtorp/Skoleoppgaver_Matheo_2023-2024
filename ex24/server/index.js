@@ -12,7 +12,7 @@ app.use(express.static("build"));
 app.use(express.json());
 app.use(cors());
 
-const port = 8080;
+const port = process.env.PORT;
 
 saltRounds = 12;
 
@@ -92,7 +92,7 @@ app.listen(port, async () => {
 
             res.status(201).json(createAccessToken(email));
         } catch (err) {
-            console.log(err);
+            console.error(err);
             res.status(500).json("Noe gikk galt i serveren. Prøv på nytt senere");
         }
     });
@@ -204,7 +204,7 @@ function authenticateTokenForAdminRights(req, res, next) {
     if (token == null) return res.sendStatus(403);
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) return res.status(401).send(err);
+        if (err||user.email!=="admin@ballil.local") return res.status(401).send(err);
         req.jwtUser = user;
         next();
     })

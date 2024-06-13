@@ -5,4 +5,5 @@ html, body, *{
 :root{
   --main-color: #1e6087;
   --user-border-color:#7fc1ff;
+  --secondary-color: rgb(155, 197, 211);
 }

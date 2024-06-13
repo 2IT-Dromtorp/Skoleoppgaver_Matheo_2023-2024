@@ -5,9 +5,24 @@
     justify-content: center;
     border: solid black 2px;
     border-radius: 10px;
-    padding: 20px 40px;
+    padding: 25px 40px;
+    background-color: var(--secondary-color);
 }
 
 .tournament-component-main-info{
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.tournament-component-main-info p{
+    font-size: 20px;
+}
+
+.tournament-component-leader-info{
+    margin-bottom: 12px;
+    font-weight: 500;
+    font-size: 20px;
 }

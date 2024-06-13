@@ -46,7 +46,7 @@ export default function CreateSport(){
 
     return(
         <div className="register-main">
-            <h1>Lage et lag i en ny sport</h1>
+            <h1>Opprett lag i en ny sport</h1>
             <form className='request-user-page-form' onSubmit={(e)=>handlesubmit(e)}>                
                 <input className="login-input-field" required={true} type="text" value={name} onChange={(e)=>setName(e.target.value)} placeholder={`Navnet på sporten*`}/>
                 <textarea className="login-input-field create-sport-text-area" required={true} type="text" onChange={(e)=>setDesc(e.target.value)} value={desc} placeholder="Beskrivelse av laget*"/>
@@ -57,7 +57,7 @@ export default function CreateSport(){
                 <input className="login-input-field" required={true} type="tel" pattern="[0-9]{8}" value={phone} onChange={(e)=>setPhone(e.target.value)} placeholder={`Telefon-nummer*`}/>
 
 
-                <button type="submit" className="login-login-button request-user-page-form-submit">Lag laget</button>
+                <button type="submit" className="login-login-button request-user-page-form-submit">Lagre</button>
             </form>
         </div>
     )

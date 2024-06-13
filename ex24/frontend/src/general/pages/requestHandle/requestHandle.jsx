@@ -25,7 +25,7 @@ export default function RequestHandlePage(){
             setRequests(resData);
         }
         fetchdata()
-    },[]);
+    },[navigate]);
      
     return(
     <>{requests&&requests.length?<div className='request-handler-main'>

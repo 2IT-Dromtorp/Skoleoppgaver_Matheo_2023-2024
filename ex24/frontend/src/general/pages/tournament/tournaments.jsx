@@ -32,7 +32,7 @@ export default function Tournaments(){
         <>{tournamentData.length?
         <div className='tournament-main'>      
             <h1 className='tournament-main-header'>Turneringer</h1>  
-            {isAdmin?<Link className='mainsite-link-to-tour' to={"/create/tournament"}>Legg til en ny turnering</Link>:""}
+            {isAdmin?<Link className='mainsite-link-to-tour' to={"/create/tournament"}>Legg til ny turnering</Link>:""}
             <div className="tournament-container">
                 {tournamentData.map((tournament, index) =>
                     <TournamentComponent key={index} name={tournament.name} place={tournament.place} date={tournament.date} sport={tournament.sportFullName} responsible={tournament.responsible}/>

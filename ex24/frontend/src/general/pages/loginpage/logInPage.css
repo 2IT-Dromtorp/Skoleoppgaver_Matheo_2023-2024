@@ -31,6 +31,7 @@
     flex-direction: column;
     gap: 15px;
     padding: 10px 0;
+    margin-bottom: 20px;
 }
 
 .login-input-field {
@@ -51,6 +52,10 @@
     color: white;
     font-size: 30px;
     padding: 7px 60px;
+}
+
+.login-login-button-padding{
+    padding: 10px 95px;
 }
 
 .login-log-in-header{

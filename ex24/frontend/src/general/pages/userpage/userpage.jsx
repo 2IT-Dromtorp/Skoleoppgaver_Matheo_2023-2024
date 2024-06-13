@@ -17,13 +17,14 @@ export default function Userpage(){
                     "authorization":`Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
+            console.log(response.status)
+            if(response.status===401||response.status===403) return navigate("/login");
             const resData = await response.json();
-            if(response.status===401) return navigate("/login");
             if(!response.ok) return alert(resData);
             setUserInfo(resData);
         }
         fetchdata();
-    },[])
+    },[navigate])
 
     function logOut(){
         localStorage.removeItem("accessToken");
