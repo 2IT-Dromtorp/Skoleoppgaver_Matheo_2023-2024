@@ -9,14 +9,6 @@ export default function RequestUserPage(){
     const {sport} = useParams();
 
     const [sportInfo, setSportInfo] = useState({});
-    
-    const [firstName, setFirstName] = useState("");
-    const [lastname, setLastname] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [address, setAddres] = useState("");
-    const [city, setCity] = useState("");
-    const [yearBorn, setYearBorn] = useState("");
 
     useEffect(()=>{
         async function fetchData(){
@@ -30,7 +22,6 @@ export default function RequestUserPage(){
     },[sport])
 
     async function handlesubmit() {
-        console.log("A")
         const userData = {
             sport:sport
         }

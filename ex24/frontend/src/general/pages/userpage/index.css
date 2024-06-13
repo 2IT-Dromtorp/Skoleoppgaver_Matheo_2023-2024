@@ -1,0 +1,39 @@
+.user-page-main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 40px;
+    gap: 10px;
+}
+
+.user-address{
+    font-size: 18px;
+}
+
+.user-page-info-container{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.user-info-box{
+    background-color: rgb(155, 197, 211);
+    border: solid rgb(58, 58, 58) 1px;
+    border-radius: 9px;
+    padding: 10px 20px;
+}
+
+.user-logout-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 293px;
+    border-radius: 9px;
+    font-size: 20px;
+    padding: 10px 20px;
+    border: solid rgb(52, 52, 52) 1px;
+    background-color: #922a2a;
+    color: white;
+}

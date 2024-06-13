@@ -38,8 +38,8 @@ export default function LogInPage() {
 
                 <form onSubmit={handleLogin} className="login-form">
                     <input className="login-input-field" required={true} autoComplete="email" type="email" onChange={(e)=>setemailloc(e.target.value)} value={emailloc} placeholder="Email*"/>
-                    <input className="login-input-field" required={true} autoComplete="password" type="password" onChange={(e)=>setPassword(e.target.value)} value={password} placeholder="Password*"/>
-                    <button type="submit" className="login-login-button">Log in</button>
+                    <input className="login-input-field" required={true} autoComplete="password" type="password" onChange={(e)=>setPassword(e.target.value)} value={password} placeholder="Passord*"/>
+                    <button type="submit" className="login-login-button">Logg inn</button>
                 </form>
             </div>
         </div>

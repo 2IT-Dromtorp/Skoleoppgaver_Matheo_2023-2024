@@ -1,0 +1,38 @@
+.request-component-main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 30px;
+    border: solid rgb(123, 123, 123) 1px;
+    border-radius: 9px;
+}
+
+.request-component-name{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.request-component-options-container{
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.request-component-option{
+    padding: 10px 20px;
+    border: solid rgb(84, 84, 84) 1px;
+    border-radius: 7px;
+    font-size: 15px;
+    color: white;
+}
+
+.accept-button{
+    background-color: var(--main-color);
+}
+
+.deny-button{
+    background-color: #922a2a;
+}

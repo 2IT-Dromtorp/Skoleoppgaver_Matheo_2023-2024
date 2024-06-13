@@ -9,6 +9,9 @@ import RequestUserPage from './general/pages/requestUserPage/requestUserPage';
 import Tournaments from './general/pages/tournament/tournaments';
 import Userpage from './general/pages/userpage/userpage';
 import Register from './general/pages/register/register';
+import RequestHandlePage from './general/pages/requestHandle/requestHandle';
+import CreateTournament from './general/pages/createTournament/createTournament';
+import CreateSport from './general/pages/createSport/createSport';
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
         <Route path='/tournaments' element={<Tournaments/>} />
         <Route path='/my-page' element={<Userpage/>} />
         <Route path='/register' element={<Register/>} />
+        <Route path='/requests' element={<RequestHandlePage/>} />
+        <Route path='/create/tournament' element={<CreateTournament/>} />
+        <Route path='/create/sport' element={<CreateSport/>} />
       </Route>
     </Routes>
     </BrowserRouter>

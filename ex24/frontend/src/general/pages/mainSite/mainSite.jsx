@@ -6,12 +6,21 @@ import SportComponent from '../../components/sportComponent/sportComponent';
 
 export default function MainSite(){
     const [offers, setOffers] = useState([]);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(()=>{
         async function fetchdata(){
             const response = await fetch("/api/get-sports");
             const resData = await response.json();
             setOffers(resData);
+
+            const checkIfAdmin = await fetch("/api/check-if-admin",{
+                method:"GET",
+                headers:{
+                    "Authorization":`Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
+            setIsAdmin(checkIfAdmin.ok);
         }
         fetchdata();
     },[]);
@@ -24,6 +33,8 @@ export default function MainSite(){
             <div  className='mainsite-content-holder'>
                 <Link to={"/tournaments"} className='mainsite-link-to-tour'>Turneringer</Link>
                 <Link to={localStorage.getItem("accessToken")?"/my-page":"/login"} className='mainsite-link-to-tour'>Min side</Link>
+                {isAdmin?<Link to={"/create/sport"} className='mainsite-link-to-tour'>Lag et nytt lag</Link>:""}
+                {isAdmin?<Link to={"/requests"} className='mainsite-link-to-tour'>Søknader</Link>:""}
             </div>
 
             <p className='mainsite-offer-text'>Meld deg på ett av våre tilbud:</p>
